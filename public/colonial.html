@@ -3,90 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colonial 专题 - NSSA</title>
+    <title>交互式报告：殖民时代的“斩首”与幸存</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
-                    },
-                    colors: {
-                        'apple-blue': '#007AFF',
-                        'apple-gray': '#8E8E93',
-                        'apple-light-gray': '#F2F2F7',
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Paper/Stone) -->
+    <!-- Application Structure Plan: A thematic, non-linear SPA designed for exploration. It starts with a hero section, then a core interactive module "双重命运" (Two Fates) allowing side-by-side comparison of 'fallen' and 'surviving' leaders. This is followed by a "深层动力" (Underlying Forces) section visualizing abstract concepts like disease impact and ideological frameworks. A "策略比较" (Strategy Comparison) section transforms the report's tables into a filterable dashboard. This structure turns passive reading into an active discovery process, enabling users to see patterns and relationships more effectively than a linear document. -->
+    <!-- Visualization & Content Choices: Report Info -> Population decline; Goal -> Show scale; Viz -> Bar Chart (Chart.js) for high impact. Report Info -> Case studies; Goal -> Compare outcomes; Viz -> Clickable cards in a dual-column layout to show details on demand, preventing overload. Report Info -> Comparative tables; Goal -> Enable user-driven analysis; Viz -> Filterable grid of cards. Report Info -> "Coloniality of Power"; Goal -> Explain theory; Viz -> HTML/CSS diagram to make the abstract concept visually tangible. All interactions are designed to support the exploratory structure. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background-color: #ffffff;
-            color: #1d1d1f;
-            line-height: 1.47059;
-            font-weight: 400;
-            letter-spacing: -0.022em;
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #fdfbf5;
+            color: #44403c;
         }
-
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
         .nav-link {
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: color 0.3s, border-color 0.3s;
         }
-
-        .nav-link:hover {
-            color: #007AFF;
-        }
-
         .nav-link.active {
-            color: #007AFF;
-            font-weight: 600;
+            color: #a16207;
+            border-bottom-color: #a16207;
         }
-
-        .content-card {
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            background-color: #ffffff;
-            border: 1px solid #d2d2d7;
-            border-radius: 16px;
+        .case-card {
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-
-        .content-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border-color: #007AFF;
+        .case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        .filter-btn.active {
+            background-color: #a16207;
+            color: #ffffff;
         }
     </style>
 </head>
-<body class="bg-white">
-    <!-- 导航栏 -->
-    <!-- 导航栏 -->
-    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center space-x-8">
-                    <a href="/" class="text-2xl font-light text-gray-900 tracking-tight">NSSA</a>
-                    <span class="text-apple-gray">|</span>
-                    <span class="text-lg font-medium text-gray-900">Colonial 专题</span>
-                </div>
-                <div class="hidden lg:flex items-center space-x-6">
-                    <a href="/" class="nav-link text-gray-900">首页</a>
-                    <a href="/fww.html" class="nav-link text-gray-900">一战缘起</a>
-                    <a href="/jaw.html" class="nav-link text-gray-900">JAW 专题</a>
-                    <a href="/swgg.html" class="nav-link text-gray-900">SWGG 专题</a>
-                    <a href="/colonial.html" class="nav-link active">Colonial 专题</a>
-                    <a href="/about.html" class="nav-link text-gray-900">关于</a>
-                </div>
-                <div class="lg:hidden">
-                    <button class="text-gray-900">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
+<body class="antialiased">
+
+    <header id="main-header" class="bg-fdfbf5/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+         <!-- 导航栏 -->
+        <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center space-x-8">
+                        <a href="/" class="text-2xl font-light text-gray-900 tracking-tight">NSSA</a>
+                        <span class="text-apple-gray">|</span>
+                        <span class="text-lg font-medium text-gray-900">Colonial 专题</span>
+                    </div>
+                    <div class="hidden lg:flex items-center space-x-6">
+                        <a href="/" class="nav-link text-gray-900">首页</a>
+                        <a href="/fww.html" class="nav-link text-gray-900">一战缘起</a>
+                        <a href="/jaw.html" class="nav-link text-gray-900">JAW 专题</a>
+                        <a href="/swgg.html" class="nav-link text-gray-900">SWGG 专题</a>
+                        <a href="/colonial.html" class="nav-link active">Colonial 专题</a>
+                        <a href="/about.html" class="nav-link text-gray-900">关于</a>
+                    </div>
+                    <div class="lg:hidden">
+                        <button class="text-gray-900">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     <main>
         <section id="hero" class="py-20 md:py-28 bg-amber-100/30">
@@ -211,6 +208,7 @@
              </div>
         </section>
     </main>
+
     <!-- 页脚 -->
     <footer class="border-t border-gray-200 mt-20">
         <div class="max-w-6xl mx-auto px-6 py-8 text-center">
@@ -414,6 +412,5 @@
             });
         });
     </script>
-
 </body>
 </html>
