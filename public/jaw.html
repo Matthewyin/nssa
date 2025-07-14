@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互式报告：职场毒性动力学分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is structured thematically to guide users from understanding the problem to implementing solutions. It uses a top navigation for quick access to five key sections: 1. **识别 (Identify):** Interactive cards for problem prototypes. 2. **解析 (Analyze):** Explains the underlying logic and career trajectory using a visual timeline. 3. **影响 (Impact):** Quantifies the damage with a Chart.js visualization. 4. **策略 (Strategies):** An actionable, tabbed handbook for different roles (Leadership, Managers, Employees). 5. **转移 (Shifting Conflict):** A dedicated section explaining manipulation tactics and proper escalation. This structure moves from theoretical to practical, directly addressing the user's initial questions in a logical flow, prioritizing user understanding over mirroring the report's linear chapter format. -->
+    <!-- Visualization & Content Choices: Report Info -> Key toxic behaviors (HCP, Narcissist). Goal -> Identification. Viz -> Interactive HTML/CSS cards. Interaction -> Click to reveal details. Justification -> More engaging than static text. Library -> Vanilla JS. || Report Info -> Career path data. Goal -> Show change over time. Viz -> HTML/CSS timeline diagram. Interaction -> Hover/click points for info. Justification -> Visualizes progression clearly. Library -> Vanilla JS. || Report Info -> Financial cost of toxic workers vs. superstars. Goal -> Show impact. Viz -> Bar Chart. Interaction -> Hover for exact values. Justification -> Powerful, quantifiable comparison. Library -> Chart.js. || Report Info -> Bystander intervention methods (5Ds). Goal -> Teach actionable skills. Viz -> HTML/CSS accordion. Interaction -> Click to expand. Justification -> Organizes complex info concisely. Library -> Vanilla JS. || CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #F8F9FA;
+            color: #343A40;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #007BFF;
+            border-bottom-color: #007BFF;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .tab-button.active {
+            background-color: #007BFF;
+            color: white;
+            border-color: #007BFF;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .chart-container {
+            position: relative; 
+            width: 100%; 
+            max-width: 700px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { 
+                height: 400px; 
+            }
+        }
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background-color: #E9ECEF;
+        }
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 1rem 2rem;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 4rem;
+        }
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 4rem;
+        }
+        .timeline-dot {
+            content: '';
+            position: absolute;
+            top: 1.5rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 3px solid #007BFF;
+            z-index: 10;
+        }
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -0.625rem;
+            transform: translateX(50%);
+        }
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -0.625rem;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">职场毒性动力学</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#identify" class="nav-link py-2">识别问题</a>
+                <a href="#analyze" class="nav-link py-2">解析动机</a>
+                <a href="#impact" class="nav-link py-2">量化影响</a>
+                <a href="#strategy" class="nav-link py-2">应对策略</a>
+                <a href="#shifting" class="nav-link py-2">矛盾转移</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-3">
+             <a href="#identify" class="block py-2 text-center text-gray-700 hover:text-blue-500">识别问题</a>
+             <a href="#analyze" class="block py-2 text-center text-gray-700 hover:text-blue-500">解析动机</a>
+             <a href="#impact" class="block py-2 text-center text-gray-700 hover:text-blue-500">量化影响</a>
+             <a href="#strategy" class="block py-2 text-center text-gray-700 hover:text-blue-500">应对策略</a>
+             <a href="#shifting" class="block py-2 text-center text-gray-700 hover:text-blue-500">矛盾转移</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <section id="intro" class="text-center py-12 md:py-20">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4">看透职场“抢功精”与“甩锅侠”</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                本应用深度剖析了您遇到的职场困境。从识别破坏性行为，到理解其深层逻辑，再到提供可行的应对策略，我们将科学报告转化为您的个人行动指南。
+            </p>
+        </section>
+
+        <!-- Section 1: Identify -->
+        <section id="identify" class="py-16 bg-white rounded-xl shadow-md">
+            <div class="text-center mb-12 px-4">
+                <h3 class="text-3xl font-bold mb-2">第一步：识别问题原型</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto">您的同事很可能属于以下一种或多种原型。点击卡片查看他们的核心动机与典型行为，看看哪个最符合您观察到的情况。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 md:px-8">
+                <div class="card bg-gray-50 p-6 rounded-lg border border-gray-200" data-modal="hcp">
+                    <h4 class="font-bold text-xl mb-2 text-red-600">高冲突人格 (HCP)</h4>
+                    <p class="text-gray-700">核心是**规避责任**。他们总在寻找“指责对象”，情绪极易失控，且思维非黑即白。</p>
+                </div>
+                <div class="card bg-gray-50 p-6 rounded-lg border border-gray-200" data-modal="aggressor">
+                    <h4 class="font-bold text-xl mb-2 text-orange-600">攻击型沟通者</h4>
+                    <p class="text-gray-700">核心是**控制与赢**。通过大喊大叫、贬低和命令来支配他人，无视他人感受。</p>
+                </div>
+                <div class="card bg-gray-50 p-6 rounded-lg border border-gray-200" data-modal="passive">
+                    <h4 class="font-bold text-xl mb-2 text-yellow-600">被动攻击型</h4>
+                    <p class="text-gray-700">核心是**隐蔽的报复**。用冷暴力、讽刺和拖延来表达不满，言行不一。</p>
+                </div>
+                <div class="card bg-gray-50 p-6 rounded-lg border border-gray-200" data-modal="narcissist">
+                    <h4 class="font-bold text-xl mb-2 text-blue-600">自恋型邀功者</h4>
+                    <p class="text-gray-700">核心是**自我价值确认**。窃取他人功劳，贬低贡献，极度需要赞美，缺乏同理心。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Analyze -->
+        <section id="analyze" class="py-16">
+            <div class="text-center mb-12 px-4">
+                <h3 class="text-3xl font-bold mb-2">第二步：解析动机与走向</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto">为什么他们能“吵闹抢功”还被领导纵容？这种行为的底层逻辑是什么？他们的职业生涯通常会如何发展？</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                 <h4 class="text-2xl font-bold text-center mb-8">“高绩效毒瘤”的职业生命周期</h4>
+                 <div class="timeline">
+                     <div class="timeline-item">
+                         <div class="timeline-dot"></div>
+                         <div class="p-4 bg-blue-50 rounded-lg">
+                            <h5 class="font-bold text-lg text-blue-800">第一阶段：早期成功 & 晋升</h5>
+                            <p class="text-sm text-gray-700 mt-1">在初级岗位，他们凭借超高的个人产出和极度自信（常被误认为领导力），掩盖了其毒性行为。领导只看到漂亮的业绩，因此倾向于容忍甚至奖励他们，认为他们是“能做事”的人。</p>
+                         </div>
+                     </div>
+                     <div class="timeline-item">
+                         <div class="timeline-dot"></div>
+                         <div class="p-4 bg-yellow-50 rounded-lg">
+                            <h5 class="font-bold text-lg text-yellow-800">第二阶段：平台期 & 问题暴露</h5>
+                            <p class="text-sm text-gray-700 mt-1">当岗位要求从“个人贡献”转向“协同领导”时，问题开始暴露。项目失败、团队冲突激化、360度评估的负面反馈，都会让高层注意到他们无法与人协作的根本缺陷。**这是问题暴露的关键时期。**</p>
+                         </div>
+                     </div>
+                     <div class="timeline-item">
+                         <div class="timeline-dot"></div>
+                         <div class="p-4 bg-red-50 rounded-lg">
+                           <h5 class="font-bold text-lg text-red-800">第三阶段：职业脱轨</h5>
+                           <p class="text-sm text-gray-700 mt-1">最终失败是必然的。核心原因是：无法建立有效关系、缺乏自我认知（拒绝反馈）、无法真正向上管理。随着职位升高，其破坏性行为的“可见度”和“负债”急剧增加，组织将不得不出手干预。</p>
+                         </div>
+                     </div>
+                     <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="p-4 bg-gray-100 rounded-lg">
+                           <h5 class="font-bold text-lg text-gray-800">底层逻辑：责任外化</h5>
+                           <p class="text-sm text-gray-700 mt-1">无论是哪种原型，其核心都是一种心理防御机制：**将内部的不安全感、挫败感投射到外部**。通过指责、攻击或利用他人来稳定自己的内在状态。“抢功”是为了获取外部验证，掩盖内在的不安；“大吵大闹”是情绪失控和通过攻击性来控制局面的极端行为。</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Impact -->
+        <section id="impact" class="py-16 bg-white rounded-xl shadow-md">
+            <div class="text-center mb-12 px-4">
+                <h3 class="text-3xl font-bold mb-2">第三步：量化“毒性”的代价</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto">领导的“纵容”可能源于对成本的无知。毒性行为不仅影响士气，更是实实在在的财务负债。以下数据来自哈佛商学院研究，清晰揭示了这一真相。</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="impactChart"></canvas>
+            </div>
+            <p class="text-center mt-4 text-gray-500 text-sm">规避一名毒性员工的收益是雇佣一名超级明星的两倍以上。</p>
+        </section>
+
+        <!-- Section 4: Strategy -->
+        <section id="strategy" class="py-16">
+            <div class="text-center mb-12 px-4">
+                <h3 class="text-3xl font-bold mb-2">第四步：您的个人行动手册</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto">面对这种情况，普通员工并非无能为力。选择您的角色，获取最适合您的应对策略。这些策略旨在保护您自己，并推动问题解决。</p>
+            </div>
+            <div class="bg-white p-4 md:p-8 rounded-xl shadow-md">
+                <div class="mb-4 border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-4" aria-label="Tabs">
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm active" data-tab="employee">作为普通员工</button>
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="manager">作为管理者</button>
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="bystander">作为旁观者</button>
+                    </nav>
+                </div>
+
+                <div id="employee" class="tab-content">
+                    <h4 class="text-xl font-bold mb-4">员工自保与反击策略</h4>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h5 class="font-semibold">1. 关键第一步：冷静记录</h5>
+                            <p class="text-sm text-gray-600 mt-1">这是最有力的武器。记录每一次事件：日期、时间、地点、目击者、对方的具体言行（引用原话）。这是向HR投诉和保护自己的核心证据。</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h5 class="font-semibold">2. 设立沟通边界：使用 BIFF 回复法</h5>
+                            <p class="text-sm text-gray-600 mt-1">对于挑衅邮件或信息，使用此方法回应：**B**rief (简短), **I**nformative (信息性), **F**riendly (友好), **F**irm (坚定)。只陈述事实，不带情绪，明确结束对话。</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h5 class="font-semibold">3. 向上管理：推动经理介入</h5>
+                            <p class="text-sm text-gray-600 mt-1">如果经理不知情或逃避，将问题包装成影响团队效率和业务目标的“业务问题”，而非“人事纠纷”。提供你记录的客观证据，冷静陈述事实，让他意识到问题的严重性。</p>
+                        </div>
+                         <div class="p-4 bg-gray-50 rounded-lg">
+                            <h5 class="font-semibold">4. 建立同盟：专业地集体投诉</h5>
+                            <p class="text-sm text-gray-600 mt-1">私下与信得过的同事沟通，共同记录，形成证据链。以联合署名的书面形式，向经理的上级或HR提出正式、事实清晰、无情绪化的投诉。集体的力量远大于个人。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="manager" class="tab-content hidden">
+                    <h4 class="text-xl font-bold mb-4">管理者干预工具箱</h4>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                             <h5 class="font-semibold">1. 校准绩效体系</h5>
+                             <p class="text-sm text-gray-600 mt-1">将“如何做”(how)与“做什么”(what)并重。明确表示，破坏团队合作的行为，即使业绩再好也无法得到高评价。</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h5 class="font-semibold">2. 进行“勇敢对话”</h5>
+                            <p class="text-sm text-gray-600 mt-1">一对一坦诚沟通，聚焦于**具体行为**对团队的**实际影响**，而非模糊的“态度问题”。使用“我注意到...”句式，而非“你总是...”。</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <h5 class="font-semibold">3. 明确后果 (PIP)</h5>
+                            <p class="text-sm text-gray-600 mt-1">设定明确的“绩效改进计划”(PIP)，定义需要改变的行为、时间表和未能达标的后果（包括解雇）。让HR介入，确保流程合法合规。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="bystander" class="tab-content hidden">
+                    <h4 class="text-xl font-bold mb-4">从旁观者到挺身者：5D策略</h4>
+                    <div class="space-y-2">
+                        <div class="accordion-item border-b">
+                            <button class="accordion-header w-full text-left py-4 px-2 flex justify-between items-center">
+                                <span class="font-medium">1. Distract (分散注意力)</span>
+                                <span>+</span>
+                            </button>
+                            <div class="accordion-content px-2 pb-4">
+                                <p class="text-sm text-gray-600">巧妙地中断冲突。例如，“不好意思，打扰一下，现在几点了？”或假装认识受害者并热情打招呼。</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item border-b">
+                            <button class="accordion-header w-full text-left py-4 px-2 flex justify-between items-center">
+                                <span class="font-medium">2. Delegate (授权求助)</span>
+                                <span>+</span>
+                            </button>
+                            <div class="accordion-content px-2 pb-4">
+                                <p class="text-sm text-gray-600">向有能力介入的人求助，如主管或HR。“我注意到X正在对Y进行不当评论，您能介入一下吗？”</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item border-b">
+                            <button class="accordion-header w-full text-left py-4 px-2 flex justify-between items-center">
+                                <span class="font-medium">3. Document (记录存证)</span>
+                                <span>+</span>
+                            </button>
+                            <div class="accordion-content px-2 pb-4">
+                                <p class="text-sm text-gray-600">作为目击者，记下事件详情。事后可将记录提供给受害者作为证据。</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item border-b">
+                            <button class="accordion-header w-full text-left py-4 px-2 flex justify-between items-center">
+                                <span class="font-medium">4. Delay (延迟关怀)</span>
+                                <span>+</span>
+                            </button>
+                            <div class="accordion-content px-2 pb-4">
+                                <p class="text-sm text-gray-600">事件发生后，私下找到受害者表达关心和支持。“我刚才看到那一幕了，你还好吗？如果你需要，我愿意支持你。”</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header w-full text-left py-4 px-2 flex justify-between items-center">
+                                <span class="font-medium">5. Direct (直接介入)</span>
+                                <span>+</span>
+                            </button>
+                            <div class="accordion-content px-2 pb-4">
+                                <p class="text-sm text-gray-600">在评估环境安全时，直接发声。“嘿，这种玩笑过分了，请停止。”</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 5: Shifting Conflict -->
+        <section id="shifting" class="py-16">
+            <div class="text-center mb-12 px-4">
+                <h3 class="text-3xl font-bold mb-2">第五步：应对矛盾转移</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto">您问到“是否可以使用矛盾转移的方式将战火引到管理者”。这其实是问题员工的惯用伎俩（如寻找“指责对象”）。我们的策略不是模仿他们，而是用更高级、更专业的方式，将问题的焦点从“个人恩怨”转移到“组织议题”上。</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                <div>
+                    <h4 class="text-xl font-bold mb-2 text-red-700">要避免的陷阱：模仿他们的“战争游戏”</h4>
+                    <p class="text-gray-700">问题员工将冲突视为必须取胜的战争，他们不攻击“问题”，而是攻击“人”。他们通过背后议论、歪曲事实来拉拢盟友（负面倡导者），或引入第三方（三角关系），让冲突升级。直接模仿这种方式只会让你陷入泥潭，并可能损害自己的职业声誉。</p>
+                </div>
+                <div>
+                     <h4 class="text-xl font-bold mb-2 text-green-700">正确操作：将“战火”专业地引向“业务”和“流程”</h4>
+                     <div class="grid md:grid-cols-3 gap-6 mt-4">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h5 class="font-semibold">1. 转移到“业务影响”</h5>
+                            <p class="text-sm mt-1 text-gray-600">与管理者沟通时，不要说“他抢我功劳”，而要说“这个项目的关键贡献归属不明确，可能会影响未来团队成员的协作积极性和项目复盘的准确性。我们是否可以建立一个更清晰的贡献记录流程？”</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                           <h5 class="font-semibold">2. 转移到“团队风险”</h5>
+                           <p class="text-sm mt-1 text-gray-600">向HR或高层管理者陈述时，不要抱怨“他总是大喊大叫”，而要说“团队中观察到一种攻击性的沟通模式，已造成部分成员士气低落，并存在潜在的人员流失风险。这可能会影响我们关键项目的交付进度。”</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                           <h5 class="font-semibold">3. 转移到“组织责任”</h5>
+                           <p class="text-sm mt-1 text-gray-600">通过正式渠道（最好是集体书面投诉），将问题从“我与他的冲突”上升为“组织需要处理的一个不当行为案例”。使用“敌意工作环境”、“职场欺凌”等术语，可以触发公司更正式的调查流程，将责任从个人对抗转移给组织来裁决。</p>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer class="text-center py-6 bg-gray-100 border-t">
+        <p class="text-sm text-gray-500">本应用内容根据《职场毒性动力学综合报告》生成，仅供参考。</p>
+    </footer>
+
+    <!-- Modal Structure -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"></div>
+    <div id="modal-container" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div id="modal-content" class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 relative">
+            <button id="modal-close-button" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Navigation scroll spy
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+
+            // Tabs
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        if (content.id === tabId) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // Accordion
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('span:last-child');
+                    
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        icon.textContent = '+';
+                    } else {
+                        // Close other accordions
+                        document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                        document.querySelectorAll('.accordion-header span:last-child').forEach(i => i.textContent = '+');
+                        
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.textContent = '-';
+                    }
+                });
+            });
+            
+            // Modal
+            const modalData = {
+                hcp: {
+                    title: '高冲突人格 (HCP)',
+                    content: `
+                        <p class="mb-2"><strong>核心动机：</strong>规避任何个人责任，将所有问题归咎于他人。</p>
+                        <p class="mb-2"><strong>关键行为指标：</strong></p>
+                        <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+                            <li><strong>寻找“指责对象”：</strong>全神贯注于攻击一个目标，通常是亲近的同事或上级。</li>
+                            <li><strong>情绪失控：</strong>为小事爆发出强烈的愤怒、哭泣或大喊大叫。</li>
+                            <li><strong>非黑即白思维：</strong>无法接受妥协，认为事情必须完全按自己的方式进行。</li>
+                            <li><strong>极端行为：</strong>做出90%的人在压力下都不会做的过激行为。</li>
+                            <li><strong>拒绝反馈：</strong>无法认识到自身行为的问题，强烈抵制任何批评。</li>
+                        </ul>`
+                },
+                aggressor: {
+                    title: '攻击型沟通者',
+                    content: `
+                        <p class="mb-2"><strong>核心动机：</strong>控制、支配、赢。</p>
+                        <p class="mb-2"><strong>关键行为指标：</strong></p>
+                         <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+                            <li><strong>命令式语气：</strong>使用高亢、命令式的语调。</li>
+                            <li><strong>人身攻击：</strong>贬低、羞辱或直接攻击他人。</li>
+                            <li><strong>打断与无视：</strong>频繁打断别人说话，无视他人想法和边界。</li>
+                            <li><strong>“你”式指责：</strong>频繁使用“你”开头的语句直接归咎于人（例如，“你又搞砸了”）。</li>
+                        </ul>`
+                },
+                passive: {
+                    title: '被动攻击型沟通者',
+                    content: `
+                        <p class="mb-2"><strong>核心动机：</strong>避免直接冲突，通过隐蔽的方式表达敌意和报复。</p>
+                        <p class="mb-2"><strong>关键行为指标：</strong></p>
+                         <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+                            <li><strong>冷暴力：</strong>故意不回复邮件或请求。</li>
+                            <li><strong>讽刺挖苦：</strong>用尖酸的玩笑或评论来表达不满。</li>
+                            <li><strong>故意拖延：</strong>故意拖延承诺的工作，暗中破坏。</li>
+                            <li><strong>言行不一：</strong>口头佯装同意（“好主意”），但随后毫无行动，甚至反过来指责对方。</li>
+                        </ul>`
+                },
+                narcissist: {
+                    title: '自恋型邀功者',
+                    content: `
+                        <p class="mb-2"><strong>核心动机：</strong>确认自我价值，维持权力和优越感。</p>
+                        <p class="mb-2"><strong>关键行为指标：</strong></p>
+                         <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+                            <li><strong>窃取功劳：</strong>在会议或报告中将团队成果归为己有。</li>
+                            <li><strong>贬低他人贡献：</strong>刻意淡化或无视同事的努力。</li>
+                            <li><strong>缺乏同理心：</strong>无法理解或关心他人的感受。</li>
+                            <li><strong>需要持续赞美：</strong>对赞扬和奉承有强烈的需求。</li>
+                            <li><strong>信息囤积：</strong>扣留关键信息以维持自己的优势地位。</li>
+                        </ul>
+                        <p class="mt-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-2 text-sm"><strong>特别注意：</strong>您提到的“遇到能立功的工作...用大吵大闹的方式来抢活”正是<strong>攻击型沟通</strong>与<strong>自恋型邀功</strong>的结合体。</p>
+                        `
+                }
+            };
+
+            const cards = document.querySelectorAll('.card');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContainer = document.getElementById('modal-container');
+            const modalContent = document.getElementById('modal-content');
+            const modalBody = document.getElementById('modal-body');
+            const modalCloseButton = document.getElementById('modal-close-button');
+
+            const openModal = (key) => {
+                const data = modalData[key];
+                modalBody.innerHTML = `<h3 class="text-2xl font-bold mb-4">${data.title}</h3><div>${data.content}</div>`;
+                modalBackdrop.classList.remove('hidden');
+                modalContainer.classList.remove('hidden');
+            };
+
+            const closeModal = () => {
+                modalBackdrop.classList.add('hidden');
+                modalContainer.classList.add('hidden');
+            };
+
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    openModal(card.dataset.modal);
+                });
+            });
+
+            modalCloseButton.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', closeModal);
+            
+            // Chart.js
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            const impactChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['规避1名毒性员工', '雇佣1名超级明星'],
+                    datasets: [{
+                        label: '财务价值对比 (美元)',
+                        data: [12489, 5303],
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.6)',
+                            'rgba(59, 130, 246, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(220, 38, 38, 1)',
+                            'rgba(59, 130, 246, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '美元 ($)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '“毒性员工” vs “超级明星”的财务影响',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.x);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

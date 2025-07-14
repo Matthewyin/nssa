@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一战缘起：交互式探索</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Historical Parchment -->
+    <!-- Application Structure Plan: The application is designed as a single-page exploratory experience, structured into five thematic, scrollable sections accessible via a fixed navigation bar. This non-linear, thematic structure is chosen over a simple report-like layout to enhance usability and engagement. The user journey starts with a compelling introduction, moves to the deep-rooted "Great Power Rivalries" (the gunpowder), then focuses on the volatile "Balkan Powder Keg," the "Spark of Sarajevo" assassination, and finally the "July Crisis" domino effect, visualized as an interactive timeline. A concluding analysis section encourages critical thinking. This structure allows users to either follow a narrative flow or jump directly to topics of interest, making complex historical information digestible and explorable. -->
+    <!-- Visualization & Content Choices:
+        1. Alliances (Inform/Organize): An interactive diagram built with HTML/CSS. Goal: To clearly show the two opposing blocs. Interaction: Hovering over a country reveals its core motivation. Justification: More engaging and clearer than a static list. Method: HTML/CSS with Tailwind.
+        2. Military Spending (Compare/Change): A Bar Chart. Goal: To quantify the pre-war arms race. Interaction: Tooltips on hover provide exact figures. Justification: A quantitative visual is more impactful than just text. Library: Chart.js (Canvas).
+        3. July Crisis Timeline (Change/Relationships): An interactive vertical timeline. Goal: To illustrate the rapid, cause-and-effect escalation to war. Interaction: Clicking on an event expands to show details and consequences. Justification: Makes the complex sequence of events easy to follow and understand the domino effect. Method: HTML/JS with Tailwind for styling.
+        4. Balkan Map (Organize): A simplified, non-geographic diagram. Goal: To show the key regional players and their tensions. Interaction: Clickable areas reveal short descriptions. Justification: A simple visual guide to a complex geopolitical situation. Method: HTML/CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f4f3ee;
+            color: #3d3d3d;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #a52a2a;
+            border-bottom-color: #a52a2a;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .timeline-item-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .timeline-item-content.open {
+            max-height: 500px;
+        }
+        .alliance-card {
+            position: relative;
+            border: 2px solid;
+            transition: all 0.3s ease;
+        }
+        .alliance-card .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+        .alliance-card:hover .overlay {
+            opacity: 1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body class="leading-relaxed">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-[#a52a2a]">一战缘起</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#intro" class="nav-link px-3 py-2 rounded-md text-sm font-medium">序章</a>
+                        <a href="#rivalries" class="nav-link px-3 py-2 rounded-md text-sm font-medium">大国纷争</a>
+                        <a href="#balkans" class="nav-link px-3 py-2 rounded-md text-sm font-medium">巴尔干火药桶</a>
+                        <a href="#spark" class="nav-link px-3 py-2 rounded-md text-sm font-medium">萨拉热窝的火星</a>
+                        <a href="#crisis" class="nav-link px-3 py-2 rounded-md text-sm font-medium">七月危机</a>
+                        <a href="#analysis" class="nav-link px-3 py-2 rounded-md text-sm font-medium">为何是必然？</a>
+                        <a href="/timeline.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium">时间线</a>
+                        <a href="/about.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium">关于</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="intro" class="py-20 sm:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 tracking-tight">一场终结所有战争的战争</h2>
+                <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">
+                    第一次世界大战的爆发并非偶然。它不是源于一次刺杀，而是一系列深层矛盾的最终引爆。本应用将带您穿越时空，探寻那些将世界推向深渊的帝国野心、军事同盟、狂热民族主义和外交误判。
+                </p>
+                <div class="mt-8">
+                    <span class="inline-block text-gray-400">👇 向下滚动或使用导航开始探索</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="rivalries" class="py-20 sm:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">大国纷争：欧洲的结构性矛盾</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+                        1914年的欧洲，表面和平之下暗流涌动。四大结构性矛盾——帝国主义、军事同盟、军备竞赛和民族主义——如同干燥的薪柴，只待一颗火星便可燃起熊熊烈火。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="card bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-gray-800">⚔️ 两大军事同盟</h3>
+                        <p class="mt-4 text-gray-600">欧洲被两大敌对的军事集团所割裂：以德国和奥匈帝国为核心的"三国同盟"与以法国、俄国和英国为核心的"三国协约"。僵化的同盟体系使得任何局部冲突都可能迅速演变为全面战争。请将鼠标悬停在国家上查看其动机。</p>
+                        <div class="mt-6 grid grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-semibold text-center text-red-700 mb-2">三国同盟</h4>
+                                <div class="space-y-3">
+                                    <div class="alliance-card border-red-700 p-4 rounded-lg text-center font-semibold">
+                                        德意志帝国
+                                        <div class="overlay">维护欧洲霸权，孤立法国，支持奥匈。</div>
+                                    </div>
+                                    <div class="alliance-card border-red-700 p-4 rounded-lg text-center font-semibold">
+                                        奥匈帝国
+                                        <div class="overlay">对抗俄国在巴尔干的扩张，维持多民族帝国的统一。</div>
+                                    </div>
+                                    <div class="alliance-card border-gray-400 p-4 rounded-lg text-center font-semibold italic">
+                                        意大利王国*
+                                        <div class="overlay">*初期成员，但与奥匈存在领土争端，后加入协约国。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-center text-blue-700 mb-2">三国协约</h4>
+                                <div class="space-y-3">
+                                    <div class="alliance-card border-blue-700 p-4 rounded-lg text-center font-semibold">
+                                        法兰西共和国
+                                        <div class="overlay">寻求对德复仇，收复失地，摆脱外交孤立。</div>
+                                    </div>
+                                    <div class="alliance-card border-blue-700 p-4 rounded-lg text-center font-semibold">
+                                        俄罗斯帝国
+                                        <div class="overlay">支持巴尔干的斯拉夫民族，遏制德奥势力。</div>
+                                    </div>
+                                    <div class="alliance-card border-blue-700 p-4 rounded-lg text-center font-semibold">
+                                        大英帝国
+                                        <div class="overlay">维护海上霸权，防止德国主宰欧洲大陆。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-gray-800">📈 失控的军备竞赛</h3>
+                        <p class="mt-4 text-gray-600">"安全困境"愈演愈烈，各国军费开支急剧膨胀。英德之间的"无畏舰竞赛"和大陆国家的陆军扩张，不仅耗费巨资，更催生了"先发制人"和"速战速决"的危险军事思想，极大地压缩了外交斡旋空间。</p>
+                        <div class="mt-6 chart-container">
+                            <canvas id="militarySpendingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-gray-800">🌍 帝国主义扩张</h3>
+                        <p class="mt-4 text-gray-600">老牌殖民帝国英、法与新兴强国德国之间，为争夺殖民地、市场和"阳光下的地盘"展开了激烈角逐。德国"世界政策"挑战英国全球霸权，法德在北非的摩洛哥危机数次将欧洲推向战争边缘。经济实力与殖民地份额的巨大失衡，是冲突的根本经济原因。</p>
+                    </div>
+
+                    <div class="card bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-gray-800">🔥 狂热的民族主义</h3>
+                        <p class="mt-4 text-gray-600">极端民族主义思潮在欧洲蔓延，为对抗提供了强大的精神动力。泛日耳曼主义鼓吹德意志民族扩张；泛斯拉夫主义寻求联合斯拉夫民族对抗德奥；法国复仇主义则时刻渴望一雪普法战争之耻。这些思潮将国际关系描绘成"你死我活"的民族生存斗争。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="balkans" class="py-20 sm:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">巴尔干火药桶</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+                        奥斯曼帝国的衰落在此地留下权力真空，大国势力与新生民族国家的野心在此激烈碰撞。两次巴尔干战争（1912-1913）重塑了地区格局，却也埋下了更深的仇恨。
+                    </p>
+                </div>
+                <div class="max-w-4xl mx-auto p-8 bg-gray-50 rounded-lg">
+                    <p class="text-center text-gray-700 mb-8">塞尔维亚的迅速壮大和其"大塞尔维亚"的梦想，被视作对其境内大量斯拉夫人口的煽动，直接威胁到多民族的奥匈帝国的存亡。维也纳决心不惜一切代价遏制塞尔维亚，而萨拉热窝，这座被奥匈吞并的波斯尼亚首府，正是这场冲突的焦点。</p>
+                    <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8">
+                        <div class="text-center">
+                           <div class="w-32 h-32 mx-auto bg-red-200 rounded-full flex items-center justify-center border-4 border-red-400">
+                               <p class="font-bold text-red-800">奥匈帝国</p>
+                           </div>
+                           <p class="mt-2 text-sm text-gray-600">恐惧内部斯拉夫民族分离</p>
+                        </div>
+                        <div class="text-4xl font-light text-gray-400 transform rotate-90 md:rotate-0">💥</div>
+                         <div class="text-center">
+                           <div class="w-32 h-32 mx-auto bg-blue-200 rounded-full flex items-center justify-center border-4 border-blue-400">
+                               <p class="font-bold text-blue-800">塞尔维亚</p>
+                           </div>
+                           <p class="mt-2 text-sm text-gray-600">梦想统一南部斯拉夫民族</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="spark" class="py-20 sm:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">萨拉热窝的火星</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+                        1914年6月28日，一声枪响震动了世界。这一天，奥匈帝国皇储斐迪南大公夫妇在萨拉热窝街头遇刺身亡。
+                    </p>
+                </div>
+                <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-xl">
+                    <p class="mb-4 text-gray-700">刺客是19岁的波斯尼亚塞族青年加夫里洛·普林西普，他背后是塞尔维亚激进民族主义秘密组织"黑手会"。这次刺杀，既有周密的策划，也充满了戏剧性的偶然——一次失败的炸弹袭击，一次意外的错误转向，最终将皇储的汽车送到了普林西普的枪口之下。</p>
+                    <p class="text-gray-700">然而，刺杀的成功并非重点。重点在于，它为奥匈帝国提供了一个梦寐以求的借口，一个用武力一劳永逸地解决"塞尔维亚问题"的"天赐良机"。萨拉热窝的枪声，成为了点燃整个欧洲火药桶的那颗致命火星。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="crisis" class="py-20 sm:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">七月危机：战争的连锁反应</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+                        从萨拉热窝的枪声到世界大战的全面爆发，仅仅用了一个多月。在这场被称为"七月危机"的外交风暴中，一系列误判、最后通牒和军事动员，如多米诺骨牌般接连倒下。点击下方时间线上的事件，查看危机的逐步升级。
+                    </p>
+                </div>
+
+                <div class="relative max-w-4xl mx-auto">
+                    <div class="absolute left-1/2 top-0 h-full w-0.5 bg-gray-300 transform -translate-x-1/2"></div>
+                    <div id="timeline-container" class="space-y-12">
+                        <!-- Timeline items will be injected here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="py-20 sm:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">为何是必然？</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+                        欧洲在1914年前也曾经历过数次危机，为何唯独这一次失控了？大国间的信任缺失、战略误判和僵化的军事计划，共同将世界推向深渊。
+                    </p>
+                </div>
+                <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <h3 class="font-bold text-xl mb-3">此前危机（如摩洛哥危机）</h3>
+                        <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                            <li><span class="font-semibold">利益攸关度较低：</span>主要涉及殖民地利益，未触及大国核心安全。</li>
+                            <li><span class="font-semibold">外交尚有空间：</span>大国（如英国）尚能有效调停，外交孤立迫使德国让步。</li>
+                            <li><span class="font-semibold">危机发展较慢：</span>为外交斡旋留下了充足的时间窗口。</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-50 border border-red-200 p-8 rounded-lg shadow-md">
+                        <h3 class="font-bold text-xl mb-3 text-red-800">七月危机 (1914)</h3>
+                        <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                             <li><span class="font-semibold">触及核心利益：</span>直接关系到奥匈帝国的存亡和俄国在巴尔干的战略地位。</li>
+                            <li><span class="font-semibold">和平意愿降低：</span>德国开出"空头支票"，纵容奥匈采取强硬行动，调停失败。</li>
+                            <li><span class="font-semibold">军事压力空前：</span>危机发展迅速，"动员即战争"的军事逻辑压倒了外交努力。</li>
+                            <li><span class="font-semibold">信任基础崩溃：</span>此前危机的累积效应，使得各国互信荡然无存，决心不再退让。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p>基于历史报告的交互式探索。仅用于学习和研究目的。</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Navigation link active state
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Military Spending Chart
+            const militarySpendingCtx = document.getElementById('militarySpendingChart').getContext('2d');
+            new Chart(militarySpendingCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['德国', '奥匈', '意大利', '英国', '法国', '俄国'],
+                    datasets: [{
+                        label: '1913年年度军事开支（估算，百万英镑）',
+                        data: [244, 77, 40, 147, 100, 166], // Simplified data based on historical estimates for impact
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.6)',
+                            'rgba(220, 38, 38, 0.6)',
+                            'rgba(220, 38, 38, 0.6)',
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(59, 130, 246, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(220, 38, 38, 1)',
+                            'rgba(220, 38, 38, 1)',
+                            'rgba(220, 38, 38, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(59, 130, 246, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '1913年欧洲主要列强军事开支对比',
+                            font: { size: 16, family: "'Noto Sans SC', sans-serif" }
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' 百万英镑';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '开支（百万英镑）'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: { family: "'Noto Sans SC', sans-serif" }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // July Crisis Timeline
+            const timelineData = [
+                { date: '6月28日', title: '萨拉热窝刺杀事件', content: '奥匈帝国皇储斐迪南大公夫妇遇刺，引爆危机。' },
+                { date: '7月5-6日', title: '德国开出"空头支票"', content: '德国无条件支持奥匈对塞尔维亚采取任何行动，极大地纵容了奥匈的冒险政策。' },
+                { date: '7月23日', title: '奥匈发出最后通牒', content: '奥匈向塞尔维亚发出包含苛刻条款的48小时最后通牒，其意图就是被拒绝，为开战制造借口。' },
+                { date: '7月25日', title: '塞尔维亚答复与俄国动员', content: '塞尔维亚几乎接受了全部条款，但奥匈仍不满并断交。俄国开始局部军事动员以示威慑。' },
+                { date: '7月28日', title: '奥匈对塞尔维亚宣战', content: '局部战争爆发，第一次世界大战正式开始。' },
+                { date: '7月30日', title: '俄国进行全国总动员', content: '俄国决心全面介入，此举被德国视为对其安全的直接威胁，战争升级的关键一步。' },
+                { date: '8月1日', title: '德国对俄国宣战', content: '德国在俄国未停止动员后，正式对俄宣战，并开始总动员。法国也随之总动员。' },
+                { date: '8月3日', title: '德国对法国宣战', content: '德国开始实施"施里芬计划"，入侵卢森堡后向法国宣战。' },
+                { date: '8月4日', title: '英国对德国宣战', content: '德军入侵中立国比利时，英国以此为由对德宣战。欧洲大战全面爆发。' },
+            ];
+
+            const timelineContainer = document.getElementById('timeline-container');
+            timelineData.forEach((item, index) => {
+                const isLeft = index % 2 === 0;
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `relative flex items-center ${isLeft ? 'justify-start' : 'justify-end'}`;
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = `w-1/2 p-4 bg-gray-100 rounded-lg shadow-md cursor-pointer ${isLeft ? 'pr-8' : 'pl-8'}`;
+                contentDiv.innerHTML = `
+                    <p class="text-sm font-semibold ${isLeft ? 'text-right' : 'text-left'} text-red-700">${item.date}</p>
+                    <h4 class="font-bold text-lg mt-1 ${isLeft ? 'text-right' : 'text-left'}">${item.title}</h4>
+                    <div class="timeline-item-content">
+                        <p class="mt-2 text-sm text-gray-600 ${isLeft ? 'text-right' : 'text-left'}">${item.content}</p>
+                    </div>
+                `;
+
+                const dotDiv = document.createElement('div');
+                dotDiv.className = 'absolute left-1/2 w-4 h-4 bg-red-700 rounded-full transform -translate-x-1/2 border-4 border-white';
+
+                if (isLeft) {
+                    timelineItem.appendChild(contentDiv);
+                    timelineItem.appendChild(dotDiv);
+                } else {
+                    timelineItem.appendChild(dotDiv);
+                    timelineItem.appendChild(contentDiv);
+                }
+
+                contentDiv.addEventListener('click', () => {
+                    const content = contentDiv.querySelector('.timeline-item-content');
+                    content.classList.toggle('open');
+                });
+
+                timelineContainer.appendChild(timelineItem);
+            });
+        });
+    </script>
+
+</body>
+</html>
