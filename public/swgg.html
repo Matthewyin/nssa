@@ -3,52 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWGG 专题 - NSSA</title>
+    <title>交互式职场困境分析器</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
-                    },
-                    colors: {
-                        'apple-blue': '#007AFF',
-                        'apple-gray': '#8E8E93',
-                        'apple-light-gray': '#F2F2F7',
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Analytics (Slate, Teal, Amber) -->
+    <!-- Application Structure Plan: A three-part diagnostic journey: 1. The Symptom (识别症状): Validates the user's experience. 2. The Diagnosis (深度诊断): An interactive, tab-based exploration of the three key actors (Aggressor, Enabler, System) to dissect the core problem. 3. The Prescription (行动框架): A clear, actionable accordion-style guide for both employee self-preservation and organizational correction. This user-centric structure transforms passive reading into an active process of analysis and empowerment, which is ideal for the report's goal of providing clarity and solutions. -->
+    <!-- Visualization & Content Choices: 
+        1. HBS Study Data -> Goal: Compare financial impact -> Viz: Interactive Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Starkly visualizes the "talented jerk" fallacy's cost.
+        2. Psychological Concepts (nAch, nPow, Dark Triad) -> Goal: Organize complex theories -> Viz: Interactive Cards (HTML/CSS/JS) -> Interaction: Click-to-expand details -> Justification: Prevents text overload and encourages exploration.
+        3. Economic Models (Gresham's Law, Lemons Market) -> Goal: Illustrate systemic decay -> Viz: CSS-based animated diagrams -> Interaction: Button-triggered animations -> Justification: Makes abstract concepts intuitive and memorable.
+        4. Action Frameworks -> Goal: Organize recommendations -> Viz: Accordion/Collapsible Lists (HTML/JS) -> Interaction: Click-to-expand sections -> Justification: Makes a long list of advice scannable and accessible. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background-color: #ffffff;
-            color: #1d1d1f;
-            line-height: 1.47059;
-            font-weight: 400;
-            letter-spacing: -0.022em;
-        }
-
-        .nav-link {
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .nav-link:hover {
-            color: #007AFF;
-        }
-
-        .nav-link.active {
-            color: #007AFF;
-            font-weight: 600;
-        }
-
+        body { font-family: 'Noto Sans SC', sans-serif; }
         .chart-container { position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; height: 320px; max-height: 400px; }
         @media (min-width: 768px) { .chart-container { height: 380px; } }
         .nav-button { transition: all 0.3s ease; }
-        .nav-button.active { background-color: #007AFF; color: white; }
+        .nav-button.active { background-color: #0d9488; color: white; }
         .content-section { display: none; }
         .content-section.active { display: block; }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
@@ -64,7 +38,7 @@
         .lemons-container.run .peach { transform: translateY(-150px) scale(0.5); opacity: 0; }
     </style>
 </head>
-<body class="bg-white">
+<body class="bg-slate-50 text-slate-700">
 
     <!-- 导航栏 -->
     <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
@@ -94,46 +68,36 @@
         </div>
     </nav>
 
-    <!-- 主内容 -->
-    <main class="max-w-6xl mx-auto px-6 py-16">
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
         
-        <!-- 页面标题 -->
-        <div class="text-center mb-20">
-            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
-                SWGG 专题
-            </h1>
-            <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
-                交互式职场困境分析器与解决方案
-            </p>
-            <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">“会哭的孩子”悖论：深度解析攻击性抢功与领导纵容现象</p>
-        </div>
+        <header class="text-center mb-12 fade-in">
+            <h1 class="text-3xl md:text-5xl font-bold text-teal-700 mb-2">交互式职场困境分析器</h1>
+            <p class="text-lg text-slate-500">“会哭的孩子”悖论：深度解析攻击性抢功与领导纵容现象</p>
+        </header>
 
-        <!-- 内容区域 -->
-        <div class="space-y-16">
-            <section id="symptom" class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
-                <h2 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 tracking-tight flex items-center"><span class="text-3xl mr-3">🧐</span>第一步：识别症状</h2>
-                <div class="space-y-6 text-lg text-apple-gray leading-relaxed">
-                    <p>您是否正经历这样的困境：一位同事平时工作正常，但每当遇到能建立功勋的关键任务时，就会通过“大吵大闹”的方式，从已经做好准备的您或其他同事手中抢走工作？更令人困惑的是，领导似乎还默许甚至纵容这种行为。这并非孤例，而是一种常见的、极具破坏性的职场功能障碍模式。</p>
-                    <p>本工具旨在帮助您系统性地拆解这一行为的内在逻辑，理解其背后的心理动因，并找到有效的应对策略。</p>
-                </div>
+        <main>
+            <section id="symptom" class="mb-16 p-6 bg-white rounded-xl shadow-lg fade-in">
+                <h2 class="text-2xl font-bold text-teal-600 mb-4 flex items-center"><span class="text-3xl mr-3">🧐</span>第一步：识别症状</h2>
+                <p class="mb-4">您是否正经历这样的困境：一位同事平时工作正常，但每当遇到能建立功勋的关键任务时，就会通过“大吵大闹”的方式，从已经做好准备的您或其他同事手中抢走工作？更令人困惑的是，领导似乎还默许甚至纵容这种行为。这并非孤例，而是一种常见的、极具破坏性的职场功能障碍模式。</p>
+                <p>本工具旨在帮助您系统性地拆解这一行为的内在逻辑，理解其背后的心理动因，并找到有效的应对策略。</p>
             </section>
 
-            <section id="diagnosis" class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 tracking-tight flex items-center justify-center"><span class="text-4xl mr-3">🩺</span>第二步：深度诊断</h2>
-                    <p class="text-lg text-apple-gray leading-relaxed">我们将从三个核心角色入手，剖析这个有毒系统的运作机制。</p>
+            <section id="diagnosis" class="mb-16 fade-in" style="animation-delay: 0.2s;">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-teal-600 mb-2 flex items-center justify-center"><span class="text-4xl mr-3">🩺</span>第二步：深度诊断</h2>
+                    <p class="text-md text-slate-500">我们将从三个核心角色入手，剖析这个有毒系统的运作机制。</p>
                 </div>
 
-                <div class="flex justify-center mb-12 border-b border-gray-200">
-                    <button class="nav-button py-4 px-8 text-lg font-medium text-apple-gray border-b-4 border-transparent hover:text-apple-blue transition-colors active" onclick="showSection('aggressor')">攻击者</button>
-                    <button class="nav-button py-4 px-8 text-lg font-medium text-apple-gray border-b-4 border-transparent hover:text-apple-blue transition-colors" onclick="showSection('enabler')">纵容者</button>
-                    <button class="nav-button py-4 px-8 text-lg font-medium text-apple-gray border-b-4 border-transparent hover:text-apple-blue transition-colors" onclick="showSection('system')">系统性衰败</button>
+                <div class="flex justify-center mb-8 border-b border-slate-200">
+                    <button class="nav-button py-3 px-6 text-lg font-semibold text-slate-600 border-b-4 border-transparent active" onclick="showSection('aggressor')">攻击者</button>
+                    <button class="nav-button py-3 px-6 text-lg font-semibold text-slate-600 border-b-4 border-transparent" onclick="showSection('enabler')">纵容者</button>
+                    <button class="nav-button py-3 px-6 text-lg font-semibold text-slate-600 border-b-4 border-transparent" onclick="showSection('system')">系统性衰败</button>
                 </div>
 
                 <div id="aggressor" class="content-section active">
-                    <article class="p-8 bg-apple-light-gray rounded-2xl">
-                        <h3 class="text-2xl font-semibold text-rose-700 mb-6">角色一：攻击性的“抢功者”</h3>
-                        <p class="mb-8 text-lg text-apple-gray leading-relaxed">您同事的“大吵大闹”，并非简单的失控，而是一种经过计算的、高风险、高回报的攻击性策略。其行为模式揭示了复杂的心理动机。</p>
+                    <article class="p-6 bg-white rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-rose-700 mb-4">角色一：攻击性的“抢功者”</h3>
+                        <p class="mb-6">您同事的“大吵大闹”，并非简单的失控，而是一种经过计算的、高风险、高回报的攻击性策略。其行为模式揭示了复杂的心理动机。</p>
                         
                         <div class="grid md:grid-cols-3 gap-6 text-center">
                             <div class="p-4 bg-rose-50 rounded-lg border border-rose-200">
@@ -235,6 +199,18 @@
 
         </main>
     </div>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-gray-200 mt-20">
+        <div class="max-w-6xl mx-auto px-6 py-8 text-center">
+            <p class="text-apple-gray text-sm mb-2">
+                © 2025 NSSA Platform. 基于历史报告的交互式探索，仅用于学习和研究目的。
+            </p>
+            <p class="text-apple-gray text-xs">
+                Powered by Cloudflare Workers | Domain: nssa.io
+            </p>
+        </div>
+    </footer>
 
     <script>
         const employeeActions = [
@@ -398,31 +374,5 @@
         };
 
     </script>
-        </div>
-
-        <!-- 返回首页 -->
-        <div class="text-center mt-20">
-            <a href="/"
-               class="inline-flex items-center text-apple-blue hover:text-blue-600 transition-colors text-lg font-medium">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                返回首页
-            </a>
-        </div>
-        </div>
-    </main>
-
-    <!-- 页脚 -->
-    <footer class="border-t border-gray-200 mt-20">
-        <div class="max-w-6xl mx-auto px-6 py-8 text-center">
-            <p class="text-apple-gray text-sm mb-2">
-                © 2025 NSSA Platform. 基于历史报告的交互式探索，仅用于学习和研究目的。
-            </p>
-            <p class="text-apple-gray text-xs">
-                Powered by Cloudflare Workers | Domain: nssa.io
-            </p>
-        </div>
-    </footer>
 </body>
 </html>
