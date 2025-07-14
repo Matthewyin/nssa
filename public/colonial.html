@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colonial 专题 - NSSA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+                    },
+                    colors: {
+                        'apple-blue': '#007AFF',
+                        'apple-gray': '#8E8E93',
+                        'apple-light-gray': '#F2F2F7',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+        }
+
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-link:hover {
+            color: #007AFF;
+        }
+
+        .nav-link.active {
+            color: #007AFF;
+            font-weight: 600;
+        }
+
+        .content-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-color: #ffffff;
+            border: 1px solid #d2d2d7;
+            border-radius: 16px;
+        }
+
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-color: #007AFF;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-2xl font-light text-gray-900 tracking-tight">NSSA</a>
+                    <span class="text-apple-gray">|</span>
+                    <span class="text-lg font-medium text-gray-900">Colonial 专题</span>
+                </div>
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="/" class="nav-link text-gray-900">首页</a>
+                    <a href="/fww.html" class="nav-link text-gray-900">一战缘起</a>
+                    <a href="/timeline.html" class="nav-link text-gray-900">时间线</a>
+                    <a href="/jaw.html" class="nav-link text-gray-900">JAW 专题</a>
+                    <a href="/swgg.html" class="nav-link text-gray-900">SWGG 专题</a>
+                    <a href="/colonial.html" class="nav-link active">Colonial 专题</a>
+                    <a href="/about.html" class="nav-link text-gray-900">关于</a>
+                </div>
+                <div class="lg:hidden">
+                    <button class="text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <!-- 页面标题 -->
+        <div class="text-center mb-20">
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+                Colonial 专题
+            </h1>
+            <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed">
+                殖民主义历史研究与分析平台
+            </p>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="space-y-16">
+            <!-- 研究概述 -->
+            <section class="content-card p-8 lg:p-12">
+                <h2 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 tracking-tight">
+                    研究概述
+                </h2>
+                <div class="space-y-6 text-lg text-apple-gray leading-relaxed">
+                    <p>
+                        Colonial 专题致力于深入研究殖民主义的历史发展、影响机制以及其在现代社会中的延续形式。
+                        通过多维度的分析框架，我们探索殖民主义如何塑造了全球政治、经济和文化格局。
+                    </p>
+                    <p>
+                        本专题采用跨学科的研究方法，结合历史学、政治学、经济学和文化研究的视角，
+                        为理解当代国际关系和全球化进程提供深层次的历史背景。
+                    </p>
+                </div>
+            </section>
+
+            <!-- 即将推出 -->
+            <section class="content-card p-8 lg:p-12 text-center">
+                <h2 class="text-3xl sm:text-4xl font-light text-gray-900 mb-6 tracking-tight">
+                    即将推出
+                </h2>
+                <p class="text-xl text-apple-gray mb-8 max-w-3xl mx-auto leading-relaxed">
+                    我们正在开发交互式的殖民主义历史地图、数据可视化工具和深度分析报告。
+                    敬请期待更多精彩内容。
+                </p>
+                <div class="inline-flex items-center text-apple-blue">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="font-medium">持续更新中</span>
+                </div>
+            </section>
+        </div>
+
+        <!-- 返回首页 -->
+        <div class="text-center mt-20">
+            <a href="/"
+               class="inline-flex items-center text-apple-blue hover:text-blue-600 transition-colors text-lg font-medium">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                返回首页
+            </a>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-gray-200 mt-20">
+        <div class="max-w-6xl mx-auto px-6 py-8 text-center">
+            <p class="text-apple-gray text-sm mb-2">
+                © 2025 NSSA Platform. 基于历史报告的交互式探索，仅用于学习和研究目的。
+            </p>
+            <p class="text-apple-gray text-xs">
+                Powered by Cloudflare Workers | Domain: nssa.io
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
