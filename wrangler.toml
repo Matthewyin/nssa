@@ -1,0 +1,12 @@
+# wrangler.toml
+
+# 给你的 Worker 项目起个名字
+name = "nssa"
+
+# 兼容性日期，使用一个近期的日期
+compatibility_date = "2025-07-14"
+
+# 核心配置：告诉 Wrangler 这是一个静态网站项目
+[site]
+# "bucket" 指向你存放HTML文件的目录
+bucket = "./public"
