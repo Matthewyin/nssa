@@ -3,26 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>交互式职场困境分析器</title>
+    <title>SWGG 专题 - NSSA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Analytics (Slate, Teal, Amber) -->
-    <!-- Application Structure Plan: A three-part diagnostic journey: 1. The Symptom (识别症状): Validates the user's experience. 2. The Diagnosis (深度诊断): An interactive, tab-based exploration of the three key actors (Aggressor, Enabler, System) to dissect the core problem. 3. The Prescription (行动框架): A clear, actionable accordion-style guide for both employee self-preservation and organizational correction. This user-centric structure transforms passive reading into an active process of analysis and empowerment, which is ideal for the report's goal of providing clarity and solutions. -->
-    <!-- Visualization & Content Choices: 
-        1. HBS Study Data -> Goal: Compare financial impact -> Viz: Interactive Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Starkly visualizes the "talented jerk" fallacy's cost.
-        2. Psychological Concepts (nAch, nPow, Dark Triad) -> Goal: Organize complex theories -> Viz: Interactive Cards (HTML/CSS/JS) -> Interaction: Click-to-expand details -> Justification: Prevents text overload and encourages exploration.
-        3. Economic Models (Gresham's Law, Lemons Market) -> Goal: Illustrate systemic decay -> Viz: CSS-based animated diagrams -> Interaction: Button-triggered animations -> Justification: Makes abstract concepts intuitive and memorable.
-        4. Action Frameworks -> Goal: Organize recommendations -> Viz: Accordion/Collapsible Lists (HTML/JS) -> Interaction: Click-to-expand sections -> Justification: Makes a long list of advice scannable and accessible. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+                    },
+                    colors: {
+                        'apple-blue': '#007AFF',
+                        'apple-gray': '#8E8E93',
+                        'apple-light-gray': '#F2F2F7',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Noto Sans SC', sans-serif; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+        }
+
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-link:hover {
+            color: #007AFF;
+        }
+
+        .nav-link.active {
+            color: #007AFF;
+            font-weight: 600;
+        }
+
         .chart-container { position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; height: 320px; max-height: 400px; }
         @media (min-width: 768px) { .chart-container { height: 380px; } }
         .nav-button { transition: all 0.3s ease; }
-        .nav-button.active { background-color: #0d9488; color: white; }
+        .nav-button.active { background-color: #007AFF; color: white; }
         .content-section { display: none; }
         .content-section.active { display: block; }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }

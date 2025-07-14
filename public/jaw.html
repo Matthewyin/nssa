@@ -3,29 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>交互式报告：职场毒性动力学分析</title>
+    <title>JAW 专题 - NSSA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: The SPA is structured thematically to guide users from understanding the problem to implementing solutions. It uses a top navigation for quick access to five key sections: 1. **识别 (Identify):** Interactive cards for problem prototypes. 2. **解析 (Analyze):** Explains the underlying logic and career trajectory using a visual timeline. 3. **影响 (Impact):** Quantifies the damage with a Chart.js visualization. 4. **策略 (Strategies):** An actionable, tabbed handbook for different roles (Leadership, Managers, Employees). 5. **转移 (Shifting Conflict):** A dedicated section explaining manipulation tactics and proper escalation. This structure moves from theoretical to practical, directly addressing the user's initial questions in a logical flow, prioritizing user understanding over mirroring the report's linear chapter format. -->
-    <!-- Visualization & Content Choices: Report Info -> Key toxic behaviors (HCP, Narcissist). Goal -> Identification. Viz -> Interactive HTML/CSS cards. Interaction -> Click to reveal details. Justification -> More engaging than static text. Library -> Vanilla JS. || Report Info -> Career path data. Goal -> Show change over time. Viz -> HTML/CSS timeline diagram. Interaction -> Hover/click points for info. Justification -> Visualizes progression clearly. Library -> Vanilla JS. || Report Info -> Financial cost of toxic workers vs. superstars. Goal -> Show impact. Viz -> Bar Chart. Interaction -> Hover for exact values. Justification -> Powerful, quantifiable comparison. Library -> Chart.js. || Report Info -> Bystander intervention methods (5Ds). Goal -> Teach actionable skills. Viz -> HTML/CSS accordion. Interaction -> Click to expand. Justification -> Organizes complex info concisely. Library -> Vanilla JS. || CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+                    },
+                    colors: {
+                        'apple-blue': '#007AFF',
+                        'apple-gray': '#8E8E93',
+                        'apple-light-gray': '#F2F2F7',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background-color: #F8F9FA;
-            color: #343A40;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
         }
+
         .nav-link {
-            transition: all 0.3s ease;
-            border-bottom: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .nav-link.active, .nav-link:hover {
-            color: #007BFF;
-            border-bottom-color: #007BFF;
+
+        .nav-link:hover {
+            color: #007AFF;
+        }
+
+        .nav-link.active {
+            color: #007AFF;
+            font-weight: 600;
         }
         .card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -106,32 +123,34 @@
         }
     </style>
 </head>
-<body class="antialiased">
-
-    <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold text-gray-800">职场毒性动力学</h1>
-            <div class="hidden md:flex space-x-8">
-                <a href="#identify" class="nav-link py-2">识别问题</a>
-                <a href="#analyze" class="nav-link py-2">解析动机</a>
-                <a href="#impact" class="nav-link py-2">量化影响</a>
-                <a href="#strategy" class="nav-link py-2">应对策略</a>
-                <a href="#shifting" class="nav-link py-2">矛盾转移</a>
+<body class="bg-white">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-2xl font-light text-gray-900 tracking-tight">NSSA</a>
+                    <span class="text-apple-gray">|</span>
+                    <span class="text-lg font-medium text-gray-900">JAW 专题</span>
+                </div>
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="#identify" class="nav-link text-gray-900">识别</a>
+                    <a href="#analyze" class="nav-link text-gray-900">解析</a>
+                    <a href="#impact" class="nav-link text-gray-900">影响</a>
+                    <a href="#strategy" class="nav-link text-gray-900">策略</a>
+                    <a href="#shifting" class="nav-link text-gray-900">转移</a>
+                    <a href="/about.html" class="nav-link text-gray-900">关于</a>
+                </div>
+                <div class="lg:hidden">
+                    <button class="text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <button id="mobile-menu-button" class="md:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-        </nav>
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-3">
-             <a href="#identify" class="block py-2 text-center text-gray-700 hover:text-blue-500">识别问题</a>
-             <a href="#analyze" class="block py-2 text-center text-gray-700 hover:text-blue-500">解析动机</a>
-             <a href="#impact" class="block py-2 text-center text-gray-700 hover:text-blue-500">量化影响</a>
-             <a href="#strategy" class="block py-2 text-center text-gray-700 hover:text-blue-500">应对策略</a>
-             <a href="#shifting" class="block py-2 text-center text-gray-700 hover:text-blue-500">矛盾转移</a>
         </div>
-    </header>
+    </nav>
 
     <main class="container mx-auto p-4 md:p-8">
         
