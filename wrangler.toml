@@ -6,7 +6,17 @@ name = "nssa"
 # 兼容性日期，使用一个近期的日期
 compatibility_date = "2025-07-14"
 
+# 主入口文件
+main = "workers-site/index.js"
+
 # 核心配置：告诉 Wrangler 这是一个静态网站项目
 [site]
 # "bucket" 指向你存放HTML文件的目录
 bucket = "./public"
+
+# 自定义域名路由配置（示例）
+# 取消注释并替换为您的实际域名
+# routes = [
+#   "yourdomain.com/*",
+#   "www.yourdomain.com/*"
+# ]
