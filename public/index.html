@@ -5,133 +5,197 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NSSA - 历史研究与学习平台</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+                    },
+                    colors: {
+                        'apple-blue': '#007AFF',
+                        'apple-gray': '#8E8E93',
+                        'apple-light-gray': '#F2F2F7',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
         }
-        .card {
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 12px;
+            background-color: #ffffff;
+            border: 1px solid #d2d2d7;
         }
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-color: #007AFF;
         }
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+
+        .nav-link:active {
+            transform: translateY(0);
+            transition-duration: 0.1s;
+        }
+
+        .title-gradient {
+            background: linear-gradient(135deg, #1d1d1f 0%, #86868b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>
-<body>
-    <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="max-w-6xl w-full">
-            <!-- 主标题 -->
+<body class="bg-white">
+    <div class="min-h-screen">
+        <!-- 主容器 -->
+        <div class="max-w-4xl mx-auto px-6 py-16 sm:py-24">
+
+            <!-- 头部标题区域 -->
+            <div class="text-center mb-20">
+                <h1 class="text-7xl sm:text-8xl font-light title-gradient mb-6 tracking-tight">
+                    NSSA
+                </h1>
+                <p class="text-2xl sm:text-3xl font-light text-gray-900 mb-4 tracking-tight">
+                    历史研究与学习平台
+                </p>
+                <p class="text-lg text-apple-gray font-normal">
+                    National Security & Strategic Analysis
+                </p>
+            </div>
+
+            <!-- 导航链接区域 -->
+            <div class="space-y-4 mb-20">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-8 text-center">
+                    探索内容
+                </h2>
+
+                <div class="grid gap-4 sm:gap-6">
+                    <!-- 一战缘起 -->
+                    <a href="/fww.html" class="nav-link group block p-6 sm:p-8">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                                    一战缘起
+                                </h3>
+                                <p class="text-apple-gray text-base sm:text-lg">
+                                    深入探索第一次世界大战爆发的复杂历史背景
+                                </p>
+                            </div>
+                            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- 历史时间线 -->
+                    <a href="/timeline.html" class="nav-link group block p-6 sm:p-8">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                                    历史时间线
+                                </h3>
+                                <p class="text-apple-gray text-base sm:text-lg">
+                                    从萨拉热窝事件到全面战争爆发的关键时刻
+                                </p>
+                            </div>
+                            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- 关于页面 -->
+                    <a href="/about.html" class="nav-link group block p-6 sm:p-8">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                                    关于平台
+                                </h3>
+                                <p class="text-apple-gray text-base sm:text-lg">
+                                    了解 NSSA 平台的技术特色和项目背景
+                                </p>
+                            </div>
+                            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- 其他页面 -->
+                    <a href="/jaw.html" class="nav-link group block p-6 sm:p-8">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                                    JAW 专题
+                                </h3>
+                                <p class="text-apple-gray text-base sm:text-lg">
+                                    专题研究内容
+                                </p>
+                            </div>
+                            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/swgg.html" class="nav-link group block p-6 sm:p-8">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                                    SWGG 专题
+                                </h3>
+                                <p class="text-apple-gray text-base sm:text-lg">
+                                    专题研究内容
+                                </p>
+                            </div>
+                            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 外部链接 -->
             <div class="text-center mb-16">
-                <h1 class="text-6xl font-bold text-white mb-4 drop-shadow-lg">NSSA</h1>
-                <p class="text-2xl text-white/90 mb-2">历史研究与学习平台</p>
-                <p class="text-lg text-white/70">National Security & Strategic Analysis</p>
-            </div>
-
-            <!-- 项目卡片网格 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                <!-- 一战缘起项目 -->
-                <div class="card glass rounded-2xl p-8 text-center">
-                    <div class="text-6xl mb-6">⚔️</div>
-                    <h2 class="text-2xl font-bold text-white mb-4">一战缘起</h2>
-                    <p class="text-white/80 mb-6 leading-relaxed">
-                        深入探索第一次世界大战爆发的复杂历史背景，
-                        通过交互式内容了解大国纷争、巴尔干危机和萨拉热窝事件。
-                    </p>
-                    <div class="space-y-3">
-                        <a href="/fww.html"
-                           class="block w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                            进入探索
-                        </a>
-                        <a href="/timeline.html"
-                           class="block w-full bg-white/20 hover:bg-white/30 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
-                            查看时间线
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 关于平台 -->
-                <div class="card glass rounded-2xl p-8 text-center">
-                    <div class="text-6xl mb-6">📚</div>
-                    <h2 class="text-2xl font-bold text-white mb-4">关于平台</h2>
-                    <p class="text-white/80 mb-6 leading-relaxed">
-                        NSSA 致力于通过现代化的技术手段，
-                        让历史学习变得更加生动有趣，深入浅出地展现复杂的历史事件。
-                    </p>
-                    <div class="space-y-3">
-                        <a href="/about.html"
-                           class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                            了解更多
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 技术特色 -->
-                <div class="card glass rounded-2xl p-8 text-center">
-                    <div class="text-6xl mb-6">🚀</div>
-                    <h2 class="text-2xl font-bold text-white mb-4">技术特色</h2>
-                    <p class="text-white/80 mb-6 leading-relaxed">
-                        采用现代化的前端技术栈，响应式设计，
-                        交互式图表和时间线，为用户提供优质的学习体验。
-                    </p>
-                    <div class="space-y-3">
-                        <div class="bg-white/20 text-white font-semibold py-2 px-4 rounded-lg text-sm">
-                            Cloudflare Workers
-                        </div>
-                        <div class="bg-white/20 text-white font-semibold py-2 px-4 rounded-lg text-sm">
-                            Tailwind CSS
-                        </div>
-                        <div class="bg-white/20 text-white font-semibold py-2 px-4 rounded-lg text-sm">
-                            Chart.js
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- 快速导航 -->
-            <div class="mt-16 text-center">
-                <div class="glass rounded-2xl p-8 inline-block">
-                    <h3 class="text-xl font-bold text-white mb-4">快速导航</h3>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <a href="/fww.html"
-                           class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors">
-                            📖 完整探索
-                        </a>
-                        <a href="/timeline.html"
-                           class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors">
-                            ⏰ 历史时间线
-                        </a>
-                        <a href="/about.html"
-                           class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors">
-                            ℹ️ 关于我们
-                        </a>
-                        <a href="https://github.com/Matthewyin/nssa" target="_blank"
-                           class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors">
-                            💻 GitHub
-                        </a>
-                    </div>
-                </div>
+                <a href="https://github.com/Matthewyin/nssa"
+                   target="_blank"
+                   class="inline-flex items-center text-apple-blue hover:text-blue-600 transition-colors text-lg font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    在 GitHub 上查看源码
+                </a>
             </div>
 
             <!-- 页脚 -->
-            <div class="mt-16 text-center">
-                <p class="text-white/60 text-sm">
+            <div class="text-center border-t border-gray-200 pt-8">
+                <p class="text-apple-gray text-sm mb-2">
                     © 2025 NSSA Platform. 基于历史报告的交互式探索，仅用于学习和研究目的。
                 </p>
-                <p class="text-white/40 text-xs mt-2">
+                <p class="text-apple-gray text-xs">
                     Powered by Cloudflare Workers | Domain: nssa.io
                 </p>
             </div>
