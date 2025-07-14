@@ -3,145 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>历史时间线 - 一战缘起</title>
+    <title>历史时间线 - NSSA</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+                    },
+                    colors: {
+                        'apple-blue': '#007AFF',
+                        'apple-gray': '#8E8E93',
+                        'apple-light-gray': '#F2F2F7',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background-color: #f4f3ee;
-            color: #3d3d3d;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
         }
+        
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .nav-link:hover {
+            color: #007AFF;
+        }
+        
+        .nav-link.active {
+            color: #007AFF;
+            font-weight: 600;
+        }
+        
         .timeline-item {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+        
         .timeline-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
     </style>
 </head>
-<body class="leading-relaxed">
-    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+<body class="bg-white">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-[#a52a2a]">
-                        <a href="/">一战缘起</a>
-                    </h1>
+                    <a href="/" class="text-2xl font-light text-gray-900 tracking-tight">NSSA</a>
                 </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="/" class="px-3 py-2 rounded-md text-sm font-medium hover:text-[#a52a2a]">首页</a>
-                        <a href="/about.html" class="px-3 py-2 rounded-md text-sm font-medium hover:text-[#a52a2a]">关于</a>
-                        <a href="/timeline.html" class="px-3 py-2 rounded-md text-sm font-medium text-[#a52a2a] border-b-2 border-[#a52a2a]">时间线</a>
-                    </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="nav-link text-gray-900">首页</a>
+                    <a href="/fww.html" class="nav-link text-gray-900">一战缘起</a>
+                    <a href="/timeline.html" class="nav-link active">时间线</a>
+                    <a href="/about.html" class="nav-link text-gray-900">关于</a>
                 </div>
-            </div>
-        </nav>
-    </header>
-
-    <main class="py-20 sm:py-24">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">一战爆发时间线</h1>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    从萨拉热窝事件到全面战争爆发的关键时刻
-                </p>
-            </div>
-
-            <div class="max-w-4xl mx-auto">
-                <div class="space-y-8">
-                    <!-- 1914年6月28日 -->
-                    <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
-                        <div class="flex items-center mb-2">
-                            <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">1914年6月28日</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">萨拉热窝事件</h3>
-                        <p class="text-gray-700">奥匈帝国皇储弗朗茨·斐迪南大公夫妇在萨拉热窝遇刺身亡，成为第一次世界大战的导火索。</p>
-                    </div>
-
-                    <!-- 1914年7月5日 -->
-                    <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
-                        <div class="flex items-center mb-2">
-                            <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">1914年7月5日</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">德国的"空白支票"</h3>
-                        <p class="text-gray-700">德国向奥匈帝国提供无条件支持，承诺在对塞尔维亚采取行动时给予全力支持。</p>
-                    </div>
-
-                    <!-- 1914年7月23日 -->
-                    <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
-                        <div class="flex items-center mb-2">
-                            <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">1914年7月23日</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">奥匈最后通牒</h3>
-                        <p class="text-gray-700">奥匈帝国向塞尔维亚发出包含十项苛刻条件的最后通牒，要求48小时内答复。</p>
-                    </div>
-
-                    <!-- 1914年7月25日 -->
-                    <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
-                        <div class="flex items-center mb-2">
-                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">1914年7月25日</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">塞尔维亚的回应</h3>
-                        <p class="text-gray-700">塞尔维亚接受了大部分条件，但拒绝了几项关键要求。奥匈帝国认为回应不充分。</p>
-                    </div>
-
-                    <!-- 1914年7月28日 -->
-                    <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
-                        <div class="flex items-center mb-2">
-                            <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">1914年7月28日</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">奥匈对塞宣战</h3>
-                        <p class="text-gray-700">奥匈帝国正式向塞尔维亚宣战，第一次世界大战正式开始。</p>
-                    </div>
-
-                    <!-- 1914年8月1日 -->
-                    <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-purple-500">
-                        <div class="flex items-center mb-2">
-                            <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">1914年8月1日</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">德国对俄宣战</h3>
-                        <p class="text-gray-700">德国向俄国宣战，战争规模进一步扩大。法国开始总动员。</p>
-                    </div>
-
-                    <!-- 1914年8月3日 -->
-                    <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-500">
-                        <div class="flex items-center mb-2">
-                            <span class="bg-pink-500 text-white px-3 py-1 rounded-full text-sm font-semibold">1914年8月3日</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">德国对法宣战</h3>
-                        <p class="text-gray-700">德国向法国宣战，并开始实施施里芬计划，入侵比利时。</p>
-                    </div>
-
-                    <!-- 1914年8月4日 -->
-                    <div class="timeline-item bg-white p-6 rounded-lg shadow-md border-l-4 border-gray-500">
-                        <div class="flex items-center mb-2">
-                            <span class="bg-gray-500 text-white px-3 py-1 rounded-full text-sm font-semibold">1914年8月4日</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">英国参战</h3>
-                        <p class="text-gray-700">英国因德军入侵比利时而对德国宣战，欧洲大战全面爆发。</p>
-                    </div>
-                </div>
-
-                <div class="text-center mt-12">
-                    <a href="/" class="inline-block bg-[#a52a2a] text-white px-6 py-3 rounded-lg hover:bg-red-800 transition-colors">
-                        返回主页了解更多
-                    </a>
+                <div class="md:hidden">
+                    <button class="text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="max-w-4xl mx-auto px-6 py-16">
+        <!-- 页面标题 -->
+        <div class="text-center mb-16">
+            <h1 class="text-5xl sm:text-6xl font-light text-gray-900 mb-6 tracking-tight">
+                历史时间线
+            </h1>
+            <p class="text-xl text-apple-gray font-normal max-w-2xl mx-auto">
+                从萨拉热窝事件到全面战争爆发的关键时刻
+            </p>
+        </div>
+
+        <!-- 时间线内容 -->
+        <div class="space-y-8">
+            <!-- 1914年6月28日 -->
+            <div class="timeline-item bg-white p-8 rounded-2xl border border-gray-200">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-24 text-right mr-8">
+                        <span class="inline-block bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            6月28日
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">萨拉热窝事件</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            奥匈帝国皇储弗朗茨·斐迪南大公夫妇在萨拉热窝遇刺身亡，成为第一次世界大战的导火索。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1914年7月5日 -->
+            <div class="timeline-item bg-white p-8 rounded-2xl border border-gray-200">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-24 text-right mr-8">
+                        <span class="inline-block bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            7月5日
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">德国的"空白支票"</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            德国向奥匈帝国提供无条件支持，承诺在对塞尔维亚采取行动时给予全力支持。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1914年7月23日 -->
+            <div class="timeline-item bg-white p-8 rounded-2xl border border-gray-200">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-24 text-right mr-8">
+                        <span class="inline-block bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            7月23日
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">奥匈最后通牒</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            奥匈帝国向塞尔维亚发出包含十项苛刻条件的最后通牒，要求48小时内答复。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1914年7月25日 -->
+            <div class="timeline-item bg-white p-8 rounded-2xl border border-gray-200">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-24 text-right mr-8">
+                        <span class="inline-block bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            7月25日
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">塞尔维亚的回应</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            塞尔维亚接受了大部分条件，但拒绝了几项关键要求。奥匈帝国认为回应不充分。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1914年7月28日 -->
+            <div class="timeline-item bg-white p-8 rounded-2xl border border-gray-200">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-24 text-right mr-8">
+                        <span class="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            7月28日
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">奥匈对塞宣战</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            奥匈帝国正式向塞尔维亚宣战，第一次世界大战正式开始。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1914年8月1日 -->
+            <div class="timeline-item bg-white p-8 rounded-2xl border border-gray-200">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-24 text-right mr-8">
+                        <span class="inline-block bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            8月1日
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">德国对俄宣战</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            德国向俄国宣战，战争规模进一步扩大。法国开始总动员。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1914年8月3日 -->
+            <div class="timeline-item bg-white p-8 rounded-2xl border border-gray-200">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-24 text-right mr-8">
+                        <span class="inline-block bg-pink-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            8月3日
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">德国对法宣战</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            德国向法国宣战，并开始实施施里芬计划，入侵比利时。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1914年8月4日 -->
+            <div class="timeline-item bg-white p-8 rounded-2xl border border-gray-200">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-24 text-right mr-8">
+                        <span class="inline-block bg-gray-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            8月4日
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">英国参战</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            英国因德军入侵比利时而对德国宣战，欧洲大战全面爆发。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 返回链接 -->
+        <div class="text-center mt-16">
+            <a href="/fww.html" 
+               class="inline-flex items-center text-apple-blue hover:text-blue-600 transition-colors text-lg font-medium">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                返回一战缘起了解更多
+            </a>
+        </div>
     </main>
 
-    <footer class="bg-gray-800 text-white">
-        <div class="container mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
-            <p>基于历史报告的交互式探索。仅用于学习和研究目的。</p>
-            <p class="mt-2 text-sm text-gray-400">
-                <a href="/" class="hover:text-white">返回首页</a> | 
-                <a href="/about.html" class="hover:text-white">关于本站</a>
+    <!-- 页脚 -->
+    <footer class="border-t border-gray-200 mt-20">
+        <div class="max-w-4xl mx-auto px-6 py-8 text-center">
+            <p class="text-apple-gray text-sm mb-2">
+                © 2025 NSSA Platform. 基于历史报告的交互式探索，仅用于学习和研究目的。
+            </p>
+            <p class="text-apple-gray text-xs">
+                Powered by Cloudflare Workers | Domain: nssa.io
             </p>
         </div>
     </footer>

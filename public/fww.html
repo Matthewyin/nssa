@@ -3,62 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一战缘起：交互式探索</title>
+    <title>一战缘起：交互式探索 - NSSA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Historical Parchment -->
-    <!-- Application Structure Plan: The application is designed as a single-page exploratory experience, structured into five thematic, scrollable sections accessible via a fixed navigation bar. This non-linear, thematic structure is chosen over a simple report-like layout to enhance usability and engagement. The user journey starts with a compelling introduction, moves to the deep-rooted "Great Power Rivalries" (the gunpowder), then focuses on the volatile "Balkan Powder Keg," the "Spark of Sarajevo" assassination, and finally the "July Crisis" domino effect, visualized as an interactive timeline. A concluding analysis section encourages critical thinking. This structure allows users to either follow a narrative flow or jump directly to topics of interest, making complex historical information digestible and explorable. -->
-    <!-- Visualization & Content Choices:
-        1. Alliances (Inform/Organize): An interactive diagram built with HTML/CSS. Goal: To clearly show the two opposing blocs. Interaction: Hovering over a country reveals its core motivation. Justification: More engaging and clearer than a static list. Method: HTML/CSS with Tailwind.
-        2. Military Spending (Compare/Change): A Bar Chart. Goal: To quantify the pre-war arms race. Interaction: Tooltips on hover provide exact figures. Justification: A quantitative visual is more impactful than just text. Library: Chart.js (Canvas).
-        3. July Crisis Timeline (Change/Relationships): An interactive vertical timeline. Goal: To illustrate the rapid, cause-and-effect escalation to war. Interaction: Clicking on an event expands to show details and consequences. Justification: Makes the complex sequence of events easy to follow and understand the domino effect. Method: HTML/JS with Tailwind for styling.
-        4. Balkan Map (Organize): A simplified, non-geographic diagram. Goal: To show the key regional players and their tensions. Interaction: Clickable areas reveal short descriptions. Justification: A simple visual guide to a complex geopolitical situation. Method: HTML/CSS.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+                    },
+                    colors: {
+                        'apple-blue': '#007AFF',
+                        'apple-gray': '#8E8E93',
+                        'apple-light-gray': '#F2F2F7',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background-color: #f4f3ee;
-            color: #3d3d3d;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: #ffffff;
+            color: #1d1d1f;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
         }
+
         .nav-link {
-            transition: color 0.3s ease, border-color 0.3s ease;
-            border-bottom: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .nav-link.active, .nav-link:hover {
-            color: #a52a2a;
-            border-bottom-color: #a52a2a;
+
+        .nav-link:hover {
+            color: #007AFF;
         }
+
+        .nav-link.active {
+            color: #007AFF;
+            font-weight: 600;
+        }
+
         .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-color: #ffffff;
+            border: 1px solid #d2d2d7;
+            border-radius: 16px;
         }
+
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-color: #007AFF;
         }
+
         .timeline-item-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-in-out;
         }
+
         .timeline-item-content.open {
             max-height: 500px;
         }
         .alliance-card {
             position: relative;
-            border: 2px solid;
-            transition: all 0.3s ease;
+            border: 2px solid #d2d2d7;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-color: #ffffff;
+            border-radius: 16px;
         }
+
+        .alliance-card:hover {
+            border-color: #007AFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
         .alliance-card .overlay {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 122, 255, 0.9);
             color: white;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -68,10 +97,13 @@
             padding: 1rem;
             text-align: center;
             font-size: 0.875rem;
+            border-radius: 16px;
         }
+
         .alliance-card:hover .overlay {
             opacity: 1;
         }
+
         .chart-container {
             position: relative;
             width: 100%;
@@ -81,6 +113,7 @@
             height: 400px;
             max-height: 50vh;
         }
+
         @media (min-width: 768px) {
             .chart-container {
                 height: 500px;
@@ -88,56 +121,73 @@
         }
     </style>
 </head>
-<body class="leading-relaxed">
-
-    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+<body class="bg-white">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6">
             <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-[#a52a2a]">一战缘起</h1>
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-2xl font-light text-gray-900 tracking-tight">NSSA</a>
+                    <span class="text-apple-gray">|</span>
+                    <span class="text-lg font-medium text-gray-900">一战缘起</span>
                 </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#intro" class="nav-link px-3 py-2 rounded-md text-sm font-medium">序章</a>
-                        <a href="#rivalries" class="nav-link px-3 py-2 rounded-md text-sm font-medium">大国纷争</a>
-                        <a href="#balkans" class="nav-link px-3 py-2 rounded-md text-sm font-medium">巴尔干火药桶</a>
-                        <a href="#spark" class="nav-link px-3 py-2 rounded-md text-sm font-medium">萨拉热窝的火星</a>
-                        <a href="#crisis" class="nav-link px-3 py-2 rounded-md text-sm font-medium">七月危机</a>
-                        <a href="#analysis" class="nav-link px-3 py-2 rounded-md text-sm font-medium">为何是必然？</a>
-                        <a href="/timeline.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium">时间线</a>
-                        <a href="/about.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium">关于</a>
-                    </div>
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="#intro" class="nav-link text-gray-900">序章</a>
+                    <a href="#rivalries" class="nav-link text-gray-900">大国纷争</a>
+                    <a href="#balkans" class="nav-link text-gray-900">巴尔干火药桶</a>
+                    <a href="#spark" class="nav-link text-gray-900">萨拉热窝的火星</a>
+                    <a href="#crisis" class="nav-link text-gray-900">七月危机</a>
+                    <a href="#analysis" class="nav-link text-gray-900">为何是必然？</a>
+                    <a href="/timeline.html" class="nav-link text-gray-900">时间线</a>
+                    <a href="/about.html" class="nav-link text-gray-900">关于</a>
+                </div>
+                <div class="lg:hidden">
+                    <button class="text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
     <main>
-        <section id="intro" class="py-20 sm:py-24 bg-white">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 tracking-tight">一场终结所有战争的战争</h2>
-                <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">
-                    第一次世界大战的爆发并非偶然。它不是源于一次刺杀，而是一系列深层矛盾的最终引爆。本应用将带您穿越时空，探寻那些将世界推向深渊的帝国野心、军事同盟、狂热民族主义和外交误判。
+        <!-- 序章 -->
+        <section id="intro" class="py-24 sm:py-32 bg-white">
+            <div class="max-w-6xl mx-auto px-6 text-center">
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+                    一场终结所有战争的战争
+                </h1>
+                <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-12">
+                    第一次世界大战的爆发并非偶然。它不是源于一次刺杀，而是一系列深层矛盾的最终引爆。
+                    本应用将带您穿越时空，探寻那些将世界推向深渊的帝国野心、军事同盟、狂热民族主义和外交误判。
                 </p>
-                <div class="mt-8">
-                    <span class="inline-block text-gray-400">👇 向下滚动或使用导航开始探索</span>
+                <div class="text-apple-gray">
+                    <span class="inline-block">👇 向下滚动或使用导航开始探索</span>
                 </div>
             </div>
         </section>
 
-        <section id="rivalries" class="py-20 sm:py-24">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">大国纷争：欧洲的结构性矛盾</h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+        <!-- 大国纷争 -->
+        <section id="rivalries" class="py-24 sm:py-32 bg-apple-light-gray">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center mb-20">
+                    <h2 class="text-4xl sm:text-5xl font-light text-gray-900 tracking-tight mb-6">
+                        大国纷争：欧洲的结构性矛盾
+                    </h2>
+                    <p class="text-xl text-apple-gray font-normal max-w-3xl mx-auto leading-relaxed">
                         1914年的欧洲，表面和平之下暗流涌动。四大结构性矛盾——帝国主义、军事同盟、军备竞赛和民族主义——如同干燥的薪柴，只待一颗火星便可燃起熊熊烈火。
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="card bg-white p-8 rounded-xl shadow-lg">
-                        <h3 class="text-2xl font-bold text-gray-800">⚔️ 两大军事同盟</h3>
-                        <p class="mt-4 text-gray-600">欧洲被两大敌对的军事集团所割裂：以德国和奥匈帝国为核心的"三国同盟"与以法国、俄国和英国为核心的"三国协约"。僵化的同盟体系使得任何局部冲突都可能迅速演变为全面战争。请将鼠标悬停在国家上查看其动机。</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                    <div class="card p-8">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-4">⚔️ 两大军事同盟</h3>
+                        <p class="text-apple-gray text-lg leading-relaxed">
+                            欧洲被两大敌对的军事集团所割裂：以德国和奥匈帝国为核心的"三国同盟"与以法国、俄国和英国为核心的"三国协约"。
+                            僵化的同盟体系使得任何局部冲突都可能迅速演变为全面战争。请将鼠标悬停在国家上查看其动机。
+                        </p>
                         <div class="mt-6 grid grid-cols-2 gap-4">
                             <div>
                                 <h4 class="font-semibold text-center text-red-700 mb-2">三国同盟</h4>
