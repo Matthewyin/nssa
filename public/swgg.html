@@ -64,38 +64,77 @@
         .lemons-container.run .peach { transform: translateY(-150px) scale(0.5); opacity: 0; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-700">
+<body class="bg-white">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-2xl font-light text-gray-900 tracking-tight">NSSA</a>
+                    <span class="text-apple-gray">|</span>
+                    <span class="text-lg font-medium text-gray-900">SWGG 专题</span>
+                </div>
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="/" class="nav-link text-gray-900">首页</a>
+                    <a href="/fww.html" class="nav-link text-gray-900">一战缘起</a>
+                    <a href="/timeline.html" class="nav-link text-gray-900">时间线</a>
+                    <a href="/jaw.html" class="nav-link text-gray-900">JAW 专题</a>
+                    <a href="/swgg.html" class="nav-link active">SWGG 专题</a>
+                    <a href="/colonial.html" class="nav-link text-gray-900">Colonial 专题</a>
+                    <a href="/about.html" class="nav-link text-gray-900">关于</a>
+                </div>
+                <div class="lg:hidden">
+                    <button class="text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="max-w-6xl mx-auto px-6 py-16">
         
-        <header class="text-center mb-12 fade-in">
-            <h1 class="text-3xl md:text-5xl font-bold text-teal-700 mb-2">交互式职场困境分析器</h1>
-            <p class="text-lg text-slate-500">“会哭的孩子”悖论：深度解析攻击性抢功与领导纵容现象</p>
-        </header>
+        <!-- 页面标题 -->
+        <div class="text-center mb-20">
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+                SWGG 专题
+            </h1>
+            <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+                交互式职场困境分析器与解决方案
+            </p>
+            <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">“会哭的孩子”悖论：深度解析攻击性抢功与领导纵容现象</p>
+        </div>
 
-        <main>
-            <section id="symptom" class="mb-16 p-6 bg-white rounded-xl shadow-lg fade-in">
-                <h2 class="text-2xl font-bold text-teal-600 mb-4 flex items-center"><span class="text-3xl mr-3">🧐</span>第一步：识别症状</h2>
-                <p class="mb-4">您是否正经历这样的困境：一位同事平时工作正常，但每当遇到能建立功勋的关键任务时，就会通过“大吵大闹”的方式，从已经做好准备的您或其他同事手中抢走工作？更令人困惑的是，领导似乎还默许甚至纵容这种行为。这并非孤例，而是一种常见的、极具破坏性的职场功能障碍模式。</p>
-                <p>本工具旨在帮助您系统性地拆解这一行为的内在逻辑，理解其背后的心理动因，并找到有效的应对策略。</p>
+        <!-- 内容区域 -->
+        <div class="space-y-16">
+            <section id="symptom" class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
+                <h2 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 tracking-tight flex items-center"><span class="text-3xl mr-3">🧐</span>第一步：识别症状</h2>
+                <div class="space-y-6 text-lg text-apple-gray leading-relaxed">
+                    <p>您是否正经历这样的困境：一位同事平时工作正常，但每当遇到能建立功勋的关键任务时，就会通过“大吵大闹”的方式，从已经做好准备的您或其他同事手中抢走工作？更令人困惑的是，领导似乎还默许甚至纵容这种行为。这并非孤例，而是一种常见的、极具破坏性的职场功能障碍模式。</p>
+                    <p>本工具旨在帮助您系统性地拆解这一行为的内在逻辑，理解其背后的心理动因，并找到有效的应对策略。</p>
+                </div>
             </section>
 
-            <section id="diagnosis" class="mb-16 fade-in" style="animation-delay: 0.2s;">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-teal-600 mb-2 flex items-center justify-center"><span class="text-4xl mr-3">🩺</span>第二步：深度诊断</h2>
-                    <p class="text-md text-slate-500">我们将从三个核心角色入手，剖析这个有毒系统的运作机制。</p>
+            <section id="diagnosis" class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 tracking-tight flex items-center justify-center"><span class="text-4xl mr-3">🩺</span>第二步：深度诊断</h2>
+                    <p class="text-lg text-apple-gray leading-relaxed">我们将从三个核心角色入手，剖析这个有毒系统的运作机制。</p>
                 </div>
 
-                <div class="flex justify-center mb-8 border-b border-slate-200">
-                    <button class="nav-button py-3 px-6 text-lg font-semibold text-slate-600 border-b-4 border-transparent active" onclick="showSection('aggressor')">攻击者</button>
-                    <button class="nav-button py-3 px-6 text-lg font-semibold text-slate-600 border-b-4 border-transparent" onclick="showSection('enabler')">纵容者</button>
-                    <button class="nav-button py-3 px-6 text-lg font-semibold text-slate-600 border-b-4 border-transparent" onclick="showSection('system')">系统性衰败</button>
+                <div class="flex justify-center mb-12 border-b border-gray-200">
+                    <button class="nav-button py-4 px-8 text-lg font-medium text-apple-gray border-b-4 border-transparent hover:text-apple-blue transition-colors active" onclick="showSection('aggressor')">攻击者</button>
+                    <button class="nav-button py-4 px-8 text-lg font-medium text-apple-gray border-b-4 border-transparent hover:text-apple-blue transition-colors" onclick="showSection('enabler')">纵容者</button>
+                    <button class="nav-button py-4 px-8 text-lg font-medium text-apple-gray border-b-4 border-transparent hover:text-apple-blue transition-colors" onclick="showSection('system')">系统性衰败</button>
                 </div>
 
                 <div id="aggressor" class="content-section active">
-                    <article class="p-6 bg-white rounded-xl shadow-lg">
-                        <h3 class="text-2xl font-bold text-rose-700 mb-4">角色一：攻击性的“抢功者”</h3>
-                        <p class="mb-6">您同事的“大吵大闹”，并非简单的失控，而是一种经过计算的、高风险、高回报的攻击性策略。其行为模式揭示了复杂的心理动机。</p>
+                    <article class="p-8 bg-apple-light-gray rounded-2xl">
+                        <h3 class="text-2xl font-semibold text-rose-700 mb-6">角色一：攻击性的“抢功者”</h3>
+                        <p class="mb-8 text-lg text-apple-gray leading-relaxed">您同事的“大吵大闹”，并非简单的失控，而是一种经过计算的、高风险、高回报的攻击性策略。其行为模式揭示了复杂的心理动机。</p>
                         
                         <div class="grid md:grid-cols-3 gap-6 text-center">
                             <div class="p-4 bg-rose-50 rounded-lg border border-rose-200">
@@ -360,5 +399,31 @@
         };
 
     </script>
+        </div>
+
+        <!-- 返回首页 -->
+        <div class="text-center mt-20">
+            <a href="/"
+               class="inline-flex items-center text-apple-blue hover:text-blue-600 transition-colors text-lg font-medium">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                返回首页
+            </a>
+        </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-gray-200 mt-20">
+        <div class="max-w-6xl mx-auto px-6 py-8 text-center">
+            <p class="text-apple-gray text-sm mb-2">
+                © 2025 NSSA Platform. 基于历史报告的交互式探索，仅用于学习和研究目的。
+            </p>
+            <p class="text-apple-gray text-xs">
+                Powered by Cloudflare Workers | Domain: nssa.io
+            </p>
+        </div>
+    </footer>
 </body>
 </html>

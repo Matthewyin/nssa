@@ -134,11 +134,12 @@
                     <span class="text-lg font-medium text-gray-900">JAW 专题</span>
                 </div>
                 <div class="hidden lg:flex items-center space-x-6">
-                    <a href="#identify" class="nav-link text-gray-900">识别</a>
-                    <a href="#analyze" class="nav-link text-gray-900">解析</a>
-                    <a href="#impact" class="nav-link text-gray-900">影响</a>
-                    <a href="#strategy" class="nav-link text-gray-900">策略</a>
-                    <a href="#shifting" class="nav-link text-gray-900">转移</a>
+                    <a href="/" class="nav-link text-gray-900">首页</a>
+                    <a href="/fww.html" class="nav-link text-gray-900">一战缘起</a>
+                    <a href="/timeline.html" class="nav-link text-gray-900">时间线</a>
+                    <a href="/jaw.html" class="nav-link active">JAW 专题</a>
+                    <a href="/swgg.html" class="nav-link text-gray-900">SWGG 专题</a>
+                    <a href="/colonial.html" class="nav-link text-gray-900">Colonial 专题</a>
                     <a href="/about.html" class="nav-link text-gray-900">关于</a>
                 </div>
                 <div class="lg:hidden">
@@ -152,40 +153,50 @@
         </div>
     </nav>
 
-    <main class="container mx-auto p-4 md:p-8">
+    <!-- 主内容 -->
+    <main class="max-w-6xl mx-auto px-6 py-16">
         
-        <section id="intro" class="text-center py-12 md:py-20">
+        <!-- 页面标题 -->
+        <div class="text-center mb-20">
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+                JAW 专题
+            </h1>
+            <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+                职场毒性动力学分析与应对策略研究
+            </p>
             <h2 class="text-3xl md:text-5xl font-bold mb-4">看透职场“抢功精”与“甩锅侠”</h2>
-            <p class="max-w-3xl mx-auto text-lg text-gray-600">
+            <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">
                 本应用深度剖析了您遇到的职场困境。从识别破坏性行为，到理解其深层逻辑，再到提供可行的应对策略，我们将科学报告转化为您的个人行动指南。
             </p>
-        </section>
+        </div>
 
-        <!-- Section 1: Identify -->
-        <section id="identify" class="py-16 bg-white rounded-xl shadow-md">
-            <div class="text-center mb-12 px-4">
-                <h3 class="text-3xl font-bold mb-2">第一步：识别问题原型</h3>
-                <p class="text-gray-600 max-w-2xl mx-auto">您的同事很可能属于以下一种或多种原型。点击卡片查看他们的核心动机与典型行为，看看哪个最符合您观察到的情况。</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 md:px-8">
-                <div class="card bg-gray-50 p-6 rounded-lg border border-gray-200" data-modal="hcp">
-                    <h4 class="font-bold text-xl mb-2 text-red-600">高冲突人格 (HCP)</h4>
-                    <p class="text-gray-700">核心是**规避责任**。他们总在寻找“指责对象”，情绪极易失控，且思维非黑即白。</p>
+        <!-- 内容区域 -->
+        <div class="space-y-16">
+            <!-- Section 1: Identify -->
+            <section id="identify" class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 tracking-tight">第一步：识别问题原型</h3>
+                    <p class="text-lg text-apple-gray max-w-2xl mx-auto leading-relaxed">您的同事很可能属于以下一种或多种原型。点击卡片查看他们的核心动机与典型行为，看看哪个最符合您观察到的情况。</p>
                 </div>
-                <div class="card bg-gray-50 p-6 rounded-lg border border-gray-200" data-modal="aggressor">
-                    <h4 class="font-bold text-xl mb-2 text-orange-600">攻击型沟通者</h4>
-                    <p class="text-gray-700">核心是**控制与赢**。通过大喊大叫、贬低和命令来支配他人，无视他人感受。</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="card bg-white p-6 rounded-2xl border border-gray-200 hover:border-apple-blue transition-all duration-300 cursor-pointer" data-modal="hcp">
+                        <h4 class="font-semibold text-xl mb-4 text-red-600">高冲突人格 (HCP)</h4>
+                        <p class="text-apple-gray leading-relaxed">核心是**规避责任**。他们总在寻找“指责对象”，情绪极易失控，且思维非黑即白。</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-2xl border border-gray-200 hover:border-apple-blue transition-all duration-300 cursor-pointer" data-modal="aggressor">
+                        <h4 class="font-semibold text-xl mb-4 text-orange-600">攻击型沟通者</h4>
+                        <p class="text-apple-gray leading-relaxed">核心是**控制与赢**。通过大喊大叫、贬低和命令来支配他人，无视他人感受。</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-2xl border border-gray-200 hover:border-apple-blue transition-all duration-300 cursor-pointer" data-modal="passive">
+                        <h4 class="font-semibold text-xl mb-4 text-yellow-600">被动攻击型</h4>
+                        <p class="text-apple-gray leading-relaxed">核心是**隐蔽的报复**。用冷暴力、讽刺和拖延来表达不满，言行不一。</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-2xl border border-gray-200 hover:border-apple-blue transition-all duration-300 cursor-pointer" data-modal="narcissist">
+                        <h4 class="font-semibold text-xl mb-4 text-blue-600">自恋型邀功者</h4>
+                        <p class="text-apple-gray leading-relaxed">核心是**自我价值确认**。窃取他人功劳，贬低贡献，极度需要赞美，缺乏同理心。</p>
+                    </div>
                 </div>
-                <div class="card bg-gray-50 p-6 rounded-lg border border-gray-200" data-modal="passive">
-                    <h4 class="font-bold text-xl mb-2 text-yellow-600">被动攻击型</h4>
-                    <p class="text-gray-700">核心是**隐蔽的报复**。用冷暴力、讽刺和拖延来表达不满，言行不一。</p>
-                </div>
-                <div class="card bg-gray-50 p-6 rounded-lg border border-gray-200" data-modal="narcissist">
-                    <h4 class="font-bold text-xl mb-2 text-blue-600">自恋型邀功者</h4>
-                    <p class="text-gray-700">核心是**自我价值确认**。窃取他人功劳，贬低贡献，极度需要赞美，缺乏同理心。</p>
-                </div>
-            </div>
-        </section>
+            </section>
 
         <!-- Section 2: Analyze -->
         <section id="analyze" class="py-16">
@@ -616,5 +627,30 @@
             });
         });
     </script>
+        </div>
+
+    <!-- 返回首页 -->
+    <div class="text-center mt-20">
+        <a href="/"
+           class="inline-flex items-center text-apple-blue hover:text-blue-600 transition-colors text-lg font-medium">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            返回首页
+        </a>
+    </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-gray-200 mt-20">
+        <div class="max-w-6xl mx-auto px-6 py-8 text-center">
+            <p class="text-apple-gray text-sm mb-2">
+                © 2025 NSSA Platform. 基于历史报告的交互式探索，仅用于学习和研究目的。
+            </p>
+            <p class="text-apple-gray text-xs">
+                Powered by Cloudflare Workers | Domain: nssa.io
+            </p>
+        </div>
+    </footer>
 </body>
 </html>
