@@ -1,61 +1,212 @@
 {{ define "main" }}
-<div class="max-w-6xl mx-auto px-6 py-16">
-    <!-- 页面标题 -->
-    <div class="text-center mb-20">
-        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 dark:text-white tracking-tight mb-8">
-            {{ .Title }}
-        </h1>
-        {{ if .Params.subtitle }}
-        <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
-            {{ .Params.subtitle }}
-        </p>
-        {{ end }}
-        {{ if .Description }}
-        <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">
-            {{ .Description }}
-        </p>
-        {{ end }}
-    </div>
-
-
-
-    <!-- 子页面列表 -->
-    {{ if .Pages }}
-    <div class="mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">专题内容</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {{ range .Pages }}
-            <a href="{{ .RelPermalink }}" class="content-card group block p-6">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+<div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- 主要内容区域 -->
+        <main class="flex-1 min-w-0">
+            <!-- 页面标题 -->
+            <header class="mb-12">
+                <h1 class="text-4xl sm:text-5xl font-light text-gray-900 dark:text-white tracking-tight mb-4">
                     {{ .Title }}
-                </h3>
+                </h1>
                 {{ if .Params.subtitle }}
-                <p class="text-apple-gray mb-4 text-sm">{{ .Params.subtitle }}</p>
+                <p class="text-xl text-apple-gray font-normal leading-relaxed mb-4">
+                    {{ .Params.subtitle }}
+                </p>
                 {{ end }}
                 {{ if .Description }}
-                <p class="text-sm text-apple-gray">{{ .Description | truncate 120 }}</p>
+                <p class="text-lg text-apple-gray leading-relaxed">
+                    {{ .Description }}
+                </p>
                 {{ end }}
-                <div class="mt-4 flex items-center text-apple-blue text-sm">
-                    <span>阅读更多</span>
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </div>
-            </a>
-            {{ end }}
-        </div>
-    </div>
-    {{ end }}
+            </header>
 
-    <!-- 返回首页 -->
-    <div class="text-center">
-        <a href="/" 
-           class="inline-flex items-center text-apple-blue hover:text-blue-600 transition-colors text-lg font-medium">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            返回首页
-        </a>
+            <!-- 文章列表 -->
+            {{ if .Pages }}
+            <div class="space-y-8">
+                {{ range .Pages }}
+                <article class="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 hover:border-apple-blue dark:hover:border-blue-400 transition-colors group">
+                    <!-- 文章标题 -->
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-white mb-4 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                    </h2>
+
+                    <!-- 文章元数据 -->
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-apple-gray mb-4">
+                        <time datetime="{{ .Date.Format "2006-01-02" }}" class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            {{ .Date.Format "2006年1月2日" }}
+                        </time>
+                        {{ if .Params.readingTime }}
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ .Params.readingTime }}
+                        </span>
+                        {{ end }}
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                            </svg>
+                            {{ .WordCount }} 字
+                        </span>
+                    </div>
+
+                    <!-- 副标题 -->
+                    {{ if .Params.subtitle }}
+                    <p class="text-lg text-apple-gray mb-4 font-medium">{{ .Params.subtitle }}</p>
+                    {{ end }}
+
+                    <!-- 文章摘要 -->
+                    {{ if .Description }}
+                    <p class="text-apple-gray leading-relaxed mb-6">{{ .Description | truncate 200 }}</p>
+                    {{ else if .Summary }}
+                    <p class="text-apple-gray leading-relaxed mb-6">{{ .Summary | truncate 200 }}</p>
+                    {{ end }}
+
+                    <!-- 阅读更多链接 -->
+                    <div class="flex items-center justify-between">
+                        <a href="{{ .RelPermalink }}" class="inline-flex items-center text-apple-blue hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
+                            <span>阅读全文</span>
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+
+                        <!-- 分享按钮 -->
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-apple-gray">分享:</span>
+                            <a href="https://twitter.com/intent/tweet?text={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}"
+                               target="_blank"
+                               class="text-apple-gray hover:text-apple-blue transition-colors"
+                               title="分享到Twitter">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                                </svg>
+                            </a>
+                            <button onclick="navigator.share ? navigator.share({title: '{{ .Title }}', url: '{{ .Permalink }}'}) : navigator.clipboard.writeText('{{ .Permalink }}')"
+                                    class="text-apple-gray hover:text-apple-blue transition-colors"
+                                    title="复制链接">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+                {{ end }}
+            </div>
+            {{ else }}
+            <!-- 空状态 -->
+            <div class="text-center py-16">
+                <div class="text-6xl mb-4">📝</div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">暂无内容</h3>
+                <p class="text-apple-gray">该专题下暂时还没有文章，敬请期待。</p>
+            </div>
+            {{ end }}
+
+            <!-- 返回首页 -->
+            <div class="text-center mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <a href="/"
+                   class="inline-flex items-center text-apple-blue hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-lg font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    返回首页
+                </a>
+            </div>
+        </main>
+
+        <!-- 侧边栏 -->
+        <aside class="w-full lg:w-80 flex-shrink-0">
+            <div class="sticky top-8 space-y-6">
+                <!-- 专题信息 -->
+                <div class="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                        {{ if eq .Type "tech" }}
+                        <span class="text-2xl mr-2">🔬</span>
+                        技术专题
+                        {{ else if eq .Type "history" }}
+                        <span class="text-2xl mr-2">📚</span>
+                        历史专题
+                        {{ else if eq .Type "psychology" }}
+                        <span class="text-2xl mr-2">🧠</span>
+                        心理专题
+                        {{ else if eq .Type "workplace" }}
+                        <span class="text-2xl mr-2">💼</span>
+                        职场专题
+                        {{ else }}
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                        </svg>
+                        {{ .Title }}
+                        {{ end }}
+                    </h3>
+                    <div class="text-sm text-apple-gray space-y-2">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>{{ len .Pages }} 篇文章</span>
+                        </div>
+                        {{ if .Pages }}
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>最近更新: {{ (index .Pages 0).Date.Format "2006年1月2日" }}</span>
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+
+                <!-- 其他专题 -->
+                <div class="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                        其他专题
+                    </h3>
+                    <div class="space-y-3">
+                        {{ if ne .Type "tech" }}
+                        <a href="/tech/" class="block group">
+                            <div class="flex items-center text-sm text-apple-gray group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                                <span class="mr-2">🔬</span>
+                                <span>技术专题</span>
+                            </div>
+                        </a>
+                        {{ end }}
+                        {{ if ne .Type "history" }}
+                        <a href="/history/" class="block group">
+                            <div class="flex items-center text-sm text-apple-gray group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                                <span class="mr-2">📚</span>
+                                <span>历史专题</span>
+                            </div>
+                        </a>
+                        {{ end }}
+                        {{ if ne .Type "psychology" }}
+                        <a href="/psychology/" class="block group">
+                            <div class="flex items-center text-sm text-apple-gray group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                                <span class="mr-2">🧠</span>
+                                <span>心理专题</span>
+                            </div>
+                        </a>
+                        {{ end }}
+                        {{ if ne .Type "workplace" }}
+                        <a href="/workplace/" class="block group">
+                            <div class="flex items-center text-sm text-apple-gray group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                                <span class="mr-2">💼</span>
+                                <span>职场专题</span>
+                            </div>
+                        </a>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+        </aside>
     </div>
 </div>
 {{ end }}
