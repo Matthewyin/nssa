@@ -4,6 +4,8 @@ subtitle: "交互式职场困境分析器与解决方案"
 description: "深度解析攻击性抢功与领导纵容现象，提供系统化的解决方案框架"
 type: "topic"
 layout: "swgg"
+slug: "swgg"
+url: "/topics/swgg/"
 date: 2025-01-14
 weight: 50
 charts: true
