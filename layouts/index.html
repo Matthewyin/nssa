@@ -2,7 +2,7 @@
 <div class="max-w-6xl mx-auto px-6 py-16">
     <!-- 页面标题 -->
     <div class="text-center mb-20">
-        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 dark:text-white tracking-tight mb-8">
             NSSA
         </h1>
         <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
@@ -19,7 +19,7 @@
         <a href="/tech/" class="content-card group block p-6 sm:p-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
                         🔬 技术专题
                     </h3>
                     <p class="text-apple-gray text-base sm:text-lg">
@@ -38,7 +38,7 @@
         <a href="/history/" class="content-card group block p-6 sm:p-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
                         📚 历史专题
                     </h3>
                     <p class="text-apple-gray text-base sm:text-lg">
@@ -57,7 +57,7 @@
         <a href="/psychology/" class="content-card group block p-6 sm:p-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
                         🧠 心理专题
                     </h3>
                     <p class="text-apple-gray text-base sm:text-lg">
@@ -76,7 +76,7 @@
         <a href="/workplace/" class="content-card group block p-6 sm:p-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
                         💼 职场专题
                     </h3>
                     <p class="text-apple-gray text-base sm:text-lg">
@@ -91,36 +91,9 @@
             </div>
         </a>
 
-        <!-- 关于 -->
-        <a href="/about/" class="content-card group block p-6 sm:p-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 group-hover:text-apple-blue transition-colors">
-                        ℹ️ 关于 NSSA
-                    </h3>
-                    <p class="text-apple-gray text-base sm:text-lg">
-                        了解我们的使命、愿景和技术架构
-                    </p>
-                </div>
-                <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </div>
-            </div>
-        </a>
+
     </div>
 
-    <!-- 平台介绍 -->
-    <div class="text-center">
-        <div class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
-            <h2 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 tracking-tight">
-                我们的使命
-            </h2>
-            <div class="prose prose-lg max-w-4xl mx-auto text-apple-gray">
-                {{ .Content }}
-            </div>
-        </div>
-    </div>
+
 </div>
 {{ end }}
