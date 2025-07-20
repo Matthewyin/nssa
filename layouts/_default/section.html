@@ -1,0 +1,68 @@
+{{ define "main" }}
+<div class="max-w-6xl mx-auto px-6 py-16">
+    <!-- 页面标题 -->
+    <div class="text-center mb-20">
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+            {{ .Title }}
+        </h1>
+        {{ if .Params.subtitle }}
+        <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+            {{ .Params.subtitle }}
+        </p>
+        {{ end }}
+        {{ if .Description }}
+        <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">
+            {{ .Description }}
+        </p>
+        {{ end }}
+    </div>
+
+    <!-- 专题内容 -->
+    {{ if .Content }}
+    <div class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200 mb-12">
+        <div class="prose prose-lg max-w-none">
+            {{ .Content }}
+        </div>
+    </div>
+    {{ end }}
+
+    <!-- 子页面列表 -->
+    {{ if .Pages }}
+    <div class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">专题内容</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {{ range .Pages }}
+            <a href="{{ .RelPermalink }}" class="content-card group block p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 group-hover:text-apple-blue transition-colors">
+                    {{ .Title }}
+                </h3>
+                {{ if .Params.subtitle }}
+                <p class="text-apple-gray mb-4 text-sm">{{ .Params.subtitle }}</p>
+                {{ end }}
+                {{ if .Description }}
+                <p class="text-sm text-apple-gray">{{ .Description | truncate 120 }}</p>
+                {{ end }}
+                <div class="mt-4 flex items-center text-apple-blue text-sm">
+                    <span>阅读更多</span>
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+            </a>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+
+    <!-- 返回首页 -->
+    <div class="text-center">
+        <a href="/" 
+           class="inline-flex items-center text-apple-blue hover:text-blue-600 transition-colors text-lg font-medium">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            返回首页
+        </a>
+    </div>
+</div>
+{{ end }}
