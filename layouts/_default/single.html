@@ -81,6 +81,66 @@
                 </div>
             </article>
 
+            <!-- 分享功能 -->
+            <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-center space-x-4">
+                    <span class="text-sm text-apple-gray">分享文章:</span>
+
+                    <!-- 微信分享 -->
+                    <button onclick="shareToWeChat('{{ .Title }}', '{{ .Permalink }}')"
+                            class="flex items-center space-x-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+                            title="分享到微信">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 4.882-1.900 7.852.194.552-.470 1.242-.748 1.905-.748a.59.59 0 0 1 .59.59c0 .08-.016.158-.046.23-.36 1.352-.36 2.704 0 4.056.03.072.046.15.046.23a.59.59 0 0 1-.59.59c-.663 0-1.353-.278-1.905-.748-2.97 2.094-6.149 1.609-7.852.194-1.775-1.474-2.789-3.868-1.932-6.446-.268-.023-.535-.05-.811-.05z"/>
+                        </svg>
+                        <span>微信</span>
+                    </button>
+
+                    <!-- 微博分享 -->
+                    <a href="https://service.weibo.com/share/share.php?title={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}"
+                       target="_blank"
+                       class="flex items-center space-x-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+                       title="分享到微博">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9.31 8.17c-2.73-.13-4.3.53-4.3 2.26 0 2.45 2.85 4.52 6.33 4.52 2.87 0 4.65-1.63 4.65-3.42 0-1.34-1.08-1.98-2.5-2.09-.46-.04-.75-.07-.68-.33.08-.27.36-.54.82-.54.5 0 .94.31.94.78 0 .23-.08.42-.08.42s.69-.24.69-.95c0-1.03-.89-1.79-2.12-1.79-1.18 0-2.16.71-2.5 1.65-.46-.05-.89-.12-1.25-.51zm11.24-3.09c-.78-2.47-2.91-4.42-5.42-5.23-.22-.07-.37.08-.37.31v.13c0 .19.13.38.31.44 2.36.77 4.24 2.65 4.91 5.11.06.22.25.38.47.38h.13c.22 0 .37-.22.31-.44l-.34-.7zm-2.27.9c-.78-.78-1.83-1.27-2.97-1.39-.19-.02-.37.13-.37.31v.16c0 .16.13.31.28.33.89.1 1.67.48 2.25 1.06.58.58.94 1.39 1.02 2.28.02.16.15.28.31.28h.16c.19 0 .33-.16.31-.34-.12-1.17-.61-2.25-1.39-3.03l.4.34z"/>
+                        </svg>
+                        <span>微博</span>
+                    </a>
+
+                    <!-- Facebook分享 -->
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink | urlquery }}"
+                       target="_blank"
+                       class="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                       title="分享到Facebook">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        <span>Facebook</span>
+                    </a>
+
+                    <!-- X (Twitter)分享 -->
+                    <a href="https://twitter.com/intent/tweet?text={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}"
+                       target="_blank"
+                       class="flex items-center space-x-2 px-4 py-2 bg-gray-900 hover:bg-black text-white rounded-lg transition-colors"
+                       title="分享到X">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                        <span>X</span>
+                    </a>
+
+                    <!-- 复制链接 -->
+                    <button onclick="copyToClipboard('{{ .Permalink }}', this)"
+                            class="flex items-center space-x-2 px-4 py-2 bg-apple-blue hover:bg-blue-600 text-white rounded-lg transition-colors"
+                            title="复制链接">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                        <span>复制链接</span>
+                    </button>
+                </div>
+            </div>
+
             <!-- 文章导航 -->
             {{ $pages := where .Site.RegularPages "Type" .Type }}
             {{ $currentIndex := 0 }}
@@ -257,5 +317,68 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// 微信分享功能
+function shareToWeChat(title, url) {
+    // 生成二维码分享链接
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+
+    // 创建模态框
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm mx-4">
+            <div class="text-center">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">微信扫码分享</h3>
+                <img src="${qrUrl}" alt="二维码" class="mx-auto mb-4 rounded-lg">
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">使用微信扫描二维码分享文章</p>
+                <button onclick="this.closest('.fixed').remove()"
+                        class="px-4 py-2 bg-apple-blue text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    关闭
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // 点击背景关闭
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+// 复制链接功能
+function copyToClipboard(text, button) {
+    navigator.clipboard.writeText(text).then(function() {
+        // 显示成功提示
+        const originalText = button.querySelector('span').textContent;
+        button.querySelector('span').textContent = '已复制!';
+        button.classList.add('bg-green-500');
+        button.classList.remove('bg-apple-blue');
+
+        setTimeout(function() {
+            button.querySelector('span').textContent = originalText;
+            button.classList.remove('bg-green-500');
+            button.classList.add('bg-apple-blue');
+        }, 2000);
+    }).catch(function(err) {
+        console.error('复制失败:', err);
+        // 降级方案
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        button.querySelector('span').textContent = '已复制!';
+        setTimeout(function() {
+            button.querySelector('span').textContent = '复制链接';
+        }, 2000);
+    });
+}
 </script>
 {{ end }}
