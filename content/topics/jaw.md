@@ -4,6 +4,8 @@ subtitle: "职场毒性动力学分析与应对策略研究"
 description: "深入分析职场中的有害行为模式，提供科学的识别方法和应对策略"
 type: "topic"
 layout: "jaw"
+slug: "jaw"
+url: "/topics/jaw/"
 date: 2025-01-14
 weight: 40
 charts: true
