@@ -3,9 +3,6 @@ title: "关于 NSSA"
 description: "了解 NSSA 平台的使命、愿景和技术架构"
 type: "page"
 layout: "single"
-menu:
-  main:
-    weight: 70
 ---
 
 # 关于 NSSA
