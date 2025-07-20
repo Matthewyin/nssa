@@ -48,13 +48,9 @@ enableEmoji = true
     url = "/workplace/"
     weight = 50
   [[menu.main]]
-    name = "时间线"
-    url = "/timeline/"
-    weight = 60
-  [[menu.main]]
     name = "关于"
     url = "/about/"
-    weight = 70
+    weight = 60
 
 # Params Configuration
 [params]
