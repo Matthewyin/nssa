@@ -2,8 +2,10 @@
 title: "一战缘起"
 subtitle: "第一次世界大战爆发的复杂历史背景分析"
 description: "深入探索第一次世界大战爆发的复杂历史背景，通过交互式图表和时间线分析大国纷争、巴尔干危机和萨拉热窝事件的深层原因"
-type: "page"
-layout: "fww"
+type: "history"
+layout: "single"
+slug: "fww"
+url: "/history/fww/"
 date: 2025-01-14
 weight: 20
 charts: true

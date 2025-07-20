@@ -32,24 +32,24 @@ enableEmoji = true
     url = "/"
     weight = 10
   [[menu.main]]
-    name = "一战缘起"
-    url = "/fww/"
+    name = "技术专题"
+    url = "/tech/"
     weight = 20
+  [[menu.main]]
+    name = "历史专题"
+    url = "/history/"
+    weight = 30
+  [[menu.main]]
+    name = "心理专题"
+    url = "/psychology/"
+    weight = 40
+  [[menu.main]]
+    name = "职场专题"
+    url = "/workplace/"
+    weight = 50
   [[menu.main]]
     name = "时间线"
     url = "/timeline/"
-    weight = 30
-  [[menu.main]]
-    name = "JAW 专题"
-    url = "/topics/jaw/"
-    weight = 40
-  [[menu.main]]
-    name = "SWGG 专题"
-    url = "/topics/swgg/"
-    weight = 50
-  [[menu.main]]
-    name = "Colonial 专题"
-    url = "/topics/colonial/"
     weight = 60
   [[menu.main]]
     name = "关于"

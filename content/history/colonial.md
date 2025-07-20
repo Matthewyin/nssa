@@ -2,10 +2,10 @@
 title: "Colonial 专题"
 subtitle: "殖民主义历史研究与现代影响分析"
 description: "探索殖民主义如何塑造了全球政治、经济和文化格局"
-type: "topic"
-layout: "colonial"
+type: "history"
+layout: "single"
 slug: "colonial"
-url: "/topics/colonial/"
+url: "/history/colonial/"
 date: 2025-01-14
 weight: 60
 ---
