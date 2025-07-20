@@ -1,0 +1,271 @@
+{{ define "main" }}
+<div class="max-w-6xl mx-auto px-6 py-16">
+    <!-- 页面标题 -->
+    <div class="text-center mb-20">
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+            {{ .Title }}
+        </h1>
+        {{ if .Params.subtitle }}
+        <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+            {{ .Params.subtitle }}
+        </p>
+        {{ end }}
+        {{ if .Description }}
+        <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">
+            {{ .Description }}
+        </p>
+        {{ end }}
+    </div>
+
+    <!-- 导航菜单 -->
+    <div class="bg-white p-6 rounded-2xl border border-gray-200 mb-12 sticky top-20 z-40">
+        <nav class="flex flex-wrap justify-center gap-4">
+            <a href="#identify" class="nav-section-link px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-apple-blue hover:text-white">识别问题</a>
+            <a href="#analyze" class="nav-section-link px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-apple-blue hover:text-white">解析动机</a>
+            <a href="#impact" class="nav-section-link px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-apple-blue hover:text-white">量化影响</a>
+            <a href="#strategy" class="nav-section-link px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-apple-blue hover:text-white">应对策略</a>
+            <a href="#shifting" class="nav-section-link px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-apple-blue hover:text-white">矛盾转移</a>
+        </nav>
+    </div>
+
+    <!-- 第一步：识别问题原型 -->
+    <section id="identify" class="py-16 bg-white rounded-2xl border border-gray-200 mb-12">
+        <div class="text-center mb-12 px-4">
+            <h3 class="text-3xl font-bold mb-4 text-gray-900">第一步：识别问题原型</h3>
+            <p class="text-apple-gray max-w-2xl mx-auto">您的同事很可能属于以下一种或多种原型。点击卡片查看他们的核心动机与典型行为，看看哪个最符合您观察到的情况。</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 md:px-8">
+            <div class="content-card p-6 cursor-pointer" data-modal="hcp">
+                <h4 class="font-bold text-xl mb-2 text-red-600">高冲突人格 (HCP)</h4>
+                <p class="text-gray-700">核心是**规避责任**。他们总在寻找"指责对象"，情绪极易失控，且思维非黑即白。</p>
+            </div>
+            <div class="content-card p-6 cursor-pointer" data-modal="aggressor">
+                <h4 class="font-bold text-xl mb-2 text-orange-600">攻击型沟通者</h4>
+                <p class="text-gray-700">核心是**控制与赢**。通过大喊大叫、贬低和命令来支配他人，无视他人感受。</p>
+            </div>
+            <div class="content-card p-6 cursor-pointer" data-modal="passive">
+                <h4 class="font-bold text-xl mb-2 text-yellow-600">被动攻击型</h4>
+                <p class="text-gray-700">核心是**隐蔽的报复**。用冷暴力、讽刺和拖延来表达不满，言行不一。</p>
+            </div>
+            <div class="content-card p-6 cursor-pointer" data-modal="narcissist">
+                <h4 class="font-bold text-xl mb-2 text-blue-600">自恋型邀功者</h4>
+                <p class="text-gray-700">核心是**自我价值确认**。窃取他人功劳，贬低贡献，极度需要赞美，缺乏同理心。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第二步：解析动机与走向 -->
+    <section id="analyze" class="py-16 mb-12">
+        <div class="text-center mb-12 px-4">
+            <h3 class="text-3xl font-bold mb-4 text-gray-900">第二步：解析动机与走向</h3>
+            <p class="text-apple-gray max-w-2xl mx-auto">为什么他们能"吵闹抢功"还被领导纵容？这种行为的底层逻辑是什么？他们的职业生涯通常会如何发展？</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl border border-gray-200">
+            <h4 class="text-2xl font-bold text-center mb-8 text-gray-900">"高绩效毒瘤"的职业生命周期</h4>
+            <div class="jaw-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content p-6 bg-blue-50 rounded-lg">
+                        <h5 class="font-bold text-lg mb-2">初期：高绩效掩盖</h5>
+                        <p class="text-gray-700">凭借出色的个人能力获得认可，毒性行为被视为"个性"或"激情"。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content p-6 bg-yellow-50 rounded-lg">
+                        <h5 class="font-bold text-lg mb-2">发展：问题显现</h5>
+                        <p class="text-gray-700">开始出现团队冲突，但由于业绩突出，管理层选择容忍。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content p-6 bg-orange-50 rounded-lg">
+                        <h5 class="font-bold text-lg mb-2">爆发：严重影响</h5>
+                        <p class="text-gray-700">毒性行为严重影响团队士气和效率，优秀员工开始流失。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content p-6 bg-red-50 rounded-lg">
+                        <h5 class="font-bold text-lg mb-2">结局：组织应对</h5>
+                        <p class="text-gray-700">组织被迫采取行动：调岗、降职或解雇，但往往为时已晚。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第三步：量化影响 -->
+    <section id="impact" class="py-16 bg-white rounded-2xl border border-gray-200 mb-12">
+        <div class="text-center mb-12 px-4">
+            <h3 class="text-3xl font-bold mb-4 text-gray-900">第三步：量化影响</h3>
+            <p class="text-apple-gray max-w-2xl mx-auto">数据不会说谎。让我们看看毒性员工对组织造成的真实成本。</p>
+        </div>
+        <div class="px-4 md:px-8">
+            <div class="chart-container">
+                <canvas id="impactChart"></canvas>
+            </div>
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center p-4 bg-red-50 rounded-lg">
+                    <h5 class="font-bold text-lg text-red-600 mb-2">毒性员工成本</h5>
+                    <p class="text-2xl font-bold text-red-700">$160,000</p>
+                    <p class="text-sm text-gray-600">年度总成本</p>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <h5 class="font-bold text-lg text-green-600 mb-2">明星员工价值</h5>
+                    <p class="text-2xl font-bold text-green-700">$240,000</p>
+                    <p class="text-sm text-gray-600">年度贡献价值</p>
+                </div>
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <h5 class="font-bold text-lg text-blue-600 mb-2">净损失</h5>
+                    <p class="text-2xl font-bold text-blue-700">$400,000</p>
+                    <p class="text-sm text-gray-600">机会成本差异</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第四步：应对策略 -->
+    <section id="strategy" class="py-16 mb-12">
+        <div class="text-center mb-12 px-4">
+            <h3 class="text-3xl font-bold mb-4 text-gray-900">第四步：应对策略</h3>
+            <p class="text-apple-gray max-w-2xl mx-auto">根据您的角色选择合适的策略。每个角色都有不同的权限和责任，需要采用不同的方法。</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl border border-gray-200">
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button class="tab-button px-6 py-3 rounded-lg font-medium transition-colors active" data-tab="leadership">领导层</button>
+                <button class="tab-button px-6 py-3 rounded-lg font-medium transition-colors" data-tab="managers">管理者</button>
+                <button class="tab-button px-6 py-3 rounded-lg font-medium transition-colors" data-tab="employees">员工</button>
+            </div>
+            
+            <div id="leadership" class="tab-content">
+                <h4 class="text-xl font-bold mb-4">领导层策略</h4>
+                <div class="space-y-4">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">制度建设</h5>
+                        <p class="text-gray-700">建立明确的行为准则和绩效评估体系，将团队合作纳入考核指标。</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">文化塑造</h5>
+                        <p class="text-gray-700">倡导协作文化，奖励团队成功，而非个人英雄主义。</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">及时干预</h5>
+                        <p class="text-gray-700">一旦发现毒性行为，立即采取行动，不要因为短期绩效而妥协。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="managers" class="tab-content hidden">
+                <h4 class="text-xl font-bold mb-4">管理者策略</h4>
+                <div class="space-y-4">
+                    <div class="p-4 bg-purple-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">设定边界</h5>
+                        <p class="text-gray-700">明确工作边界和行为标准，对违规行为及时纠正。</p>
+                    </div>
+                    <div class="p-4 bg-indigo-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">文档记录</h5>
+                        <p class="text-gray-700">详细记录问题行为和沟通过程，为后续处理提供依据。</p>
+                    </div>
+                    <div class="p-4 bg-pink-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">保护团队</h5>
+                        <p class="text-gray-700">保护其他团队成员不受毒性行为影响，维护团队士气。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="employees" class="tab-content hidden">
+                <h4 class="text-xl font-bold mb-4">员工策略</h4>
+                <div class="space-y-4">
+                    <div class="p-4 bg-teal-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">保护自己</h5>
+                        <p class="text-gray-700">保留工作记录，避免单独与毒性同事接触，寻求支持。</p>
+                    </div>
+                    <div class="p-4 bg-cyan-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">专业应对</h5>
+                        <p class="text-gray-700">保持专业态度，不被情绪化行为影响，专注于工作目标。</p>
+                    </div>
+                    <div class="p-4 bg-emerald-50 rounded-lg">
+                        <h5 class="font-semibold mb-2">寻求帮助</h5>
+                        <p class="text-gray-700">及时向上级或HR报告问题，不要独自承受压力。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第五步：矛盾转移 -->
+    <section id="shifting" class="py-16 bg-white rounded-2xl border border-gray-200 mb-12">
+        <div class="text-center mb-12 px-4">
+            <h3 class="text-3xl font-bold mb-4 text-gray-900">第五步：矛盾转移</h3>
+            <p class="text-apple-gray max-w-2xl mx-auto">了解常见的操控策略，学会识别和应对矛盾转移行为。</p>
+        </div>
+        <div class="px-4 md:px-8">
+            <div class="space-y-4">
+                <div class="accordion-item">
+                    <div class="accordion-header p-4 bg-gray-50 rounded-lg cursor-pointer flex justify-between items-center">
+                        <h5 class="font-semibold">转移注意力</h5>
+                        <span class="text-xl">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="p-4 bg-white border-l-4 border-red-500">
+                            <p class="text-gray-700">当面临质疑时，立即转移话题到其他人的问题上，避免承担责任。</p>
+                            <p class="text-sm text-gray-600 mt-2"><strong>应对：</strong>坚持原话题，不被转移注意力。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header p-4 bg-gray-50 rounded-lg cursor-pointer flex justify-between items-center">
+                        <h5 class="font-semibold">情绪操控</h5>
+                        <span class="text-xl">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="p-4 bg-white border-l-4 border-orange-500">
+                            <p class="text-gray-700">通过愤怒、哭泣或其他强烈情绪来控制局面，让对方妥协。</p>
+                            <p class="text-sm text-gray-600 mt-2"><strong>应对：</strong>保持冷静，不被情绪影响，坚持事实。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header p-4 bg-gray-50 rounded-lg cursor-pointer flex justify-between items-center">
+                        <h5 class="font-semibold">受害者角色</h5>
+                        <span class="text-xl">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="p-4 bg-white border-l-4 border-yellow-500">
+                            <p class="text-gray-700">将自己塑造成受害者，获得同情，同时将责任推给他人。</p>
+                            <p class="text-sm text-gray-600 mt-2"><strong>应对：</strong>关注行为而非情绪，坚持客观事实。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页面内容 -->
+    <div class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
+        <div class="prose prose-lg max-w-none">
+            {{ .Content }}
+        </div>
+    </div>
+</div>
+
+<!-- 模态框 -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modal-title" class="text-2xl font-bold"></h3>
+                <button id="modal-close" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+</div>
+{{ end }}

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>历史时间线 - NSSA - Not-So-Stubby Area</title>
+
+
+
+<meta name="description" content="通过交互式时间线探索重要历史事件的发展脉络和相互关系">
+
+
+
+
+<meta name="keywords" content="历史研究,战略分析,交互式学习,学术平台">
+
+
+
+
+<meta name="author" content="NSSA Team">
+
+
+
+<meta property="og:title" content="历史时间线">
+<meta property="og:description" content="通过交互式时间线探索重要历史事件的发展脉络和相互关系">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://localhost:1313/timeline/">
+<meta property="og:site_name" content="NSSA - Not-So-Stubby Area">
+
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="历史时间线">
+<meta name="twitter:description" content="通过交互式时间线探索重要历史事件的发展脉络和相互关系">
+
+
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+                },
+                colors: {
+                    'apple-blue': '#007AFF',
+                    'apple-gray': '#8E8E93',
+                    'apple-light-gray': '#F2F2F7',
+                }
+            }
+        }
+    }
+</script>
+
+
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+        background-color: #ffffff;
+        color: #1d1d1f;
+        line-height: 1.47059;
+        font-weight: 400;
+        letter-spacing: -0.022em;
+    }
+    
+    .nav-link {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .nav-link:hover {
+        color: #007AFF;
+    }
+    
+    .nav-link.active {
+        color: #007AFF;
+        font-weight: 600;
+    }
+    
+    .content-card {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        background-color: #ffffff;
+        border: 1px solid #d2d2d7;
+        border-radius: 16px;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border-color: #007AFF;
+    }
+</style>
+
+
+
+
+</head>
+<body class="bg-white">
+    
+<nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center space-x-8">
+                <a href="http://localhost:1313/" class="text-2xl font-light text-gray-900 tracking-tight">NSSA</a>
+                <span class="text-apple-gray">|</span>
+                
+                <span class="text-lg font-medium text-gray-900">历史时间线</span>
+                
+            </div>
+            <div class="hidden lg:flex items-center space-x-6">
+                
+                
+                
+                    
+                    
+                
+                <a href="/" class="nav-link text-gray-900">
+                    首页
+                </a>
+                
+                
+                
+                    
+                    
+                
+                <a href="/fww/" class="nav-link text-gray-900">
+                    一战缘起
+                </a>
+                
+                
+                
+                    
+                    
+                
+                <a href="/timeline/" class="nav-link active">
+                    时间线
+                </a>
+                
+                
+                
+                    
+                    
+                
+                <a href="/topics/jaw/" class="nav-link text-gray-900">
+                    JAW 专题
+                </a>
+                
+                
+                
+                    
+                    
+                
+                <a href="/topics/swgg/" class="nav-link text-gray-900">
+                    SWGG 专题
+                </a>
+                
+                
+                
+                    
+                    
+                
+                <a href="/topics/colonial/" class="nav-link text-gray-900">
+                    Colonial 专题
+                </a>
+                
+                
+                
+                    
+                    
+                
+                <a href="/about/" class="nav-link text-gray-900">
+                    关于
+                </a>
+                
+                
+                
+                    
+                    
+                
+                <a href="/about/" class="nav-link text-gray-900">
+                    关于 NSSA
+                </a>
+                
+            </div>
+            <div class="lg:hidden">
+                <button class="text-gray-900" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        
+        <div id="mobile-menu" class="lg:hidden hidden border-t border-gray-200 py-4">
+            
+            
+            
+                
+            
+            <a href="/" class="block py-2 nav-link text-gray-900">
+                首页
+            </a>
+            
+            
+            
+                
+            
+            <a href="/fww/" class="block py-2 nav-link text-gray-900">
+                一战缘起
+            </a>
+            
+            
+            
+                
+            
+            <a href="/timeline/" class="block py-2 nav-link active">
+                时间线
+            </a>
+            
+            
+            
+                
+            
+            <a href="/topics/jaw/" class="block py-2 nav-link text-gray-900">
+                JAW 专题
+            </a>
+            
+            
+            
+                
+            
+            <a href="/topics/swgg/" class="block py-2 nav-link text-gray-900">
+                SWGG 专题
+            </a>
+            
+            
+            
+                
+            
+            <a href="/topics/colonial/" class="block py-2 nav-link text-gray-900">
+                Colonial 专题
+            </a>
+            
+            
+            
+                
+            
+            <a href="/about/" class="block py-2 nav-link text-gray-900">
+                关于
+            </a>
+            
+            
+            
+                
+            
+            <a href="/about/" class="block py-2 nav-link text-gray-900">
+                关于 NSSA
+            </a>
+            
+        </div>
+    </div>
+</nav>
+
+    
+    <main>
+        
+<div class="max-w-6xl mx-auto px-6 py-16">
+    
+    <div class="text-center mb-20">
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+            历史时间线
+        </h1>
+        
+        <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+            交互式历史事件时间轴展示
+        </p>
+        
+        
+        <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">
+            通过交互式时间线探索重要历史事件的发展脉络和相互关系
+        </p>
+        
+    </div>
+
+    
+    <div class="bg-white p-6 rounded-2xl border border-gray-200 mb-12">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-gray-700">时间段:</label>
+                <select id="timeline-period" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <option value="all">全部时期</option>
+                    <option value="ancient">古代文明</option>
+                    <option value="medieval">中世纪</option>
+                    <option value="early-modern">近代早期</option>
+                    <option value="modern">现代</option>
+                </select>
+            </div>
+            <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-gray-700">事件类型:</label>
+                <select id="timeline-type" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <option value="all">全部类型</option>
+                    <option value="political">政治</option>
+                    <option value="economic">经济</option>
+                    <option value="cultural">文化</option>
+                    <option value="military">军事</option>
+                </select>
+            </div>
+            <button id="timeline-reset" class="px-4 py-2 bg-apple-blue text-white rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                重置筛选
+            </button>
+        </div>
+    </div>
+
+    
+    <div class="relative">
+        
+        <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-apple-blue h-full"></div>
+        
+        
+        <div id="timeline-events" class="space-y-12">
+            
+            <div class="timeline-event flex items-center" data-period="ancient" data-type="political">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">古埃及统一</h3>
+                        <p class="text-apple-gray text-sm mb-2">公元前 3100 年</p>
+                        <p class="text-gray-700">美尼斯统一上下埃及，建立第一王朝，标志着古埃及文明的开始。</p>
+                    </div>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8"></div>
+            </div>
+
+            <div class="timeline-event flex items-center" data-period="ancient" data-type="cultural">
+                <div class="w-1/2 pr-8"></div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">雅典民主制</h3>
+                        <p class="text-apple-gray text-sm mb-2">公元前 508 年</p>
+                        <p class="text-gray-700">克里斯提尼改革建立雅典民主制，为后世民主政治奠定基础。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-event flex items-center" data-period="medieval" data-type="military">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">十字军东征</h3>
+                        <p class="text-apple-gray text-sm mb-2">1095 - 1291 年</p>
+                        <p class="text-gray-700">欧洲基督教世界对中东地区发动的一系列宗教战争。</p>
+                    </div>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8"></div>
+            </div>
+
+            <div class="timeline-event flex items-center" data-period="early-modern" data-type="cultural">
+                <div class="w-1/2 pr-8"></div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">文艺复兴</h3>
+                        <p class="text-apple-gray text-sm mb-2">14 - 17 世纪</p>
+                        <p class="text-gray-700">欧洲的文化艺术复兴运动，标志着中世纪的结束和近代的开始。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-event flex items-center" data-period="modern" data-type="economic">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">工业革命</h3>
+                        <p class="text-apple-gray text-sm mb-2">1760 - 1840 年</p>
+                        <p class="text-gray-700">从手工劳动向机器生产的转变，彻底改变了人类社会。</p>
+                    </div>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="mt-20">
+        <div class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
+            <div class="prose prose-lg max-w-none">
+                <h1 id="历史时间线">历史时间线</h1>
+<p>通过交互式的时间轴，探索重要历史事件的发展脉络、因果关系和深远影响。我们的时间线涵盖了从古代文明到现代社会的重要历史节点。</p>
+<h2 id="时间线特色">时间线特色</h2>
+<h3 id="-精确时间定位">🕐 精确时间定位</h3>
+<p>每个历史事件都标注了准确的时间信息，帮助您理解历史发展的时序关系。</p>
+<h3 id="-关联事件分析">🔗 关联事件分析</h3>
+<p>点击任意事件，查看与其相关的前因后果和影响范围。</p>
+<h3 id="-多维度展示">📊 多维度展示</h3>
+<p>从政治、经济、文化、科技等多个维度展示历史事件的复杂性。</p>
+<h3 id="-个性化筛选">🎯 个性化筛选</h3>
+<p>根据时间段、事件类型、地理区域等条件筛选您感兴趣的历史内容。</p>
+<h2 id="主要时间段">主要时间段</h2>
+<h3 id="古代文明-公元前3000年---公元500年">古代文明 (公元前3000年 - 公元500年)</h3>
+<ul>
+<li>美索不达米亚文明的兴起</li>
+<li>古埃及王朝的建立与发展</li>
+<li>古希腊城邦制度的形成</li>
+<li>罗马帝国的扩张与衰落</li>
+</ul>
+<h3 id="中世纪-500年---1500年">中世纪 (500年 - 1500年)</h3>
+<ul>
+<li>拜占庭帝国的延续</li>
+<li>伊斯兰文明的传播</li>
+<li>十字军东征</li>
+<li>蒙古帝国的建立</li>
+</ul>
+<h3 id="近代早期-1500年---1800年">近代早期 (1500年 - 1800年)</h3>
+<ul>
+<li>地理大发现</li>
+<li>宗教改革运动</li>
+<li>科学革命</li>
+<li>启蒙运动</li>
+</ul>
+<h3 id="现代-1800年---至今">现代 (1800年 - 至今)</h3>
+<ul>
+<li>工业革命</li>
+<li>民族国家的形成</li>
+<li>两次世界大战</li>
+<li>冷战与全球化</li>
+</ul>
+<h2 id="交互功能">交互功能</h2>
+<h3 id="时间导航">时间导航</h3>
+<ul>
+<li><strong>快速跳转</strong> - 直接跳转到特定年代</li>
+<li><strong>缩放控制</strong> - 调整时间轴的显示精度</li>
+<li><strong>平滑滚动</strong> - 流畅的时间线浏览体验</li>
+</ul>
+<h3 id="事件详情">事件详情</h3>
+<ul>
+<li><strong>弹窗展示</strong> - 点击事件查看详细信息</li>
+<li><strong>相关链接</strong> - 跳转到相关专题页面</li>
+<li><strong>多媒体内容</strong> - 图片、地图、图表等丰富展示</li>
+</ul>
+<h3 id="个性化设置">个性化设置</h3>
+<ul>
+<li><strong>主题切换</strong> - 明暗主题自由切换</li>
+<li><strong>显示选项</strong> - 自定义显示的信息类型</li>
+<li><strong>收藏功能</strong> - 标记感兴趣的历史事件</li>
+</ul>
+<h2 id="使用指南">使用指南</h2>
+<ol>
+<li><strong>浏览时间线</strong> - 使用鼠标滚轮或拖拽来浏览不同时期</li>
+<li><strong>筛选事件</strong> - 使用顶部的筛选器来查看特定类型的事件</li>
+<li><strong>查看详情</strong> - 点击任意事件节点查看详细信息</li>
+<li><strong>探索关联</strong> - 通过相关事件链接深入了解历史脉络</li>
+</ol>
+<h2 id="数据来源">数据来源</h2>
+<p>我们的时间线数据来源于：</p>
+<ul>
+<li>权威历史教科书和学术著作</li>
+<li>国际知名博物馆和档案馆</li>
+<li>经过同行评议的学术期刊</li>
+<li>联合国教科文组织等国际组织的官方资料</li>
+</ul>
+<p>所有历史事件的时间和描述都经过严格的学术验证，确保信息的准确性和可靠性。</p>
+<hr>
+<p><em>开始您的历史探索之旅，发现时间长河中的精彩故事！</em></p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const periodSelect = document.getElementById('timeline-period');
+    const typeSelect = document.getElementById('timeline-type');
+    const resetButton = document.getElementById('timeline-reset');
+    const events = document.querySelectorAll('.timeline-event');
+
+    function filterEvents() {
+        const selectedPeriod = periodSelect.value;
+        const selectedType = typeSelect.value;
+
+        events.forEach(event => {
+            const eventPeriod = event.dataset.period;
+            const eventType = event.dataset.type;
+            
+            const periodMatch = selectedPeriod === 'all' || eventPeriod === selectedPeriod;
+            const typeMatch = selectedType === 'all' || eventType === selectedType;
+            
+            if (periodMatch && typeMatch) {
+                event.style.display = 'flex';
+                event.style.opacity = '1';
+            } else {
+                event.style.display = 'none';
+                event.style.opacity = '0';
+            }
+        });
+    }
+
+    periodSelect.addEventListener('change', filterEvents);
+    typeSelect.addEventListener('change', filterEvents);
+    
+    resetButton.addEventListener('click', function() {
+        periodSelect.value = 'all';
+        typeSelect.value = 'all';
+        filterEvents();
+    });
+
+    
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.transform = 'translateY(0)';
+                entry.target.style.opacity = '1';
+            }
+        });
+    }, observerOptions);
+
+    events.forEach(event => {
+        event.style.transform = 'translateY(20px)';
+        event.style.opacity = '0';
+        event.style.transition = 'all 0.6s ease-out';
+        observer.observe(event);
+    });
+});
+</script>
+
+    </main>
+    
+    
+<footer class="border-t border-gray-200 mt-20">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-center">
+        <p class="text-apple-gray text-sm mb-2">
+            © 2025 NSSA Platform. 基于历史报告的交互式探索，仅用于学习和研究目的。
+        </p>
+        <p class="text-apple-gray text-xs">
+            Powered by Hugo & Cloudflare Workers | Domain: nssa.io
+        </p>
+    </div>
+</footer>
+
+    
+<script>
+    
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+    }
+    
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const links = document.querySelectorAll('a[href^="#"]');
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

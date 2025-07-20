@@ -1,0 +1,200 @@
+{{ define "main" }}
+<div class="max-w-6xl mx-auto px-6 py-16">
+    <!-- 页面标题 -->
+    <div class="text-center mb-20">
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+            {{ .Title }}
+        </h1>
+        {{ if .Params.subtitle }}
+        <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+            {{ .Params.subtitle }}
+        </p>
+        {{ end }}
+        {{ if .Description }}
+        <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">
+            {{ .Description }}
+        </p>
+        {{ end }}
+    </div>
+
+    <!-- 时间线控制面板 -->
+    <div class="bg-white p-6 rounded-2xl border border-gray-200 mb-12">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-gray-700">时间段:</label>
+                <select id="timeline-period" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <option value="all">全部时期</option>
+                    <option value="ancient">古代文明</option>
+                    <option value="medieval">中世纪</option>
+                    <option value="early-modern">近代早期</option>
+                    <option value="modern">现代</option>
+                </select>
+            </div>
+            <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-gray-700">事件类型:</label>
+                <select id="timeline-type" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <option value="all">全部类型</option>
+                    <option value="political">政治</option>
+                    <option value="economic">经济</option>
+                    <option value="cultural">文化</option>
+                    <option value="military">军事</option>
+                </select>
+            </div>
+            <button id="timeline-reset" class="px-4 py-2 bg-apple-blue text-white rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                重置筛选
+            </button>
+        </div>
+    </div>
+
+    <!-- 时间线容器 -->
+    <div class="relative">
+        <!-- 时间线主轴 -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-apple-blue h-full"></div>
+        
+        <!-- 时间线事件 -->
+        <div id="timeline-events" class="space-y-12">
+            <!-- 示例事件 - 这些将通过 JavaScript 动态生成 -->
+            <div class="timeline-event flex items-center" data-period="ancient" data-type="political">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">古埃及统一</h3>
+                        <p class="text-apple-gray text-sm mb-2">公元前 3100 年</p>
+                        <p class="text-gray-700">美尼斯统一上下埃及，建立第一王朝，标志着古埃及文明的开始。</p>
+                    </div>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8"></div>
+            </div>
+
+            <div class="timeline-event flex items-center" data-period="ancient" data-type="cultural">
+                <div class="w-1/2 pr-8"></div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">雅典民主制</h3>
+                        <p class="text-apple-gray text-sm mb-2">公元前 508 年</p>
+                        <p class="text-gray-700">克里斯提尼改革建立雅典民主制，为后世民主政治奠定基础。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-event flex items-center" data-period="medieval" data-type="military">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">十字军东征</h3>
+                        <p class="text-apple-gray text-sm mb-2">1095 - 1291 年</p>
+                        <p class="text-gray-700">欧洲基督教世界对中东地区发动的一系列宗教战争。</p>
+                    </div>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8"></div>
+            </div>
+
+            <div class="timeline-event flex items-center" data-period="early-modern" data-type="cultural">
+                <div class="w-1/2 pr-8"></div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">文艺复兴</h3>
+                        <p class="text-apple-gray text-sm mb-2">14 - 17 世纪</p>
+                        <p class="text-gray-700">欧洲的文化艺术复兴运动，标志着中世纪的结束和近代的开始。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-event flex items-center" data-period="modern" data-type="economic">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="content-card p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">工业革命</h3>
+                        <p class="text-apple-gray text-sm mb-2">1760 - 1840 年</p>
+                        <p class="text-gray-700">从手工劳动向机器生产的转变，彻底改变了人类社会。</p>
+                    </div>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-4 h-4 bg-apple-blue rounded-full border-4 border-white shadow-lg"></div>
+                </div>
+                <div class="w-1/2 pl-8"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页面内容 -->
+    <div class="mt-20">
+        <div class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
+            <div class="prose prose-lg max-w-none">
+                {{ .Content }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 时间线交互脚本 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const periodSelect = document.getElementById('timeline-period');
+    const typeSelect = document.getElementById('timeline-type');
+    const resetButton = document.getElementById('timeline-reset');
+    const events = document.querySelectorAll('.timeline-event');
+
+    function filterEvents() {
+        const selectedPeriod = periodSelect.value;
+        const selectedType = typeSelect.value;
+
+        events.forEach(event => {
+            const eventPeriod = event.dataset.period;
+            const eventType = event.dataset.type;
+            
+            const periodMatch = selectedPeriod === 'all' || eventPeriod === selectedPeriod;
+            const typeMatch = selectedType === 'all' || eventType === selectedType;
+            
+            if (periodMatch && typeMatch) {
+                event.style.display = 'flex';
+                event.style.opacity = '1';
+            } else {
+                event.style.display = 'none';
+                event.style.opacity = '0';
+            }
+        });
+    }
+
+    periodSelect.addEventListener('change', filterEvents);
+    typeSelect.addEventListener('change', filterEvents);
+    
+    resetButton.addEventListener('click', function() {
+        periodSelect.value = 'all';
+        typeSelect.value = 'all';
+        filterEvents();
+    });
+
+    // 添加滚动动画
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.transform = 'translateY(0)';
+                entry.target.style.opacity = '1';
+            }
+        });
+    }, observerOptions);
+
+    events.forEach(event => {
+        event.style.transform = 'translateY(20px)';
+        event.style.opacity = '0';
+        event.style.transition = 'all 0.6s ease-out';
+        observer.observe(event);
+    });
+});
+</script>
+{{ end }}
