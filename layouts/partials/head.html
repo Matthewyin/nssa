@@ -161,6 +161,150 @@
     .dark ::-webkit-scrollbar-thumb:hover {
         background: #777;
     }
+
+    /* 文本截断样式 */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* 文章页面样式 */
+    .prose {
+        color: #374151;
+        max-width: none;
+    }
+
+    .dark .prose {
+        color: #d1d5db;
+    }
+
+    .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+        color: #111827;
+        font-weight: 600;
+        line-height: 1.25;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .dark .prose h1, .dark .prose h2, .dark .prose h3, .dark .prose h4, .dark .prose h5, .dark .prose h6 {
+        color: #f9fafb;
+    }
+
+    .prose h1 {
+        font-size: 2.25rem;
+        margin-top: 0;
+    }
+
+    .prose h2 {
+        font-size: 1.875rem;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+    }
+
+    .dark .prose h2 {
+        border-bottom-color: #374151;
+    }
+
+    .prose h3 {
+        font-size: 1.5rem;
+    }
+
+    .prose h4 {
+        font-size: 1.25rem;
+    }
+
+    .prose p {
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        line-height: 1.75;
+    }
+
+    .prose ul, .prose ol {
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        padding-left: 1.625rem;
+    }
+
+    .prose li {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .prose blockquote {
+        font-style: italic;
+        border-left: 4px solid #007AFF;
+        padding-left: 1rem;
+        margin: 1.5rem 0;
+        color: #6b7280;
+    }
+
+    .dark .prose blockquote {
+        border-left-color: #409CFF;
+        color: #9ca3af;
+    }
+
+    .prose code {
+        background-color: #f3f4f6;
+        padding: 0.125rem 0.25rem;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        color: #dc2626;
+    }
+
+    .dark .prose code {
+        background-color: #374151;
+        color: #fca5a5;
+    }
+
+    .prose pre {
+        background-color: #1f2937;
+        color: #f9fafb;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+    }
+
+    .prose pre code {
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+
+    /* 目录样式 */
+    .toc-content ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .toc-content li {
+        margin: 0;
+    }
+
+    .toc-content a {
+        display: block;
+        padding: 0.25rem 0;
+        border-radius: 0.25rem;
+        transition: all 0.2s ease;
+    }
+
+    .toc-content a:hover {
+        background-color: #f3f4f6;
+        padding-left: 0.5rem;
+    }
+
+    .dark .toc-content a:hover {
+        background-color: #374151;
+    }
 </style>
 
 <!-- Chart.js for interactive charts -->
