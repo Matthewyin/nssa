@@ -1,18 +1,30 @@
 {
-  "name": "nssa",
-  "version": "1.0.0",
-  "description": "",
+  "name": "nssa-hugo-site",
+  "version": "2.0.0",
+  "description": "NSSA - Hugo-powered historical research and analysis platform",
   "main": "index.js",
   "scripts": {
+    "dev": "hugo server --buildDrafts --bind 0.0.0.0",
+    "build": "hugo --minify --gc",
+    "preview": "hugo server --environment production",
+    "clean": "rm -rf public resources",
+    "deploy": "npm run build && wrangler deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Matthewyin/nssa.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "hugo",
+    "static-site",
+    "history",
+    "research",
+    "education",
+    "cloudflare-workers"
+  ],
+  "author": "NSSA Team",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/Matthewyin/nssa/issues"
