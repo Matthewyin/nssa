@@ -52,7 +52,7 @@
                     <p class="text-apple-gray leading-relaxed mb-6">{{ .Summary | truncate 200 }}</p>
                     {{ end }}
 
-                    <!-- 阅读更多链接 -->
+                    <!-- 交互按钮 -->
                     <div class="flex items-center justify-between">
                         <a href="{{ .RelPermalink }}" class="inline-flex items-center text-apple-blue hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
                             <span>阅读全文</span>
@@ -61,57 +61,27 @@
                             </svg>
                         </a>
 
-                        <!-- 分享按钮 -->
-                        <div class="flex items-center space-x-3">
-                            <span class="text-sm text-apple-gray">分享:</span>
-
-                            <!-- 微信分享 -->
-                            <button onclick="shareToWeChat('{{ .Title }}', '{{ .Permalink }}')"
-                                    class="text-apple-gray hover:text-green-500 transition-colors"
-                                    title="分享到微信">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 4.882-1.900 7.852.194.552-.470 1.242-.748 1.905-.748a.59.59 0 0 1 .59.59c0 .08-.016.158-.046.23-.36 1.352-.36 2.704 0 4.056.03.072.046.15.046.23a.59.59 0 0 1-.59.59c-.663 0-1.353-.278-1.905-.748-2.97 2.094-6.149 1.609-7.852.194-1.775-1.474-2.789-3.868-1.932-6.446-.268-.023-.535-.05-.811-.05z"/>
+                        <div class="flex items-center space-x-4">
+                            <!-- 点赞按钮 -->
+                            <button onclick="toggleLike(this)"
+                                    class="flex items-center space-x-1 px-3 py-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm"
+                                    data-liked="false">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L9 7m-7 10h2m5-10h2m0 0h2m-2 0v2m0 0h2"></path>
                                 </svg>
+                                <span class="like-count">73</span>
                             </button>
 
-                            <!-- 微博分享 -->
-                            <a href="https://service.weibo.com/share/share.php?title={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}"
-                               target="_blank"
-                               class="text-apple-gray hover:text-red-500 transition-colors"
-                               title="分享到微博">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9.31 8.17c-2.73-.13-4.3.53-4.3 2.26 0 2.45 2.85 4.52 6.33 4.52 2.87 0 4.65-1.63 4.65-3.42 0-1.34-1.08-1.98-2.5-2.09-.46-.04-.75-.07-.68-.33.08-.27.36-.54.82-.54.5 0 .94.31.94.78 0 .23-.08.42-.08.42s.69-.24.69-.95c0-1.03-.89-1.79-2.12-1.79-1.18 0-2.16.71-2.5 1.65-.46-.05-.89-.12-1.25-.51zm11.24-3.09c-.78-2.47-2.91-4.42-5.42-5.23-.22-.07-.37.08-.37.31v.13c0 .19.13.38.31.44 2.36.77 4.24 2.65 4.91 5.11.06.22.25.38.47.38h.13c.22 0 .37-.22.31-.44l-.34-.7zm-2.27.9c-.78-.78-1.83-1.27-2.97-1.39-.19-.02-.37.13-.37.31v.16c0 .16.13.31.28.33.89.1 1.67.48 2.25 1.06.58.58.94 1.39 1.02 2.28.02.16.15.28.31.28h.16c.19 0 .33-.16.31-.34-.12-1.17-.61-2.25-1.39-3.03l.4.34z"/>
-                                </svg>
-                            </a>
-
-                            <!-- Facebook分享 -->
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink | urlquery }}"
-                               target="_blank"
-                               class="text-apple-gray hover:text-blue-600 transition-colors"
-                               title="分享到Facebook">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                </svg>
-                            </a>
-
-                            <!-- X (Twitter)分享 -->
-                            <a href="https://twitter.com/intent/tweet?text={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}"
-                               target="_blank"
-                               class="text-apple-gray hover:text-gray-900 dark:hover:text-white transition-colors"
-                               title="分享到X">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.80l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                </svg>
-                            </a>
-
-                            <!-- 复制链接 -->
-                            <button onclick="copyToClipboard('{{ .Permalink }}', this)"
-                                    class="text-apple-gray hover:text-apple-blue transition-colors"
-                                    title="复制链接">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                                </svg>
-                            </button>
+                            <!-- 分享按钮 -->
+                            <div class="relative">
+                                <button onclick="toggleShareMenu(this)"
+                                        class="flex items-center space-x-1 px-3 py-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                                    </svg>
+                                    <span>分享</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -229,8 +199,128 @@
     </div>
 </div>
 
-<!-- 分享功能JavaScript -->
+<!-- 交互功能JavaScript -->
 <script>
+// 点赞功能
+function toggleLike(button) {
+    const isLiked = button.getAttribute('data-liked') === 'true';
+    const countElement = button.querySelector('.like-count');
+    let count = parseInt(countElement.textContent);
+
+    if (isLiked) {
+        count--;
+        button.setAttribute('data-liked', 'false');
+        button.classList.remove('bg-apple-blue', 'text-white');
+        button.classList.add('bg-gray-100', 'dark:bg-gray-800');
+    } else {
+        count++;
+        button.setAttribute('data-liked', 'true');
+        button.classList.remove('bg-gray-100', 'dark:bg-gray-800');
+        button.classList.add('bg-apple-blue', 'text-white');
+    }
+
+    countElement.textContent = count;
+}
+
+// 分享菜单切换
+function toggleShareMenu(button) {
+    // 创建分享弹窗
+    const existingMenu = document.getElementById('share-menu-popup');
+    if (existingMenu) {
+        existingMenu.remove();
+        return;
+    }
+
+    const shareMenu = document.createElement('div');
+    shareMenu.id = 'share-menu-popup';
+    shareMenu.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+
+    // 获取当前文章信息
+    const articleCard = button.closest('article');
+    const title = articleCard.querySelector('h2 a').textContent;
+    const url = articleCard.querySelector('h2 a').href;
+
+    shareMenu.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 max-w-md mx-4">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">分享</h3>
+                <button onclick="closeShareMenu()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-4 gap-4 mb-4">
+                <!-- 微信 -->
+                <button onclick="shareToWeChat('${title}', '${url}')" class="flex flex-col items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-2">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 4.882-1.900 7.852.194.552-.470 1.242-.748 1.905-.748a.59.59 0 0 1 .59.59c0 .08-.016.158-.046.23-.36 1.352-.36 2.704 0 4.056.03.072.046.15.046.23a.59.59 0 0 1-.59.59c-.663 0-1.353-.278-1.905-.748-2.97 2.094-6.149 1.609-7.852.194-1.775-1.474-2.789-3.868-1.932-6.446-.268-.023-.535-.05-.811-.05z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">微信</span>
+                </button>
+
+                <!-- 微博 -->
+                <a href="https://service.weibo.com/share/share.php?title=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}" target="_blank" class="flex flex-col items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mb-2">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9.31 8.17c-2.73-.13-4.3.53-4.3 2.26 0 2.45 2.85 4.52 6.33 4.52 2.87 0 4.65-1.63 4.65-3.42 0-1.34-1.08-1.98-2.5-2.09-.46-.04-.75-.07-.68-.33.08-.27.36-.54.82-.54.5 0 .94.31.94.78 0 .23-.08.42-.08.42s.69-.24.69-.95c0-1.03-.89-1.79-2.12-1.79-1.18 0-2.16.71-2.5 1.65-.46-.05-.89-.12-1.25-.51zm11.24-3.09c-.78-2.47-2.91-4.42-5.42-5.23-.22-.07-.37.08-.37.31v.13c0 .19.13.38.31.44 2.36.77 4.24 2.65 4.91 5.11.06.22.25.38.47.38h.13c.22 0 .37-.22.31-.44l-.34-.7zm-2.27.9c-.78-.78-1.83-1.27-2.97-1.39-.19-.02-.37.13-.37.31v.16c0 .16.13.31.28.33.89.1 1.67.48 2.25 1.06.58.58.94 1.39 1.02 2.28.02.16.15.28.31.28h.16c.19 0 .33-.16.31-.34-.12-1.17-.61-2.25-1.39-3.03l.4.34z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">微博</span>
+                </a>
+
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" class="flex flex-col items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-2">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">Facebook</span>
+                </a>
+
+                <!-- X (Twitter) -->
+                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}" target="_blank" class="flex flex-col items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <div class="w-12 h-12 bg-gray-900 dark:bg-white rounded-full flex items-center justify-center mb-2">
+                        <svg class="w-6 h-6 text-white dark:text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">X</span>
+                </a>
+            </div>
+
+            <!-- 复制链接 -->
+            <div class="flex items-center space-x-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <input type="text" value="${url}" readonly class="flex-1 bg-transparent text-sm text-gray-600 dark:text-gray-400 outline-none">
+                <button onclick="copyToClipboard('${url}', this)" class="px-3 py-1 bg-apple-blue text-white text-sm rounded-lg hover:bg-blue-600 transition-colors">
+                    复制
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(shareMenu);
+
+    // 点击背景关闭
+    shareMenu.addEventListener('click', function(e) {
+        if (e.target === shareMenu) {
+            shareMenu.remove();
+        }
+    });
+}
+
+// 关闭分享菜单
+function closeShareMenu() {
+    const shareMenu = document.getElementById('share-menu-popup');
+    if (shareMenu) {
+        shareMenu.remove();
+    }
+}
+
 // 微信分享功能
 function shareToWeChat(title, url) {
     // 生成二维码分享链接
@@ -267,13 +357,15 @@ function shareToWeChat(title, url) {
 function copyToClipboard(text, button) {
     navigator.clipboard.writeText(text).then(function() {
         // 显示成功提示
-        const originalTitle = button.title;
-        button.title = '已复制!';
-        button.classList.add('text-green-500');
+        const originalText = button.textContent;
+        button.textContent = '已复制!';
+        button.classList.add('bg-green-500');
+        button.classList.remove('bg-apple-blue');
 
         setTimeout(function() {
-            button.title = originalTitle;
-            button.classList.remove('text-green-500');
+            button.textContent = originalText;
+            button.classList.remove('bg-green-500');
+            button.classList.add('bg-apple-blue');
         }, 2000);
     }).catch(function(err) {
         console.error('复制失败:', err);
@@ -285,9 +377,9 @@ function copyToClipboard(text, button) {
         document.execCommand('copy');
         document.body.removeChild(textArea);
 
-        button.title = '已复制!';
+        button.textContent = '已复制!';
         setTimeout(function() {
-            button.title = '复制链接';
+            button.textContent = '复制';
         }, 2000);
     });
 }

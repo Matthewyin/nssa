@@ -11,32 +11,66 @@
         const themeToggle = document.getElementById('theme-toggle');
         const lightIcon = document.getElementById('theme-toggle-light-icon');
         const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const systemIcon = document.getElementById('theme-toggle-system-icon');
 
-        // 检查本地存储的主题设置或系统偏好
-        const currentTheme = localStorage.getItem('theme') ||
-            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        // 检查本地存储的主题设置，默认为系统模式
+        let currentTheme = localStorage.getItem('theme') || 'system';
 
         // 应用主题
         function applyTheme(theme) {
+            // 隐藏所有图标
+            lightIcon.classList.add('hidden');
+            darkIcon.classList.add('hidden');
+            systemIcon.classList.add('hidden');
+
             if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
                 lightIcon.classList.remove('hidden');
-                darkIcon.classList.add('hidden');
-            } else {
+                localStorage.setItem('theme', 'dark');
+            } else if (theme === 'light') {
                 document.documentElement.classList.remove('dark');
-                lightIcon.classList.add('hidden');
                 darkIcon.classList.remove('hidden');
+                localStorage.setItem('theme', 'light');
+            } else { // system
+                systemIcon.classList.remove('hidden');
+                localStorage.setItem('theme', 'system');
+                // 根据系统偏好设置
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
             }
-            localStorage.setItem('theme', theme);
         }
+
+        // 监听系统主题变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            if (localStorage.getItem('theme') === 'system') {
+                if (e.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+        });
 
         // 初始化主题
         applyTheme(currentTheme);
 
-        // 主题切换事件
+        // 主题切换事件 (循环: system -> light -> dark -> system)
         themeToggle.addEventListener('click', function() {
-            const isDark = document.documentElement.classList.contains('dark');
-            applyTheme(isDark ? 'light' : 'dark');
+            const currentTheme = localStorage.getItem('theme') || 'system';
+            let nextTheme;
+
+            if (currentTheme === 'system') {
+                nextTheme = 'light';
+            } else if (currentTheme === 'light') {
+                nextTheme = 'dark';
+            } else {
+                nextTheme = 'system';
+            }
+
+            applyTheme(nextTheme);
         });
     }
 
