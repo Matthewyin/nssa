@@ -1,0 +1,101 @@
+# NSSA Hugo Configuration
+baseURL = 'https://nssa.io'
+languageCode = 'zh-CN'
+title = 'NSSA - Not-So-Stubby Area'
+defaultContentLanguage = 'zh'
+
+# Build Configuration
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+enableRobotsTXT = true
+enableGitInfo = true
+
+# Output Configuration
+disableKinds = ['taxonomy', 'term']
+enableEmoji = true
+
+# Markup Configuration
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = 'github'
+    lineNos = false
+    codeFences = true
+
+# Menu Configuration
+[menu]
+  [[menu.main]]
+    name = "首页"
+    url = "/"
+    weight = 10
+  [[menu.main]]
+    name = "一战缘起"
+    url = "/fww/"
+    weight = 20
+  [[menu.main]]
+    name = "时间线"
+    url = "/timeline/"
+    weight = 30
+  [[menu.main]]
+    name = "JAW 专题"
+    url = "/topics/jaw/"
+    weight = 40
+  [[menu.main]]
+    name = "SWGG 专题"
+    url = "/topics/swgg/"
+    weight = 50
+  [[menu.main]]
+    name = "Colonial 专题"
+    url = "/topics/colonial/"
+    weight = 60
+  [[menu.main]]
+    name = "关于"
+    url = "/about/"
+    weight = 70
+
+# Params Configuration
+[params]
+  description = "NSSA 平台 - 历史研究与分析的交互式探索"
+  author = "NSSA Team"
+  keywords = ["历史研究", "战略分析", "交互式学习", "学术平台"]
+
+  # Apple Style Design
+  applestyle = true
+
+  # Social and SEO
+  [params.social]
+    github = "https://github.com/Matthewyin/nssa"
+
+  # Analytics and Performance
+  [params.analytics]
+    enabled = false
+
+  [params.performance]
+    lazyload = true
+    minify = true
+
+# Permalinks Configuration
+[permalinks]
+  topics = "/topics/:slug/"
+
+# Related Content
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = false
+  [[related.indices]]
+    name = "keywords"
+    weight = 100
+  [[related.indices]]
+    name = "tags"
+    weight = 80
+
+# Security Configuration
+[security]
+  [security.exec]
+    allow = ['^dart-sass-embedded$', '^go$', '^npx$', '^postcss$', '^tailwindcss$', '^git$']
+  [security.funcs]
+    getenv = ['^HUGO_', '^CI$']

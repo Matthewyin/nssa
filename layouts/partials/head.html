@@ -1,0 +1,99 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+
+<!-- Meta Description -->
+{{ if .Description }}
+<meta name="description" content="{{ .Description }}">
+{{ else if .Site.Params.description }}
+<meta name="description" content="{{ .Site.Params.description }}">
+{{ end }}
+
+<!-- Keywords -->
+{{ if .Params.keywords }}
+<meta name="keywords" content="{{ delimit .Params.keywords "," }}">
+{{ else if .Site.Params.keywords }}
+<meta name="keywords" content="{{ delimit .Site.Params.keywords "," }}">
+{{ end }}
+
+<!-- Author -->
+{{ if .Site.Params.author }}
+<meta name="author" content="{{ .Site.Params.author }}">
+{{ end }}
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<meta property="og:type" content="{{ if .IsHome }}website{{ else }}article{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta name="twitter:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+                },
+                colors: {
+                    'apple-blue': '#007AFF',
+                    'apple-gray': '#8E8E93',
+                    'apple-light-gray': '#F2F2F7',
+                }
+            }
+        }
+    }
+</script>
+
+<!-- Custom Styles -->
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+        background-color: #ffffff;
+        color: #1d1d1f;
+        line-height: 1.47059;
+        font-weight: 400;
+        letter-spacing: -0.022em;
+    }
+    
+    .nav-link {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .nav-link:hover {
+        color: #007AFF;
+    }
+    
+    .nav-link.active {
+        color: #007AFF;
+        font-weight: 600;
+    }
+    
+    .content-card {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        background-color: #ffffff;
+        border: 1px solid #d2d2d7;
+        border-radius: 16px;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border-color: #007AFF;
+    }
+</style>
+
+<!-- Chart.js for interactive charts -->
+{{ if or (eq .Type "topic") (.Params.charts) }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ end }}

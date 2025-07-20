@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦境解析报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Harmony -->
+    <!-- Application Structure Plan: 本应用的结构设计旨在引导用户进行一次心理探索之旅。它没有采用传统的仪表盘布局，而是采用了线性的叙事流程，从梦境的原始记述开始，逐步深入到符号的细节解析，然后通过数据可视化的方式呈现情感的动态变化和内在冲突，最后汇集所有线索，给出一个综合性的结论。这种结构模仿了心理分析的过程：从表面现象到深层原因，再到整体整合。这种方式对于理解一个复杂的、充满情感的梦境叙事来说，比零散的模块化展示更为直观和有效，能帮助用户更好地理解梦境各个元素之间的联系及其整体意义。 -->
+    <!-- Visualization & Content Choices: 
+        1. 梦境叙述 -> 目标:告知 -> 呈现方式: 优雅的文本块 -> 交互: 无 -> 理由: 清晰地呈现分析的基础，为后续解读设定场景。 -> 技术: HTML/Tailwind。
+        2. 核心符号 -> 目标:组织/告知 -> 呈现方式: 交互式卡片网格 -> 交互: 点击展开/折叠解析文本 -> 理由: 鼓励用户主动探索，将复杂的分析分解为易于理解的小块，避免信息过载。 -> 技术: HTML/Tailwind + JS。
+        3. 情感弧线 -> 目标:展示变化 -> 呈现方式: 情感动态折线图 -> 交互: 悬停提示框显示各阶段的情感状态 -> 理由: 将梦中抽象、连续的情感流动转化为直观的视觉语言，清晰展示从“威胁”到“安全”的情感转折点。 -> 技术: Chart.js (Canvas)。
+        4. 主题冲突 -> 目标:比较/分析 -> 呈现方式: 核心冲突水平堆叠条形图 -> 交互: 悬停提示框解释冲突的构成部分 -> 理由: 有效地可视化梦境中相互对立的心理力量（如：渴望vs束缚，脆弱vs保护），帮助用户理解其内心的矛盾状态。 -> 技术: Chart.js (Canvas)。
+        确认：未使用SVG/Mermaid，所有图表均通过Canvas实现，符合要求。 -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #FFFBF5;
+            color: #333;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 40vh;
+        }
+        .symbol-card {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .symbol-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .content-hidden {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .content-visible {
+            display: block;
+            opacity: 1;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: #8C5A4C;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #E29578;
+        }
+        .nav-button {
+            background-color: #A3B18A;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #8A9A5B;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#8C5A4C] mb-2">梦境解析报告</h1>
+            <p class="text-lg text-gray-600">一次对潜意识深处象征性叙事的探索</p>
+        </header>
+
+        <nav class="flex justify-center space-x-4 mb-12">
+            <a href="#dream-narrative" class="nav-button">梦境回顾</a>
+            <a href="#symbol-analysis" class="nav-button">符号解读</a>
+            <a href="#visual-analysis" class="nav-button">图表分析</a>
+            <a href="#conclusion" class="nav-button">综合结论</a>
+        </nav>
+
+        <main>
+            <section id="dream-narrative" class="mb-16 p-8 bg-white/70 rounded-2xl shadow-lg backdrop-blur-sm">
+                <h2 class="section-title">梦境回顾</h2>
+                <div class="text-center max-w-3xl mx-auto">
+                    <p class="text-gray-700 leading-relaxed text-left md:text-center text-lg">
+                        您梦到与一位女伴进入一个男女混浴的澡堂。在入口处，你们遭遇了一群不良青年的言语骚扰和不怀好意的注视，这让您感到威胁但无力反抗。关键时刻，名人Angelababy的出现转移了这群人的注意力，使你们得以脱身。随后，您和女伴进入一个私密的榻榻米房间，两人赤裸相对，可以相互抚摸，但存在着一种不可逾越的界限，无法进一步亲热。
+                    </p>
+                </div>
+            </section>
+
+            <section id="symbol-analysis" class="mb-16">
+                <h2 class="section-title">核心符号解读</h2>
+                <div class="max-w-4xl mx-auto">
+                    <p class="text-center text-gray-600 mb-8">
+                        梦由许多象征性元素构成，它们共同揭示了您潜意识中的状态。点击下方的卡片，可以深入了解每个核心符号可能代表的含义。这是理解整个梦境的关键。
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="symbol-card bg-white p-6 rounded-xl shadow-md" data-symbol="bathhouse">
+                            <h3 class="font-bold text-xl text-[#A3B18A] mb-2">① 男女混浴的澡堂</h3>
+                            <div class="symbol-content content-hidden text-gray-700 mt-4 leading-relaxed">
+                                <p><strong>象征意义：</strong> 情感的暴露、脆弱性与社会融合的渴望。</p>
+                                <p>澡堂，尤其是混浴的形式，代表了一个完全暴露和不设防的心理空间。水象征着情感，赤身裸体则代表了最原始、最真实的自我。这个场景暗示您可能正处于一个渴望与他人（特别是异性）建立坦诚、深入的情感连接，但同时也对在这种“暴露”状态下的脆弱感和不确定性感到焦虑。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="symbol-card bg-white p-6 rounded-xl shadow-md" data-symbol="harassment">
+                            <h3 class="font-bold text-xl text-[#A3B18A] mb-2">② 不良青年的骚扰</h3>
+                            <div class="symbol-content content-hidden text-gray-700 mt-4 leading-relaxed">
+                                <p><strong>象征意义：</strong> 社会压力、外界的评判与内在的不安感。</p>
+                                <p>不良青年代表了您在现实生活中感受到的外界威胁、批判性的目光或社会压力。他们对您女伴的骚扰，可能反映了您对自己珍视的关系或内在情感世界受到外界负面影响的担忧。您感到“对方人多”而无力，这精确地描绘了在面对群体压力或社会规范时的无助感和焦虑。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="symbol-card bg-white p-6 rounded-xl shadow-md" data-symbol="celebrity">
+                            <h3 class="font-bold text-xl text-[#A3B18A] mb-2">③ Angelababy的解围</h3>
+                            <div class="symbol-content content-hidden text-gray-700 mt-4 leading-relaxed">
+                                <p><strong>象征意义：</strong> 意外的转机、理想化的解脱与注意力的转移。</p>
+                                <p>名人通常象征着理想化的形象、成功或一种“更高”的、非个人的力量。Angelababy的出现并非偶然，她代表了一种理想化的、完美的外部力量介入，解决了您无法处理的困境。这可能暗示您潜意识中渴望有一个“救星”或戏剧性的事件来转移您所面临的压力，而不是通过直接对抗来解决问题。它也可能指向您通过幻想或关注外部光鲜事物来逃避内在焦虑的倾向。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="symbol-card bg-white p-6 rounded-xl shadow-md" data-symbol="intimacy">
+                            <h3 class="font-bold text-xl text-[#A3B18A] mb-2">④ 有限的亲密关系</h3>
+                            <div class="symbol-content content-hidden text-gray-700 mt-4 leading-relaxed">
+                                <p><strong>象征意义：</strong> 渴望亲密但又害怕完全融合，情感中的界限感。</p>
+                                <p>在安全的私人空间里，您和女伴可以进行抚摸，这代表了对亲密和情感连接的强烈渴望。然而，“不能亲热”这一明确的界限是整个梦境的核心。它揭示了您内心深处的矛盾：一方面极度渴望与人建立深刻、真实的情感纽带，另一方面又存在着某种强大的内在或外在的禁忌、恐惧或规则，阻止您完全投入和融合。这可能源于对承诺的恐惧、对失去自我的担忧，或是过去情感经历留下的创伤。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="visual-analysis" class="mb-16">
+                <h2 class="section-title">情感与冲突可视化</h2>
+                 <div class="max-w-4xl mx-auto">
+                    <p class="text-center text-gray-600 mb-10">
+                        除了符号，梦境中的情感波动和内在冲突也至关重要。下面的图表将这些抽象的感觉和矛盾转化为视觉形式，帮助您更清晰地看到梦中情绪的起伏和核心的心理张力。
+                    </p>
+                    <div class="bg-white/70 rounded-2xl shadow-lg p-6 md:p-8 mb-8 backdrop-blur-sm">
+                        <h3 class="font-semibold text-xl text-center mb-4 text-[#8C5A4C]">梦境情感弧线</h3>
+                        <div class="chart-container">
+                            <canvas id="emotionalArcChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 rounded-2xl shadow-lg p-6 md:p-8 backdrop-blur-sm">
+                        <h3 class="font-semibold text-xl text-center mb-4 text-[#8C5A4C]">核心心理冲突分析</h3>
+                        <div class="chart-container">
+                            <canvas id="themeConflictChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="conclusion" class="p-8 bg-white/70 rounded-2xl shadow-2xl backdrop-blur-sm border-t-4 border-[#A3B18A]">
+                <h2 class="section-title">综合结论</h2>
+                <div class="max-w-3xl mx-auto text-gray-800 leading-loose space-y-4">
+                    <p>综合来看，这个梦境生动地描绘了您内心深处关于<strong>人际关系、脆弱性与自我保护</strong>之间的核心冲突。</p>
+                    <p>您<strong>渴望与人建立坦诚、深度的情感连接</strong>（混浴澡堂、与女伴独处），但同时又对这种关系带来的<strong>脆弱感和潜在的社会评判感到极度不安和焦虑</strong>（不良青年的骚扰）。您倾向于幻想有一种<strong>理想化的外部力量来拯救您脱离困境</strong>（Angelababy的出现），而不是直面冲突，这可能反映了您在现实中应对压力时的一种回避倾向。</p>
+                    <p>最关键的是，即使在最安全、最私密的环境下，您与亲密关系之间依然存在一道<strong>“不可逾越”的界限</strong>。这强烈暗示了您在情感投入上存在着深刻的矛盾和犹豫。您既想靠近，又害怕完全交融。这可能与对失控的恐惧、对承诺的保留态度，或是需要维持强烈的个人边界感有关。</p>
+                    <p>总而言之，这个梦建议您去探索自己内心对于“亲密”的真实定义，并审视那些阻止您完全投入一段关系的内在障碍究竟是什么。它在问您：是什么让您在渴望连接的同时，又下意识地踩下了刹车？</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 py-4 border-t border-gray-200">
+            <p class="text-sm text-gray-500">本报告基于心理象征学进行分析，仅供参考。</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const symbolCards = document.querySelectorAll('.symbol-card');
+            symbolCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const content = card.querySelector('.symbol-content');
+                    content.classList.toggle('content-hidden');
+                    content.classList.toggle('content-visible');
+                });
+            });
+
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            const chartFont = {
+                family: "'Noto Sans SC', sans-serif",
+                size: 13
+            };
+            
+            const tooltipConfig = {
+                backgroundColor: 'rgba(51, 51, 51, 0.8)',
+                titleFont: { size: 14, weight: 'bold', family: chartFont.family },
+                bodyFont: { size: 12, family: chartFont.family },
+                padding: 10,
+                cornerRadius: 4,
+                displayColors: false,
+            };
+
+            const emotionalArcCtx = document.getElementById('emotionalArcChart').getContext('2d');
+            new Chart(emotionalArcCtx, {
+                type: 'line',
+                data: {
+                    labels: ['进入澡堂', '遭遇挑衅', '名人解围', '私密独处'],
+                    datasets: [{
+                        label: '脆弱感',
+                        data: [6, 8, 4, 7],
+                        borderColor: '#E29578',
+                        backgroundColor: 'rgba(226, 149, 120, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#E29578',
+                    }, {
+                        label: '威胁感',
+                        data: [3, 9, 2, 1],
+                        borderColor: '#FF6384',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#FF6384',
+                    }, {
+                        label: '安全感/亲密感',
+                        data: [4, 1, 7, 8],
+                        borderColor: '#A3B18A',
+                        backgroundColor: 'rgba(163, 177, 138, 0.3)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#A3B18A',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: chartFont }
+                        },
+                        tooltip: tooltipConfig
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: { display: true, text: '情感强度 (0-10)', font: chartFont },
+                            ticks: { font: chartFont }
+                        },
+                        x: {
+                            ticks: { font: chartFont }
+                        }
+                    }
+                }
+            });
+
+            const themeConflictCtx = document.getElementById('themeConflictChart').getContext('2d');
+            new Chart(themeConflictCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['社会交互', '个人关系'],
+                    datasets: [{
+                        label: '渴望/积极面',
+                        data: [7, 8],
+                        backgroundColor: '#A3B18A',
+                    }, {
+                        label: '恐惧/消极面',
+                        data: [8, 6],
+                        backgroundColor: '#E29578',
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: chartFont }
+                        },
+                        tooltip: {
+                           ...tooltipConfig,
+                           callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x;
+                                    }
+                                    let extraInfo = '';
+                                    if (context.label === '社会交互') {
+                                        extraInfo = (context.dataset.label === '渴望/积极面') ? ' (渴望坦诚)' : ' (害怕评判)';
+                                    } else {
+                                        extraInfo = (context.dataset.label === '渴望/积极面') ? ' (渴望亲密)' : ' (害怕融合)';
+                                    }
+                                    return label + extraInfo;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: { display: true, text: '心理能量强度', font: chartFont },
+                            ticks: { font: chartFont }
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: { font: chartFont }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
