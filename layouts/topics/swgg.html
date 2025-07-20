@@ -1,0 +1,166 @@
+{{ define "main" }}
+<div class="max-w-6xl mx-auto px-6 py-16">
+    <!-- 页面标题 -->
+    <div class="text-center mb-20">
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 tracking-tight mb-8">
+            {{ .Title }}
+        </h1>
+        {{ if .Params.subtitle }}
+        <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+            {{ .Params.subtitle }}
+        </p>
+        {{ end }}
+        {{ if .Description }}
+        <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">
+            {{ .Description }}
+        </p>
+        {{ end }}
+    </div>
+
+    <!-- 第一步：识别症状 -->
+    <section id="symptom" class="py-16 bg-white rounded-2xl border border-gray-200 mb-12">
+        <div class="px-6 md:px-8">
+            <h2 class="text-3xl font-bold text-teal-600 mb-6 flex items-center">
+                <span class="text-4xl mr-4">🧐</span>第一步：识别症状
+            </h2>
+            <div class="space-y-4 text-gray-700 leading-relaxed">
+                <p>您是否正经历这样的困境：一位同事平时工作正常，但每当遇到能建立功勋的关键任务时，就会通过"大吵大闹"的方式，从已经做好准备的您或其他同事手中抢走工作？更令人困惑的是，领导似乎还默许甚至纵容这种行为。</p>
+                <p>这并非孤例，而是一种常见的、极具破坏性的职场功能障碍模式。</p>
+                <p>本工具旨在帮助您系统性地拆解这一行为的内在逻辑，理解其背后的心理动因，并找到有效的应对策略。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第二步：深度诊断 -->
+    <section id="diagnosis" class="py-16 mb-12">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-teal-600 mb-4 flex items-center justify-center">
+                <span class="text-4xl mr-4">🩺</span>第二步：深度诊断
+            </h2>
+            <p class="text-apple-gray max-w-2xl mx-auto">我们将从三个核心角色入手，剖析这个有毒系统的运作机制。</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-200 p-8">
+            <!-- 标签页导航 -->
+            <div class="flex justify-center mb-8 border-b border-gray-200">
+                <button class="swgg-tab-button py-3 px-6 text-lg font-semibold text-gray-600 border-b-4 border-transparent active" data-tab="aggressor">攻击者</button>
+                <button class="swgg-tab-button py-3 px-6 text-lg font-semibold text-gray-600 border-b-4 border-transparent" data-tab="enabler">纵容者</button>
+                <button class="swgg-tab-button py-3 px-6 text-lg font-semibold text-gray-600 border-b-4 border-transparent" data-tab="system">系统性衰败</button>
+            </div>
+
+            <!-- 攻击者标签页 -->
+            <div id="aggressor" class="swgg-tab-content">
+                <h3 class="text-2xl font-bold text-rose-700 mb-6">角色一：攻击性的"抢功者"</h3>
+                <div class="space-y-6">
+                    <div class="p-6 bg-rose-50 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3 text-rose-800">心理动机分析</h4>
+                        <p class="text-gray-700">这类人通常具有<strong>高成就需求 (nAch)</strong> 但<strong>低权力需求 (nPow)</strong>的矛盾组合。他们渴望成功和认可，但缺乏通过正当途径获得权力的能力或耐心。</p>
+                    </div>
+                    <div class="p-6 bg-orange-50 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3 text-orange-800">行为特征</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>选择性攻击</strong>：只在关键时刻发动攻击，平时表现正常</li>
+                            <li><strong>情绪操控</strong>：通过愤怒、威胁等情绪来控制局面</li>
+                            <li><strong>功劳窃取</strong>：将他人的工作成果据为己有</li>
+                            <li><strong>受害者角色</strong>：在被质疑时迅速转换为受害者身份</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 bg-yellow-50 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3 text-yellow-800">成功策略</h4>
+                        <p class="text-gray-700">他们善于利用组织的弱点：领导的冲突回避心理、同事的善良本性、以及系统的信息不对称。通过制造紧急感和情绪压力，迫使他人妥协。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 纵容者标签页 -->
+            <div id="enabler" class="swgg-tab-content hidden">
+                <h3 class="text-2xl font-bold text-blue-700 mb-6">角色二：纵容的"领导者"</h3>
+                <div class="space-y-6">
+                    <div class="p-6 bg-blue-50 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3 text-blue-800">回避心理</h4>
+                        <p class="text-gray-700">许多领导者害怕冲突，认为维持表面和谐比解决根本问题更重要。他们往往低估了纵容行为的长期成本。</p>
+                    </div>
+                    <div class="chart-container mb-6">
+                        <canvas id="toxicEmployeeChart"></canvas>
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3 text-indigo-800">错误认知</h4>
+                        <p class="text-gray-700">领导者往往高估有毒员工的价值，认为他们的技能无法替代。实际上，数据显示避免一个有毒员工比雇佣一个超级明星更有价值。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 系统性衰败标签页 -->
+            <div id="system" class="swgg-tab-content hidden">
+                <h3 class="text-2xl font-bold text-purple-700 mb-6">角色三：系统性衰败</h3>
+                <div class="space-y-6">
+                    <div class="p-6 bg-purple-50 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3 text-purple-800">格雷欣法则：劣币驱逐良币</h4>
+                        <p class="text-gray-700 mb-4">在职场中，当有毒行为得到奖励时，健康的行为就会被边缘化。</p>
+                        <div class="gresham-demo">
+                            <div class="gresham-container" id="gresham-container">
+                                <div class="coin good-coin">优</div>
+                                <div class="coin good-coin">秀</div>
+                                <div class="coin bad-coin">毒</div>
+                                <div class="coin bad-coin">性</div>
+                            </div>
+                            <button onclick="runGreshamDemo()" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                                演示格雷欣法则
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-pink-50 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3 text-pink-800">柠檬市场：质量螺旋下降</h4>
+                        <p class="text-gray-700 mb-4">当组织无法区分优秀员工和有毒员工时，优秀员工会逐渐离开。</p>
+                        <div class="lemons-demo">
+                            <div class="lemons-container" id="lemons-container">
+                                <div class="fruit" style="background-color: #fbbf24;">🍑</div>
+                                <div class="fruit" style="background-color: #f87171;">🍑</div>
+                                <div class="fruit" style="background-color: #34d399;">🍑</div>
+                                <div class="fruit peach" style="background-color: #fbbf24;">🍑</div>
+                                <div class="fruit peach" style="background-color: #f87171;">🍑</div>
+                                <div class="fruit" style="background-color: #fde047;">🍋</div>
+                                <div class="fruit" style="background-color: #fde047;">🍋</div>
+                            </div>
+                            <button onclick="runLemonsDemo()" class="mt-4 px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors">
+                                演示柠檬市场
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第三步：行动框架 -->
+    <section id="prescription" class="py-16 bg-white rounded-2xl border border-gray-200 mb-12">
+        <div class="px-6 md:px-8">
+            <h2 class="text-3xl font-bold text-green-600 mb-6 flex items-center">
+                <span class="text-4xl mr-4">💊</span>第三步：行动框架
+            </h2>
+            <p class="text-apple-gray mb-8 max-w-2xl">根据您的角色和权限，选择合适的应对策略。</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 员工自保策略 -->
+                <div>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">员工自保策略</h3>
+                    <div id="employee-actions" class="space-y-4"></div>
+                </div>
+                
+                <!-- 组织改革方案 -->
+                <div>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">组织改革方案</h3>
+                    <div id="org-actions" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页面内容 -->
+    <div class="bg-white p-8 lg:p-12 rounded-2xl border border-gray-200">
+        <div class="prose prose-lg max-w-none">
+            {{ .Content }}
+        </div>
+    </div>
+</div>
+{{ end }}
