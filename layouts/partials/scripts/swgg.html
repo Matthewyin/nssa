@@ -1,0 +1,293 @@
+<!-- SWGG 专题交互脚本 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 员工自保策略数据
+    const employeeActions = [
+        { 
+            title: "1. 心态转变：从受害者到分析师", 
+            content: "首先，从情绪化的反应中抽离，转变为客观的系统分析者。理解系统动态能帮助您保持冷静和专业，避免在冲突中处于不利地位。" 
+        },
+        { 
+            title: "2. 防御性文档记录：构建证据链", 
+            content: "这是最关键的自我保护措施。详细记录每一次攻击性行为（日期、言辞、在场人员），并在邮件、文档中明确标注自己的贡献，创建带有时间戳的记录，让功劳窃取变得困难。" 
+        },
+        { 
+            title: "3. 果断沟通与边界设定", 
+            content: "在适当的时机，通过果断而非攻击性的沟通来维护权益。例如，在会议中冷静澄清：'这正好建立在我昨天提出的策略基础上'。或私下沟通，并明确告知对方您期望得到尊重。" 
+        },
+        { 
+            title: "4. 积极的自我推广与联盟建设", 
+            content: "不要被动等待。在与领导的1对1会议中主动汇报您的成就。在团队中寻找并建立值得信赖的盟友，能在关键时刻为您发声。" 
+        },
+        { 
+            title: "5. 评估升级路径与退出决策", 
+            content: "如果直接沟通无效，带着您的文档记录向管理者或HR申诉。同时清醒地认识到，在一个持续鼓励毒性的系统中，唯一的"赢"可能就是离开。这并非失败，而是理性的职业选择。" 
+        }
+    ];
+
+    // 组织改革方案数据
+    const orgActions = [
+        { 
+            title: "1. 对领导者的建议：克服冲突回避", 
+            content: "领导者必须明白，逃避冲突比面对冲突的破坏性更大。必须采取果断行动，与相关方沟通，并对不良行为强制执行问责制。" 
+        },
+        { 
+            title: "2. 辅导有毒的高绩效者", 
+            content: "利用360度反馈等客观数据，帮助该员工认识到其行为的负面影响。设定具体的、可衡量的行为改进目标，并提供即时反馈。如果辅导无效，必须有勇气为了团队健康而将其移除。" 
+        },
+        { 
+            title: "3. 重建健康的组织文化", 
+            content: "建立并执行对职场霸凌和功劳窃取的零容忍政策。领导者以身作则，鼓励不同意见，重建心理安全感。改革奖励体系，使其不仅奖励业绩，更要大力奖励协作和诚信。" 
+        }
+    ];
+
+    // 创建手风琴组件
+    function createAccordion(containerId, data) {
+        const container = document.getElementById(containerId);
+        data.forEach((item, index) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'border border-gray-200 rounded-lg';
+            itemDiv.innerHTML = `
+                <button class="w-full text-left p-4 flex justify-between items-center font-semibold text-gray-800 hover:bg-gray-50 transition-colors" onclick="toggleAccordion(this)">
+                    <span>${item.title}</span>
+                    <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="accordion-content" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out;">
+                    <div class="px-4 py-4">
+                        <p class="text-gray-600 text-sm leading-relaxed">${item.content}</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(itemDiv);
+        });
+    }
+
+    // 手风琴切换功能
+    window.toggleAccordion = function(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+        
+        icon.classList.toggle('rotate-180');
+        
+        if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+            content.style.maxHeight = '0px';
+        } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+    };
+
+    // 标签页功能
+    const tabButtons = document.querySelectorAll('.swgg-tab-button');
+    const tabContents = document.querySelectorAll('.swgg-tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+
+            // 更新按钮状态
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active', 'border-teal-600', 'text-teal-600');
+                btn.classList.add('border-transparent', 'text-gray-600');
+            });
+            this.classList.add('active', 'border-teal-600', 'text-teal-600');
+            this.classList.remove('border-transparent', 'text-gray-600');
+
+            // 更新内容显示
+            tabContents.forEach(content => {
+                if (content.id === tabId) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
+
+            // 如果是纵容者标签页，渲染图表
+            if (tabId === 'enabler') {
+                renderChart();
+            }
+        });
+    });
+
+    // Chart.js 图表
+    let toxicChart = null;
+    function renderChart() {
+        if (toxicChart) {
+            return;
+        }
+        const ctx = document.getElementById('toxicEmployeeChart');
+        if (ctx) {
+            toxicChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['避免一个"有毒员工"的净收益', '雇佣一个"超级明星"的净收益'],
+                    datasets: [{
+                        label: '对组织的美元价值影响',
+                        data: [12489, 5303],
+                        backgroundColor: [
+                            'rgba(251, 146, 60, 0.8)',
+                            'rgba(56, 189, 248, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(251, 146, 60, 1)',
+                            'rgba(56, 189, 248, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `价值: $${context.parsed.x.toLocaleString()}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // 格雷欣法则演示
+    window.runGreshamDemo = function() {
+        const container = document.getElementById('gresham-container');
+        container.classList.add('run');
+        
+        setTimeout(() => {
+            container.classList.remove('run');
+        }, 3000);
+    };
+
+    // 柠檬市场演示
+    window.runLemonsDemo = function() {
+        const container = document.getElementById('lemons-container');
+        container.classList.add('run');
+        
+        setTimeout(() => {
+            container.classList.remove('run');
+        }, 3000);
+    };
+
+    // 初始化手风琴
+    createAccordion('employee-actions', employeeActions);
+    createAccordion('org-actions', orgActions);
+
+    // 初始化第一个标签页
+    document.querySelector('.swgg-tab-button.active').click();
+});
+</script>
+
+<!-- SWGG 专题样式 -->
+<style>
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    height: 320px;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 380px;
+    }
+}
+
+.gresham-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 1rem;
+    min-height: 80px;
+}
+
+.coin {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    transition: all 1s ease-in-out;
+    font-size: 14px;
+}
+
+.good-coin {
+    background-color: #f59e0b;
+}
+
+.bad-coin {
+    background-color: #78716c;
+}
+
+.gresham-container.run .good-coin {
+    transform: translateX(200px) scale(0.5);
+    opacity: 0;
+}
+
+.lemons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 1rem;
+    border: 2px dashed #d1d5db;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    min-height: 120px;
+    align-items: center;
+}
+
+.fruit {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    transition: all 1.5s ease-in-out;
+}
+
+.lemons-container.run .peach {
+    transform: translateY(-150px) scale(0.5);
+    opacity: 0;
+}
+
+.swgg-tab-button.active {
+    border-color: #0d9488 !important;
+    color: #0d9488 !important;
+}
+
+.accordion-content {
+    transition: max-height 0.5s ease-out;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+</style>
