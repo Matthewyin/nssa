@@ -15,6 +15,12 @@ enableGitInfo = true
 disableKinds = ['taxonomy', 'term']
 enableEmoji = true
 
+# Output formats - 只为首页生成 RSS
+[outputs]
+  home = ["HTML", "RSS"]
+  page = ["HTML"]
+  section = ["HTML"]
+
 # Markup Configuration
 [markup]
   [markup.goldmark]
