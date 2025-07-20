@@ -33,10 +33,7 @@ enableEmoji = true
 
 # Menu Configuration
 [menu]
-  [[menu.main]]
-    name = "首页"
-    url = "/"
-    weight = 10
+
   [[menu.main]]
     name = "技术专题"
     url = "/tech/"
