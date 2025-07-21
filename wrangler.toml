@@ -18,3 +18,8 @@ routes = [
 # Workers Sites 配置
 [site]
 bucket = "./public"
+
+# KV 存储绑定 - 用于文章阅读数统计
+[[kv_namespaces]]
+binding = "ARTICLE_STATS"
+id = "1d522d1cf0a547e28319cf5dc0f2d1cb"

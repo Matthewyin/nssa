@@ -28,6 +28,11 @@ async function handleEvent(event) {
   const url = new URL(event.request.url)
   let options = {}
 
+  // 处理阅读数统计API请求
+  if (url.pathname.startsWith('/api/')) {
+    return handleApiRequest(event.request, url)
+  }
+
   /**
    * You can add custom logic to how we fetch your assets
    * by configuring the function `mapRequestToAsset`
@@ -69,6 +74,174 @@ async function handleEvent(event) {
 
     return new Response(e.message || e.toString(), { status: 500 })
   }
+}
+
+/**
+ * 处理阅读数统计API请求
+ */
+async function handleApiRequest(request, url) {
+  // 设置CORS头
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  }
+
+  // 处理预检请求
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders })
+  }
+
+  try {
+    if (url.pathname === '/api/views/get') {
+      // 获取文章阅读数
+      return await getArticleViews(request, corsHeaders)
+    } else if (url.pathname === '/api/views/increment') {
+      // 增加文章阅读数
+      return await incrementArticleViews(request, corsHeaders)
+    } else if (url.pathname === '/api/views/batch') {
+      // 批量获取多篇文章的阅读数
+      return await getBatchArticleViews(request, corsHeaders)
+    }
+
+    return new Response('API endpoint not found', {
+      status: 404,
+      headers: corsHeaders
+    })
+  } catch (error) {
+    return new Response(`API Error: ${error.message}`, {
+      status: 500,
+      headers: corsHeaders
+    })
+  }
+}
+
+/**
+ * 获取单篇文章的阅读数
+ */
+async function getArticleViews(request, corsHeaders) {
+  const url = new URL(request.url)
+  const articlePath = url.searchParams.get('path')
+
+  if (!articlePath) {
+    return new Response('Missing article path', {
+      status: 400,
+      headers: corsHeaders
+    })
+  }
+
+  const key = `views:${articlePath}`
+  const views = await ARTICLE_STATS.get(key) || '0'
+
+  return new Response(JSON.stringify({
+    path: articlePath,
+    views: parseInt(views)
+  }), {
+    headers: {
+      'Content-Type': 'application/json',
+      ...corsHeaders
+    }
+  })
+}
+
+/**
+ * 增加文章阅读数
+ */
+async function incrementArticleViews(request, corsHeaders) {
+  if (request.method !== 'POST') {
+    return new Response('Method not allowed', {
+      status: 405,
+      headers: corsHeaders
+    })
+  }
+
+  const body = await request.json()
+  const { path: articlePath, clientId } = body
+
+  if (!articlePath) {
+    return new Response('Missing article path', {
+      status: 400,
+      headers: corsHeaders
+    })
+  }
+
+  // 防重复计数：检查24小时内是否已经计数
+  const viewKey = `views:${articlePath}`
+  const clientKey = `client:${articlePath}:${clientId}`
+
+  // 检查客户端是否在24小时内已经访问过
+  const lastVisit = await ARTICLE_STATS.get(clientKey)
+  const now = Date.now()
+  const oneDayMs = 24 * 60 * 60 * 1000
+
+  if (lastVisit && (now - parseInt(lastVisit)) < oneDayMs) {
+    // 24小时内已访问，不增加计数，但返回当前阅读数
+    const views = await ARTICLE_STATS.get(viewKey) || '0'
+    return new Response(JSON.stringify({
+      path: articlePath,
+      views: parseInt(views),
+      incremented: false,
+      reason: 'Already counted within 24 hours'
+    }), {
+      headers: {
+        'Content-Type': 'application/json',
+        ...corsHeaders
+      }
+    })
+  }
+
+  // 增加阅读数
+  const currentViews = await ARTICLE_STATS.get(viewKey) || '0'
+  const newViews = parseInt(currentViews) + 1
+
+  // 更新阅读数和客户端访问记录
+  await ARTICLE_STATS.put(viewKey, newViews.toString())
+  await ARTICLE_STATS.put(clientKey, now.toString(), { expirationTtl: 86400 }) // 24小时过期
+
+  return new Response(JSON.stringify({
+    path: articlePath,
+    views: newViews,
+    incremented: true
+  }), {
+    headers: {
+      'Content-Type': 'application/json',
+      ...corsHeaders
+    }
+  })
+}
+
+/**
+ * 批量获取多篇文章的阅读数
+ */
+async function getBatchArticleViews(request, corsHeaders) {
+  const url = new URL(request.url)
+  const pathsParam = url.searchParams.get('paths')
+
+  if (!pathsParam) {
+    return new Response('Missing paths parameter', {
+      status: 400,
+      headers: corsHeaders
+    })
+  }
+
+  const paths = pathsParam.split(',')
+  const results = {}
+
+  // 并行获取所有文章的阅读数
+  const promises = paths.map(async (path) => {
+    const key = `views:${path.trim()}`
+    const views = await ARTICLE_STATS.get(key) || '0'
+    results[path.trim()] = parseInt(views)
+  })
+
+  await Promise.all(promises)
+
+  return new Response(JSON.stringify(results), {
+    headers: {
+      'Content-Type': 'application/json',
+      ...corsHeaders
+    }
+  })
 }
 
 /**
