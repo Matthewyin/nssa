@@ -1,6 +1,6 @@
 /**
- * NSSA 文章PV统计模块
- * 提供文章页面访问次数(PV)的获取、更新和显示功能
+ * NSSA 文章统计模块
+ * 提供文章PV统计和点赞功能
  */
 
 class ArticleStats {
@@ -87,7 +87,7 @@ class ArticleStats {
         try {
             const pathsParam = articlePaths.join(',');
             const response = await fetch(`${this.baseUrl}/api/views/batch?paths=${encodeURIComponent(pathsParam)}`);
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -96,6 +96,77 @@ class ArticleStats {
             return data;
         } catch (error) {
             console.error('Failed to get batch article views:', error);
+            return {};
+        }
+    }
+
+    /**
+     * 获取文章点赞数和用户点赞状态
+     */
+    async getLikes(articlePath = null) {
+        try {
+            const path = articlePath || this.getArticlePath();
+
+            const response = await fetch(`${this.baseUrl}/api/likes/get?path=${encodeURIComponent(path)}&clientId=${encodeURIComponent(this.clientId)}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to get article likes:', error);
+            return { likes: 0, userLiked: false };
+        }
+    }
+
+    /**
+     * 切换文章点赞状态
+     */
+    async toggleLike(articlePath = null) {
+        try {
+            const path = articlePath || this.getArticlePath();
+
+            const response = await fetch(`${this.baseUrl}/api/likes/toggle`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    path: path,
+                    clientId: this.clientId
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to toggle article like:', error);
+            return null;
+        }
+    }
+
+    /**
+     * 批量获取多篇文章的点赞数
+     */
+    async getBatchLikes(articlePaths) {
+        try {
+            const pathsParam = articlePaths.join(',');
+            const response = await fetch(`${this.baseUrl}/api/likes/batch?paths=${encodeURIComponent(pathsParam)}&clientId=${encodeURIComponent(this.clientId)}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Failed to get batch article likes:', error);
             return {};
         }
     }
@@ -119,29 +190,66 @@ class ArticleStats {
         const elements = document.querySelectorAll(selector);
         elements.forEach(element => {
             element.textContent = this.formatViews(views);
-            element.style.opacity = '1'; // 显示元素
+            // 显示父容器
+            const container = element.closest('#article-views-container, .opacity-0');
+            if (container) {
+                container.style.opacity = '1';
+            }
         });
     }
 
     /**
-     * 初始化文章页面的PV统计
+     * 更新点赞按钮显示
      */
-    async initArticlePage() {
-        // 增加PV数
-        const result = await this.incrementViews();
-        if (result) {
-            // 更新显示
-            this.updateViewsDisplay(result.views);
+    updateLikeDisplay(likes, userLiked, selector = '.like-count') {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+            element.textContent = this.formatViews(likes);
 
-            // 触发自定义事件
-            window.dispatchEvent(new CustomEvent('articleViewsUpdated', {
-                detail: { views: result.views, incremented: result.incremented }
-            }));
-        }
+            // 更新按钮状态
+            const button = element.closest('button');
+            if (button) {
+                button.setAttribute('data-liked', userLiked.toString());
+                if (userLiked) {
+                    button.classList.remove('bg-gray-100', 'dark:bg-gray-800');
+                    button.classList.add('bg-apple-blue', 'text-white');
+                } else {
+                    button.classList.remove('bg-apple-blue', 'text-white');
+                    button.classList.add('bg-gray-100', 'dark:bg-gray-800');
+                }
+            }
+        });
     }
 
     /**
-     * 初始化专题页面的PV显示
+     * 初始化文章页面的统计功能
+     */
+    async initArticlePage() {
+        // 增加PV数
+        const viewsResult = await this.incrementViews();
+        if (viewsResult) {
+            // 更新PV显示
+            this.updateViewsDisplay(viewsResult.views);
+
+            // 触发自定义事件
+            window.dispatchEvent(new CustomEvent('articleViewsUpdated', {
+                detail: { views: viewsResult.views, incremented: viewsResult.incremented }
+            }));
+        }
+
+        // 获取点赞状态
+        const likesResult = await this.getLikes();
+        if (likesResult) {
+            // 更新点赞显示
+            this.updateLikeDisplay(likesResult.likes, likesResult.userLiked);
+        }
+
+        // 绑定点赞按钮事件
+        this.bindLikeButtons();
+    }
+
+    /**
+     * 初始化专题页面的统计显示
      */
     async initSectionPage() {
         // 获取页面中所有文章链接
@@ -153,24 +261,75 @@ class ArticleStats {
 
         if (articlePaths.length === 0) return;
 
-        // 批量获取PV数
-        const viewsData = await this.getBatchViews(articlePaths);
+        // 批量获取PV数和点赞数
+        const [viewsData, likesData] = await Promise.all([
+            this.getBatchViews(articlePaths),
+            this.getBatchLikes(articlePaths)
+        ]);
 
-        // 更新每个文章卡片的PV显示
+        // 更新每个文章卡片的显示
         articleLinks.forEach((link, index) => {
             const path = articlePaths[index];
             const views = viewsData[path] || 0;
+            const likesInfo = likesData[path] || { likes: 0, userLiked: false };
 
-            // 查找对应的PV显示元素
             const article = link.closest('article');
             if (article) {
+                // 更新PV显示
                 const viewsElement = article.querySelector('.article-views-count');
                 if (viewsElement) {
                     viewsElement.textContent = this.formatViews(views);
-                    viewsElement.style.opacity = '1';
+                    // 显示PV容器
+                    const viewsContainer = viewsElement.closest('.opacity-0');
+                    if (viewsContainer) {
+                        viewsContainer.style.opacity = '1';
+                    }
+                }
+
+                // 更新点赞显示
+                const likeElement = article.querySelector('.like-count');
+                if (likeElement) {
+                    this.updateLikeDisplay(likesInfo.likes, likesInfo.userLiked, `article:nth-child(${index + 1}) .like-count`);
                 }
             }
         });
+
+        // 绑定点赞按钮事件
+        this.bindLikeButtons();
+    }
+
+    /**
+     * 绑定点赞按钮事件
+     */
+    bindLikeButtons() {
+        // 移除旧的事件监听器，避免重复绑定
+        document.removeEventListener('click', this.handleLikeClick);
+
+        // 使用事件委托绑定点赞按钮
+        this.handleLikeClick = async (event) => {
+            const button = event.target.closest('.like-button');
+            if (!button) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            // 防止重复点击
+            if (button.disabled) return;
+            button.disabled = true;
+
+            try {
+                const result = await this.toggleLike();
+                if (result) {
+                    this.updateLikeDisplay(result.likes, result.userLiked);
+                }
+            } catch (error) {
+                console.error('Failed to toggle like:', error);
+            } finally {
+                button.disabled = false;
+            }
+        };
+
+        document.addEventListener('click', this.handleLikeClick);
     }
 
     /**

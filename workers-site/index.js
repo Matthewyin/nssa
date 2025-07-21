@@ -102,6 +102,15 @@ async function handleApiRequest(request, url) {
     } else if (url.pathname === '/api/views/batch') {
       // 批量获取多篇文章的PV数
       return await getBatchArticleViews(request, corsHeaders)
+    } else if (url.pathname === '/api/likes/get') {
+      // 获取文章点赞数
+      return await getArticleLikes(request, corsHeaders)
+    } else if (url.pathname === '/api/likes/toggle') {
+      // 切换文章点赞状态
+      return await toggleArticleLike(request, corsHeaders)
+    } else if (url.pathname === '/api/likes/batch') {
+      // 批量获取多篇文章的点赞数
+      return await getBatchArticleLikes(request, corsHeaders)
     }
 
     return new Response('API endpoint not found', {
@@ -232,6 +241,140 @@ async function getBatchArticleViews(request, corsHeaders) {
     const key = `views:${path.trim()}`
     const views = await ARTICLE_STATS.get(key) || '0'
     results[path.trim()] = parseInt(views)
+  })
+
+  await Promise.all(promises)
+
+  return new Response(JSON.stringify(results), {
+    headers: {
+      'Content-Type': 'application/json',
+      ...corsHeaders
+    }
+  })
+}
+
+/**
+ * 获取单篇文章的点赞数
+ */
+async function getArticleLikes(request, corsHeaders) {
+  const url = new URL(request.url)
+  const articlePath = url.searchParams.get('path')
+  const clientId = url.searchParams.get('clientId')
+
+  if (!articlePath) {
+    return new Response('Missing article path', {
+      status: 400,
+      headers: corsHeaders
+    })
+  }
+
+  const likesKey = `likes:${articlePath}`
+  const userLikeKey = `user_like:${articlePath}:${clientId}`
+
+  const likes = await ARTICLE_STATS.get(likesKey) || '0'
+  const userLiked = clientId ? (await ARTICLE_STATS.get(userLikeKey)) === 'true' : false
+
+  return new Response(JSON.stringify({
+    path: articlePath,
+    likes: parseInt(likes),
+    userLiked: userLiked
+  }), {
+    headers: {
+      'Content-Type': 'application/json',
+      ...corsHeaders
+    }
+  })
+}
+
+/**
+ * 切换文章点赞状态
+ */
+async function toggleArticleLike(request, corsHeaders) {
+  if (request.method !== 'POST') {
+    return new Response('Method not allowed', {
+      status: 405,
+      headers: corsHeaders
+    })
+  }
+
+  const body = await request.json()
+  const { path: articlePath, clientId } = body
+
+  if (!articlePath || !clientId) {
+    return new Response('Missing article path or client ID', {
+      status: 400,
+      headers: corsHeaders
+    })
+  }
+
+  const likesKey = `likes:${articlePath}`
+  const userLikeKey = `user_like:${articlePath}:${clientId}`
+
+  // 检查用户当前点赞状态
+  const currentUserLiked = (await ARTICLE_STATS.get(userLikeKey)) === 'true'
+  const currentLikes = parseInt(await ARTICLE_STATS.get(likesKey) || '0')
+
+  let newLikes
+  let newUserLiked
+
+  if (currentUserLiked) {
+    // 取消点赞
+    newLikes = Math.max(0, currentLikes - 1)
+    newUserLiked = false
+    await ARTICLE_STATS.delete(userLikeKey)
+  } else {
+    // 添加点赞
+    newLikes = currentLikes + 1
+    newUserLiked = true
+    await ARTICLE_STATS.put(userLikeKey, 'true')
+  }
+
+  // 更新总点赞数
+  await ARTICLE_STATS.put(likesKey, newLikes.toString())
+
+  return new Response(JSON.stringify({
+    path: articlePath,
+    likes: newLikes,
+    userLiked: newUserLiked,
+    action: newUserLiked ? 'liked' : 'unliked'
+  }), {
+    headers: {
+      'Content-Type': 'application/json',
+      ...corsHeaders
+    }
+  })
+}
+
+/**
+ * 批量获取多篇文章的点赞数
+ */
+async function getBatchArticleLikes(request, corsHeaders) {
+  const url = new URL(request.url)
+  const pathsParam = url.searchParams.get('paths')
+  const clientId = url.searchParams.get('clientId')
+
+  if (!pathsParam) {
+    return new Response('Missing paths parameter', {
+      status: 400,
+      headers: corsHeaders
+    })
+  }
+
+  const paths = pathsParam.split(',')
+  const results = {}
+
+  // 并行获取所有文章的点赞数
+  const promises = paths.map(async (path) => {
+    const likesKey = `likes:${path.trim()}`
+    const userLikeKey = `user_like:${path.trim()}:${clientId}`
+
+    const likes = await ARTICLE_STATS.get(likesKey) || '0'
+    const userLiked = clientId ? (await ARTICLE_STATS.get(userLikeKey)) === 'true' : false
+
+    results[path.trim()] = {
+      likes: parseInt(likes),
+      userLiked: userLiked
+    }
   })
 
   await Promise.all(promises)
