@@ -85,13 +85,12 @@
 
                         <div class="flex items-center space-x-4">
                             <!-- 点赞按钮 -->
-                            <button onclick="toggleLike(this)"
-                                    class="flex items-center space-x-1 px-3 py-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm"
+                            <button class="like-button flex items-center space-x-1 px-3 py-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm"
                                     data-liked="false">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L9 7m-7 10h2m5-10h2m0 0h2m-2 0v2m0 0h2"></path>
                                 </svg>
-                                <span class="like-count">73</span>
+                                <span class="like-count">0</span>
                             </button>
 
                             <!-- 分享按钮 -->
@@ -345,6 +344,68 @@ function closeShareMenu() {
 
 // 微信分享功能
 function shareToWeChat(title, url) {
+    // 检测是否在微信内置浏览器中
+    const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
+    // 检测是否在移动设备上
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isWeChat) {
+        // 在微信内置浏览器中，显示分享提示
+        showWeChatShareTip();
+    } else if (isMobile) {
+        // 移动端非微信浏览器，尝试调用原生分享或复制链接
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: '推荐一篇好文章',
+                url: url
+            }).catch(err => {
+                console.log('分享失败:', err);
+                copyToClipboard(url, null, '链接已复制，请粘贴到微信分享');
+            });
+        } else {
+            copyToClipboard(url, null, '链接已复制，请粘贴到微信分享');
+        }
+    } else {
+        // 桌面端，显示二维码
+        showWeChatQRCode(title, url);
+    }
+}
+
+// 显示微信内分享提示
+function showWeChatShareTip() {
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm mx-4">
+            <div class="text-center">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">分享到微信</h3>
+                <div class="mb-4">
+                    <svg class="w-16 h-16 mx-auto text-green-500 mb-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">点击右上角菜单按钮，选择"分享给朋友"或"分享到朋友圈"</p>
+                </div>
+                <button onclick="this.closest('.fixed').remove()"
+                        class="px-4 py-2 bg-apple-blue text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    知道了
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // 点击背景关闭
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+// 显示二维码分享
+function showWeChatQRCode(title, url) {
     // 生成二维码分享链接
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
 
@@ -376,19 +437,24 @@ function shareToWeChat(title, url) {
 }
 
 // 复制链接功能
-function copyToClipboard(text, button) {
+function copyToClipboard(text, button, customMessage = null) {
     navigator.clipboard.writeText(text).then(function() {
-        // 显示成功提示
-        const originalText = button.textContent;
-        button.textContent = '已复制!';
-        button.classList.add('bg-green-500');
-        button.classList.remove('bg-apple-blue');
+        if (customMessage) {
+            // 显示自定义消息
+            showToast(customMessage);
+        } else if (button) {
+            // 显示按钮反馈
+            const originalText = button.textContent;
+            button.textContent = '已复制!';
+            button.classList.add('bg-green-500');
+            button.classList.remove('bg-apple-blue');
 
-        setTimeout(function() {
-            button.textContent = originalText;
-            button.classList.remove('bg-green-500');
-            button.classList.add('bg-apple-blue');
-        }, 2000);
+            setTimeout(function() {
+                button.textContent = originalText;
+                button.classList.remove('bg-green-500');
+                button.classList.add('bg-apple-blue');
+            }, 2000);
+        }
     }).catch(function(err) {
         console.error('复制失败:', err);
         // 降级方案
@@ -399,11 +465,37 @@ function copyToClipboard(text, button) {
         document.execCommand('copy');
         document.body.removeChild(textArea);
 
-        button.textContent = '已复制!';
-        setTimeout(function() {
-            button.textContent = '复制';
-        }, 2000);
+        if (customMessage) {
+            showToast(customMessage);
+        } else if (button) {
+            button.textContent = '已复制!';
+            setTimeout(function() {
+                button.textContent = '复制';
+            }, 2000);
+        }
     });
+}
+
+// 显示Toast提示
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg z-50 transition-opacity';
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    // 淡入效果
+    setTimeout(() => {
+        toast.style.opacity = '1';
+    }, 100);
+
+    // 3秒后淡出并移除
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
 }
 </script>
 {{ end }}
