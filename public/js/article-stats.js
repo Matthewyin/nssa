@@ -1,6 +1,6 @@
 /**
- * NSSA 文章阅读数统计模块
- * 提供文章阅读数的获取、更新和显示功能
+ * NSSA 文章PV统计模块
+ * 提供文章页面访问次数(PV)的获取、更新和显示功能
  */
 
 class ArticleStats {
@@ -30,7 +30,7 @@ class ArticleStats {
     }
 
     /**
-     * 增加当前文章的阅读数
+     * 增加当前文章的PV数
      */
     async incrementViews(articlePath = null) {
         try {
@@ -60,7 +60,7 @@ class ArticleStats {
     }
 
     /**
-     * 获取单篇文章的阅读数
+     * 获取单篇文章的PV数
      */
     async getViews(articlePath = null) {
         try {
@@ -81,7 +81,7 @@ class ArticleStats {
     }
 
     /**
-     * 批量获取多篇文章的阅读数
+     * 批量获取多篇文章的PV数
      */
     async getBatchViews(articlePaths) {
         try {
@@ -101,7 +101,7 @@ class ArticleStats {
     }
 
     /**
-     * 格式化阅读数显示
+     * 格式化PV数显示
      */
     formatViews(views) {
         if (views >= 10000) {
@@ -113,7 +113,7 @@ class ArticleStats {
     }
 
     /**
-     * 更新页面中的阅读数显示
+     * 更新页面中的PV数显示
      */
     updateViewsDisplay(views, selector = '.article-views') {
         const elements = document.querySelectorAll(selector);
@@ -124,15 +124,15 @@ class ArticleStats {
     }
 
     /**
-     * 初始化文章页面的阅读数统计
+     * 初始化文章页面的PV统计
      */
     async initArticlePage() {
-        // 增加阅读数
+        // 增加PV数
         const result = await this.incrementViews();
         if (result) {
             // 更新显示
             this.updateViewsDisplay(result.views);
-            
+
             // 触发自定义事件
             window.dispatchEvent(new CustomEvent('articleViewsUpdated', {
                 detail: { views: result.views, incremented: result.incremented }
@@ -141,7 +141,7 @@ class ArticleStats {
     }
 
     /**
-     * 初始化专题页面的阅读数显示
+     * 初始化专题页面的PV显示
      */
     async initSectionPage() {
         // 获取页面中所有文章链接
@@ -153,15 +153,15 @@ class ArticleStats {
 
         if (articlePaths.length === 0) return;
 
-        // 批量获取阅读数
+        // 批量获取PV数
         const viewsData = await this.getBatchViews(articlePaths);
 
-        // 更新每个文章卡片的阅读数显示
+        // 更新每个文章卡片的PV显示
         articleLinks.forEach((link, index) => {
             const path = articlePaths[index];
             const views = viewsData[path] || 0;
-            
-            // 查找对应的阅读数显示元素
+
+            // 查找对应的PV显示元素
             const article = link.closest('article');
             if (article) {
                 const viewsElement = article.querySelector('.article-views-count');

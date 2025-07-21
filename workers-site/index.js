@@ -28,7 +28,7 @@ async function handleEvent(event) {
   const url = new URL(event.request.url)
   let options = {}
 
-  // 处理阅读数统计API请求
+  // 处理PV统计API请求
   if (url.pathname.startsWith('/api/')) {
     return handleApiRequest(event.request, url)
   }
@@ -77,7 +77,7 @@ async function handleEvent(event) {
 }
 
 /**
- * 处理阅读数统计API请求
+ * 处理PV统计API请求
  */
 async function handleApiRequest(request, url) {
   // 设置CORS头
@@ -94,13 +94,13 @@ async function handleApiRequest(request, url) {
 
   try {
     if (url.pathname === '/api/views/get') {
-      // 获取文章阅读数
+      // 获取文章PV数
       return await getArticleViews(request, corsHeaders)
     } else if (url.pathname === '/api/views/increment') {
-      // 增加文章阅读数
+      // 增加文章PV数
       return await incrementArticleViews(request, corsHeaders)
     } else if (url.pathname === '/api/views/batch') {
-      // 批量获取多篇文章的阅读数
+      // 批量获取多篇文章的PV数
       return await getBatchArticleViews(request, corsHeaders)
     }
 
@@ -117,7 +117,7 @@ async function handleApiRequest(request, url) {
 }
 
 /**
- * 获取单篇文章的阅读数
+ * 获取单篇文章的PV数
  */
 async function getArticleViews(request, corsHeaders) {
   const url = new URL(request.url)
@@ -145,7 +145,7 @@ async function getArticleViews(request, corsHeaders) {
 }
 
 /**
- * 增加文章阅读数
+ * 增加文章PV数
  */
 async function incrementArticleViews(request, corsHeaders) {
   if (request.method !== 'POST') {
@@ -190,11 +190,11 @@ async function incrementArticleViews(request, corsHeaders) {
     })
   }
 
-  // 增加阅读数
+  // 增加PV数
   const currentViews = await ARTICLE_STATS.get(viewKey) || '0'
   const newViews = parseInt(currentViews) + 1
 
-  // 更新阅读数和客户端访问记录
+  // 更新PV数和客户端访问记录
   await ARTICLE_STATS.put(viewKey, newViews.toString())
   await ARTICLE_STATS.put(clientKey, now.toString(), { expirationTtl: 86400 }) // 24小时过期
 
@@ -211,7 +211,7 @@ async function incrementArticleViews(request, corsHeaders) {
 }
 
 /**
- * 批量获取多篇文章的阅读数
+ * 批量获取多篇文章的PV数
  */
 async function getBatchArticleViews(request, corsHeaders) {
   const url = new URL(request.url)
@@ -227,7 +227,7 @@ async function getBatchArticleViews(request, corsHeaders) {
   const paths = pathsParam.split(',')
   const results = {}
 
-  // 并行获取所有文章的阅读数
+  // 并行获取所有文章的PV数
   const promises = paths.map(async (path) => {
     const key = `views:${path.trim()}`
     const views = await ARTICLE_STATS.get(key) || '0'
