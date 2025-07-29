@@ -1,4 +1,3 @@
-
 ---
 title: "面向下一代网络的MPLS L3VPN重构：高可用性、服务质量与自动化架构深度解析"
 subtitle: "构建弹性、敏捷与自动化的网络基础设施蓝图"
@@ -8,6 +7,19 @@ lastmod: 2025-01-28T11:00:00+08:00
 readingTime: "约70分钟"
 tags: ["MPLS", "L3VPN", "网络架构", "自动化运维", "QoS", "网络重构"]
 categories: ["技术专题"]
+
+# 🚀 发布配置
+publish:
+  website: true      # 发布到nssa.io网站
+  wechat_a: true     # 发布到微信公众号A
+  wechat_b: false    # 不发布到微信公众号B
+
+# 📱 微信公众号专用配置
+wechat:
+  title: "MPLS L3VPN网络重构：构建下一代网络基础设施"
+  summary: "深度解析MPLS L3VPN现代化重构方案，整合自动化运维、快速重路由、差异化QoS技术，实现网络基础设施的战略性升级。"
+  author: "NSSA技术团队"
+  cover_image: "/Photos/default.jpg"
 ---
 
 # **面向下一代网络的MPLS L3VPN重构：高可用性、服务质量与自动化架构深度解析**
