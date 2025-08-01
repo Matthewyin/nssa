@@ -31,21 +31,21 @@ NEXT_PUBLIC_API_URL = "https://admin.nssa.io"
 NODE_ENV = "staging"
 NEXT_PUBLIC_API_URL = "https://admin-staging.nssa.io"
 
-# KV 存储 - 用于缓存和会话管理
-[[kv_namespaces]]
-binding = "ADMIN_CACHE"
-id = "admin-cache-kv-id"
-preview_id = "admin-cache-kv-preview-id"
+# KV 存储 - 用于缓存和会话管理 (可选，暂时注释掉)
+# [[kv_namespaces]]
+# binding = "ADMIN_CACHE"
+# id = "admin-cache-kv-id"
+# preview_id = "admin-cache-kv-preview-id"
 
-[[kv_namespaces]]
-binding = "ADMIN_SESSIONS"
-id = "admin-sessions-kv-id"
-preview_id = "admin-sessions-kv-preview-id"
+# [[kv_namespaces]]
+# binding = "ADMIN_SESSIONS"
+# id = "admin-sessions-kv-id"
+# preview_id = "admin-sessions-kv-preview-id"
 
-# R2 存储 - 用于媒体文件上传
-[[r2_buckets]]
-binding = "ADMIN_MEDIA"
-bucket_name = "nssa-admin-media"
+# R2 存储 - 用于媒体文件上传 (可选，暂时注释掉)
+# [[r2_buckets]]
+# binding = "ADMIN_MEDIA"
+# bucket_name = "nssa-admin-media"
 
 # 自定义域名路由
 [[env.production.routes]]

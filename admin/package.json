@@ -9,6 +9,7 @@
     "dev": "next dev -p 3001",
     "prebuild": "node -e \"require('./env.config.js').initEnv()\"",
     "build": "next build",
+    "build:worker": "node scripts/build-worker.js",
     "prestart": "node -e \"require('./env.config.js').initEnv()\"",
     "start": "next start -p 3001",
     "lint": "next lint",
@@ -22,7 +23,10 @@
     "tina:dev": "tinacms dev -c \"npm run dev\"",
     "tina:build": "tinacms build",
     "tina:audit": "tinacms audit",
-    "test:env": "node scripts/test-env.js"
+    "test:env": "node scripts/test-env.js",
+    "deploy": "node scripts/deploy.js",
+    "deploy:staging": "node scripts/deploy.js staging",
+    "deploy:production": "node scripts/deploy.js production"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -71,7 +75,8 @@
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.6",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5.2.0"
+    "typescript": "^5.2.0",
+    "wrangler": "^4.27.0"
   },
   "engines": {
     "node": ">=18.0.0",
