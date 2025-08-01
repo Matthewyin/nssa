@@ -1,5 +1,4 @@
 
-
 ---
 title: "保障BSB跨平台数字代金券推广：战略性反欺诈框架"
 subtitle: "构建多平台合作环境下的全方位安全防护体系"
@@ -8,8 +7,18 @@ date: 2025-01-20T12:00:00+08:00
 lastmod: 2025-01-20T12:00:00+08:00
 readingTime: "约40分钟"
 tags: ["数字安全", "反欺诈", "跨平台合作", "风险管理", "BSB"]
-
 categories: ["技术专题"]
+
+# 🚀 发布配置
+publish:
+  website: true      # 发布到nssa.io网站
+  wechat_a: false    # 不发布到微信公众号A
+  wechat_b: false    # 不发布到微信公众号B
+
+# 📱 微信公众号专用配置
+wechat:
+  title: "BSB数字代金券反欺诈框架"
+  summary: "构建多平台合作环境下的全方位安全防护体系"
 ---
 
 # **保障BSB跨平台数字代金券推广：战略性反欺诈框架**
