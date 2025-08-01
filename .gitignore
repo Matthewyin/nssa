@@ -100,3 +100,6 @@ publish-status.json
 public/
 resources/
 .hugo_build.lock
+
+
+.taskmaster/
