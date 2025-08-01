@@ -12,7 +12,8 @@ main = "workers-site/index.js"
 # 自定义域名路由配置
 routes = [
   { pattern = "nssa.io/*", zone_name = "nssa.io" },
-  { pattern = "www.nssa.io/*", zone_name = "nssa.io" }
+  { pattern = "www.nssa.io/*", zone_name = "nssa.io" },
+  { pattern = "admin.nssa.io/*", zone_name = "nssa.io" }
 ]
 
 # Workers Sites 配置

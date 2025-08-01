@@ -1,0 +1,160 @@
+name: Deploy NSSA to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Cloudflare Workers
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # 如果使用了Hugo主题子模块
+          fetch-depth: 0    # 获取完整历史记录
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Hugo site
+        run: npm run build
+
+      - name: Validate Worker code
+        run: |
+          echo "🔍 验证Worker代码..."
+          if [ ! -f "workers-site/index.js" ]; then
+            echo "❌ Worker文件不存在"
+            exit 1
+          fi
+          
+          # 检查Admin功能
+          if grep -q "handleAdminRequest" workers-site/index.js && \
+             grep -q "handleAdminInterface" workers-site/index.js && \
+             grep -q "getAdminHTML" workers-site/index.js; then
+            echo "✅ Admin功能已集成"
+          else
+            echo "❌ Admin功能缺失"
+            exit 1
+          fi
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+
+      - name: Verify deployment
+        run: |
+          echo "🔍 验证部署结果..."
+          
+          # 等待部署生效
+          sleep 10
+          
+          # 测试主站
+          echo "测试主站..."
+          curl -f "https://nssa.io" > /dev/null || echo "⚠️ 主站访问异常"
+          
+          # 测试主站API
+          echo "测试主站API..."
+          response=$(curl -s "https://nssa.io/api/views/get?path=/test")
+          if echo "$response" | grep -q "views"; then
+            echo "✅ 主站API正常"
+          else
+            echo "⚠️ 主站API异常: $response"
+          fi
+          
+          # 测试Admin界面
+          echo "测试Admin界面..."
+          curl -f "https://admin.nssa.io" > /dev/null || echo "⚠️ Admin界面访问异常"
+          
+          # 测试Admin API
+          echo "测试Admin API..."
+          admin_response=$(curl -s "https://admin.nssa.io/api/health")
+          if echo "$admin_response" | grep -q "success"; then
+            echo "✅ Admin API正常"
+          else
+            echo "⚠️ Admin API异常: $admin_response"
+          fi
+
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "🎉 部署成功！"
+            echo "🌐 主站: https://nssa.io"
+            echo "🔧 管理后台: https://admin.nssa.io"
+          else
+            echo "❌ 部署失败，请检查日志"
+          fi
+
+  # 可选：仅在PR时运行预览部署
+  preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    name: Deploy Preview
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Hugo site
+        run: npm run build
+
+      - name: Deploy Preview
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env preview
+          
+      - name: Comment PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 预览部署完成！
+              
+              📱 预览链接:
+              - 主站: https://nssa-preview.your-subdomain.workers.dev
+              - 管理后台: https://admin-nssa-preview.your-subdomain.workers.dev
+              
+              ⏰ 部署时间: ${new Date().toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})}
+              📝 提交: ${context.sha.substring(0, 7)}`
+            })
