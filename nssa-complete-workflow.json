@@ -336,7 +336,7 @@
     {
       "parameters": {
         "authentication": "privateKey",
-        "command": "git add . && (git diff-index --quiet HEAD -- || (git commit -m \"自动发布：批量更新文档\" && git push origin main))",
+        "command": "git add . && (git diff-index --quiet HEAD -- || (git commit -m \"自动发布：批量更新文档\" && git push))",
         "cwd": "=Coding/nssa"
       },
       "type": "n8n-nodes-base.ssh",
