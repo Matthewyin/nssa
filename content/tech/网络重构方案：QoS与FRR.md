@@ -1,26 +1,15 @@
 ---
-title: "面向下一代网络的MPLS L3VPN重构：高可用性、服务质量与自动化架构深度解析"
-subtitle: "构建弹性、敏捷与自动化的网络基础设施蓝图"
-description: "全面的MPLS L3VPN网络现代化重构方案，整合自动化运维、快速重路由、差异化QoS及现代可观测性技术，实现网络基础设施的战略性升级转型。"
-date: 2025-01-28T11:00:00+08:00
-lastmod: 2025-01-28T11:00:00+08:00
-readingTime: "约70分钟"
-tags: ["MPLS", "L3VPN", "网络架构", "自动化运维", "QoS", "网络重构"]
+title: "网络重构方案：QoS与FRR"
+subtitle: "提升网络质量与韧性的关键技术解析"
+description: "本文详细阐述在网络重构背景下，如何运用服务质量（QoS）与快速重路由（FRR）这两项核心技术，实现网络性能的显著提升与故障恢复的秒级响应。旨在为网络工程师和架构师提供实用的优化策略与实施路径，确保业务连续性和用户体验。"
+tags: ["网络重构", "QoS", "FRR", "网络优化", "高可用性"]
+readingTime: "约12分钟"
+date: "2025-08-04T14:55:48.350Z"
+lastmod: "2025-08-04T14:55:48.350Z"
 categories: ["技术专题"]
-
-# 🚀 发布配置
-publish:
-  website: true      # 发布到nssa.io网站
-  wechat_a: true     # 发布到微信公众号A
-  wechat_b: false    # 不发布到微信公众号B
-
-# 📱 微信公众号专用配置
-wechat:
-  title: "MPLS L3VPN网络重构：构建下一代网络基础设施"
-  summary: "深度解析MPLS L3VPN现代化重构方案，整合自动化运维、快速重路由、差异化QoS技术，实现网络基础设施的战略性升级。"
-  author: "NSSA技术团队"
-  cover_image: "/Photos/default.jpg"
 ---
+
+
 
 # **面向下一代网络的MPLS L3VPN重构：高可用性、服务质量与自动化架构深度解析**
 
@@ -288,46 +277,6 @@ wechat:
 
 ---
 
-## **第6章：分阶段实施与迁移路线图**
-
-为确保网络重构的平稳、低风险推进，我们制定了一个分阶段的实施路线图。该路线图遵循“先基础、后核心，先监控、后变更”的原则，逐步实现方案目标，并在每个阶段都能产生可见的价值 96。
-
-### **阶段一：基础工具链与可观测性平台建设（第1-3个月）**
-
-* **目标**：在不改动任何生产网络配置的情况下，搭建起完整的自动化与监控基础平台。  
-* **关键行动**：  
-  1. 部署NetBox服务器，并通过自动化脚本对现有网络进行深度扫描和信息采集，完成对网络当前状态的初始化数据填充 96。  
-  2. 搭建Ansible控制节点，并建立Git代码仓库用于存放所有自动化代码和配置文件。  
-  3. 开发并运行第一批“只读”模式的Ansible Playbook，例如全网设备配置的自动化备份、设备信息（facts）的定期采集。此举旨在验证NetBox动态库存的准确性和Ansible到所有设备的网络可达性 13。  
-  4. 部署Prometheus和Grafana监控栈。配置Telegraf代理，开始通过SNMP采集现有网络的关键性能指标，建立性能基线，为后续的优化效果评估提供数据对比 10。
-
-### **阶段二：核心网络现代化升级（第4-6个月）**
-
-* **目标**：将网络底层承载技术升级为SR-MPLS，并启用TI-LFA，构建高可用的网络核心。  
-* **关键行动**：  
-  1. 在与生产环境1:1匹配的实验室环境（如EVE-NG或CML）中，反复演练从LDP/RSVP迁移至SR-MPLS的详细步骤和回滚方案 33。  
-  2. 在预定的维护窗口期，使用经过充分测试的Ansible Playbook，分批次（先核心P路由器，后边缘PE路由器）将SR-MPLS和TI-LFA的配置部署到生产网络。  
-  3. 开始从已升级的设备上采集gNMI流遥测数据，并将其接入新的可观测性平台，在Grafana上创建初步的遥测仪表盘。
-
-### **阶段三：QoS与FRR策略的全面部署（第7-9个月）**
-
-* **目标**：在现代化的网络核心之上，部署精细化的、差异化的FRR和QoS策略。  
-* **关键行动**：  
-  1. 在NetBox中对第3章和第4章定义的FRR和QoS策略进行数据建模。  
-  2. 开发并测试用于生成和部署这些复杂策略的Jinja2模板和Ansible Playbook。  
-  3. 采用灰度发布的方式，首先将新策略部署到风险最低的VRF（如开发测试VRF和运维管理VRF），并通过Grafana仪表盘密切监控其对网络性能的影响。  
-  4. 在确认策略稳定、效果符合预期后，再将其部署到关键的生产VRF和协同VRF。
-
-### **阶段四：运维模式转型与高级自动化探索（第10-12个月及以后）**
-
-* **目标**：将日常运维工作全面迁移到新的自动化工作流，并开始探索事件驱动的闭环自动化场景。  
-* **关键行动**：  
-  1. 对网络运维团队进行全面的新工具链和工作流程培训，使其能够熟练使用NetBox、Ansible和Grafana进行日常的变更、排障和性能分析。  
-  2. 在确认新可观测性平台稳定可靠后，逐步退役旧的、基于SNMP的监控系统。  
-  3. 开发初步的事件驱动自动化（Event-Driven Automation）用例。例如，利用Event-Driven Ansible，创建一个规则，使其能够监听来自Prometheus Alertmanager的特定告警（如某接口利用率持续超过90%），一旦接收到告警，便自动触发一个Ansible Playbook，该Playbook会自动登录相关设备采集详细的诊断信息（如接口统计、队列丢弃计数等），并将结果实时推送到运维团队的协作工具（如Teams或Slack）中，极大地缩短了故障响应和信息收集的时间 21。
-
----
-
 ## **结论与展望**
 
 本次网络重构方案，远不止于对现有MPLS L3VPN架构的简单加固，它是一次深刻的、系统性的架构演进。通过将**自动化**、**高可用性（FRR）**、**性能保障（QoS）** 与 **现代化可观测性** 四大支柱深度融合，我们旨在构建一个能够主动适应业务变化、具备高度弹性、且运维成本显著降低的下一代网络基础设施。
@@ -339,121 +288,3 @@ wechat:
 3. **商业价值的显著性**：方案的每一项技术投资都与明确的商业价值挂钩。无论是通过FRR保障业务连续性，通过QoS提升用户体验，还是通过自动化加速服务交付和降低运营成本，其最终目标都是将网络从一个后台支持系统，提升为驱动业务增长和创新的核心引擎。
 
 展望未来，本次重构项目的成功实施，将为企业开启通往更高级别网络智能的大门。基于当前构建的自动化和可观测性闭环，未来可以逐步引入基于AI/ML的智能分析，实现更精准的故障预测和根因分析。最终，网络将演化为一个能够自我感知、自我分析、自我决策、自我执行的“自治网络”（Autonomous Network），真正实现意图驱动的、零接触的闭-环自动化运维，从而将网络团队的精力从繁琐的日常维护中彻底解放出来，聚焦于更高价值的架构创新与业务赋能。
-
----
-
-## **附录：配置模板示例**
-
-本附录旨在提供关键配置的Jinja2模板示例，作为实施团队的参考起点。实际部署时需根据具体的设备型号和软件版本进行适配。
-
-* **模板A**：PE路由器的IS-IS与SR-MPLS基础配置模板  
-* **模板B**：接口的TI-LFA（链路/节点保护）配置模板  
-* **模板C**：协同VRF的模块化QoS（MQC）策略模板（含LLQ与CBWFQ）  
-* **模板D**：生产VRF的模块化QoS（MQC）策略模板（含CBWFQ与WRED）  
-* **模板E**：Ansible Playbook核心任务片段示例
-
-*(注：详细模板内容将作为交付物的一部分，在项目实施阶段提供。)*
-
-#### **引用的著作**
-
-1. The Network Automation Maturity Model \- ZOOstock.com, 访问时间为 七月 27, 2025， [https://www.zoostock.com/wp-content/uploads/2021/05/The-Network-Automation-Maturity-Model.pdf](https://www.zoostock.com/wp-content/uploads/2021/05/The-Network-Automation-Maturity-Model.pdf)  
-2. Implementing QoS for MPLS Layer 3 VPNs \- Flylib.com, 访问时间为 七月 27, 2025， [https://flylib.com/books/en/2.650.1/implementing\_qos\_for\_mpls\_layer\_3\_vpns.html](https://flylib.com/books/en/2.650.1/implementing_qos_for_mpls_layer_3_vpns.html)  
-3. MPLS VPN QoS Design \- CiteSeerX, 访问时间为 七月 27, 2025， [https://citeseerx.ist.psu.edu/document?repid=rep1\&type=pdf\&doi=a2de82acc6a54509f416c750b78c9c4e004f2b10](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=a2de82acc6a54509f416c750b78c9c4e004f2b10)  
-4. Essential Guide to Network Config Automation for Engineers \- Netodata, 访问时间为 七月 27, 2025， [https://netodata.io/essential-guide-to-network-config-automation-for-engineers/](https://netodata.io/essential-guide-to-network-config-automation-for-engineers/)  
-5. SNMP vs Telemetry: Comparing Network Monitoring Methods \- Lightyear.ai, 访问时间为 七月 27, 2025， [https://lightyear.ai/tips/snmp-versus-telemetry](https://lightyear.ai/tips/snmp-versus-telemetry)  
-6. Model-Driven Telemetry vs SNMP – Rethinking Network Monitoring \[CCNP ENTERPRISE\], 访问时间为 七月 27, 2025， [https://networkjourney.com/model-driven-telemetry-vs-snmp-rethinking-network-monitoring-ccnp-enterprise/](https://networkjourney.com/model-driven-telemetry-vs-snmp-rethinking-network-monitoring-ccnp-enterprise/)  
-7. The Benefits and Drawbacks of SNMP and Streaming Telemetry | Kentik Blog, 访问时间为 七月 27, 2025， [https://www.kentik.com/blog/the-benefits-and-drawbacks-of-snmp-and-streaming-telemetry/](https://www.kentik.com/blog/the-benefits-and-drawbacks-of-snmp-and-streaming-telemetry/)  
-8. Fast Reroute \- Wikipedia, 访问时间为 七月 27, 2025， [https://en.wikipedia.org/wiki/Fast\_Reroute](https://en.wikipedia.org/wiki/Fast_Reroute)  
-9. Understanding MPLS Fast Reroute: What It Is and How It Works | NSC \- NetSecCloud, 访问时间为 七月 27, 2025， [https://netseccloud.com/understanding-mpls-fast-reroute-what-it-is-and-how-it-works](https://netseccloud.com/understanding-mpls-fast-reroute-what-it-is-and-how-it-works)  
-10. Network Capacity Planning | VIAVI Solutions Inc., 访问时间为 七月 27, 2025， [https://www.viavisolutions.com/en-us/enterprise/resources/use-cases/network-capacity-planning](https://www.viavisolutions.com/en-us/enterprise/resources/use-cases/network-capacity-planning)  
-11. Network Automation & Orchestration Maturity Model \- Itential, 访问时间为 七月 27, 2025， [https://www.itential.com/resource/guide/network-automation-orchestration-maturity-model/](https://www.itential.com/resource/guide/network-automation-orchestration-maturity-model/)  
-12. Network Automation Maturity Model \- WWT, 访问时间为 七月 27, 2025， [https://www.wwt.com/wwt-research/network-automation-maturity-model](https://www.wwt.com/wwt-research/network-automation-maturity-model)  
-13. Network Configuration Assurance With NetBox and Ansible, 访问时间为 七月 27, 2025， [https://netboxlabs.com/blog/network-configuration-assurance-with-netbox-and-ansible/](https://netboxlabs.com/blog/network-configuration-assurance-with-netbox-and-ansible/)  
-14. networktocode/awesome-network-automation: Curated ... \- GitHub, 访问时间为 七月 27, 2025， [https://github.com/networktocode/awesome-network-automation](https://github.com/networktocode/awesome-network-automation)  
-15. Maturity Model \- WWT, 访问时间为 七月 27, 2025， [https://www.wwt.com/research-and-insights/maturity-model](https://www.wwt.com/research-and-insights/maturity-model)  
-16. Network Automation Maturity Model (adapted from (Netbrain, 2022)) \- ResearchGate, 访问时间为 七月 27, 2025， [https://www.researchgate.net/figure/Network-Automation-Maturity-Model-adapted-from-Netbrain-2022\_fig21\_371493028](https://www.researchgate.net/figure/Network-Automation-Maturity-Model-adapted-from-Netbrain-2022_fig21_371493028)  
-17. DevOps for Network Engineers: The Implications for Network Automation \- Cisco Community, 访问时间为 七月 27, 2025， [https://community.cisco.com/kxiwq67737/attachments/kxiwq67737/5672j-docs-dev-nso/100/1/DevOps%20for%20NetEng%20White%20Paper.pdf](https://community.cisco.com/kxiwq67737/attachments/kxiwq67737/5672j-docs-dev-nso/100/1/DevOps%20for%20NetEng%20White%20Paper.pdf)  
-18. Closed Loop Automation (CLA) \- Allot, 访问时间为 七月 27, 2025， [https://www.allot.com/network-intelligence/technology/closed-loop-automation/](https://www.allot.com/network-intelligence/technology/closed-loop-automation/)  
-19. What Is Closed-Loop Automation ♻️ | by Harisk | Agile Insider \- Medium, 访问时间为 七月 27, 2025， [https://medium.com/agileinsider/what-is-closed-loop-automation-%EF%B8%8F-c6baff3e8a93](https://medium.com/agileinsider/what-is-closed-loop-automation-%EF%B8%8F-c6baff3e8a93)  
-20. What is Closed-loop Automation? \- Blue Planet, 访问时间为 七月 27, 2025， [https://www.blueplanet.com/resources/what-is-closed-loop-automation.html](https://www.blueplanet.com/resources/what-is-closed-loop-automation.html)  
-21. What is event-driven automation? \- Red Hat, 访问时间为 七月 27, 2025， [https://www.redhat.com/en/topics/automation/what-is-event-driven-automation](https://www.redhat.com/en/topics/automation/what-is-event-driven-automation)  
-22. Layer 3 VPN Overview \- IPCisco, 访问时间为 七月 27, 2025， [https://ipcisco.com/lesson/layer-3-vpn-overview/](https://ipcisco.com/lesson/layer-3-vpn-overview/)  
-23. MPLS Layer 3 VPN Explained \- NetworkLessons.com, 访问时间为 七月 27, 2025， [https://networklessons.com/mpls/mpls-layer-3-vpn-explained](https://networklessons.com/mpls/mpls-layer-3-vpn-explained)  
-24. Support \- 08-MPLS L3VPN configuration \- H3C, 访问时间为 七月 27, 2025， [https://www.h3c.com/en/d\_202212/1732787\_294551\_0.htm](https://www.h3c.com/en/d_202212/1732787_294551_0.htm)  
-25. BGP / MPLS Layer3 VPNs \- Noction, 访问时间为 七月 27, 2025， [https://www.noction.com/blog/bgp-mpls-layer3-vpns](https://www.noction.com/blog/bgp-mpls-layer3-vpns)  
-26. Segment Routing (SR) and Topology Independent Loop Free Alternates (TI-LFA), 访问时间为 七月 27, 2025， [https://blogs.juniper.net/en-us/industry-solutions-and-trends/segment-routing-sr-and-topology-independent-loop-free-alternates-ti-lfa](https://blogs.juniper.net/en-us/industry-solutions-and-trends/segment-routing-sr-and-topology-independent-loop-free-alternates-ti-lfa)  
-27. Topology Independent LFA (TI-LFA) and uloop avoidance \- Segment-Routing.net, 访问时间为 七月 27, 2025， [https://www.segment-routing.net/tutorials/2016-09-27-topology-independent-lfa-ti-lfa/](https://www.segment-routing.net/tutorials/2016-09-27-topology-independent-lfa-ti-lfa/)  
-28. Topology Independent Fast Reroute using Segment Routing \- IETF, 访问时间为 七月 27, 2025， [https://www.ietf.org/archive/id/draft-ietf-rtgwg-segment-routing-ti-lfa-11.html](https://www.ietf.org/archive/id/draft-ietf-rtgwg-segment-routing-ti-lfa-11.html)  
-29. NetBox Cloud as Part of a Modern Network Automation Architecture with NetBox Labs \- YouTube, 访问时间为 七月 27, 2025， [https://www.youtube.com/watch?v=XKscCUU\_PXo](https://www.youtube.com/watch?v=XKscCUU_PXo)  
-30. Navigating Network Automation with NetBox, 访问时间为 七月 27, 2025， [https://netboxlabs.com/blog/network-automation-with-netbox/](https://netboxlabs.com/blog/network-automation-with-netbox/)  
-31. netbox-learning/automation-zero-to-hero/docs/7\_Automated\_Network\_Changes\_Ansible.md at develop \- GitHub, 访问时间为 七月 27, 2025， [https://github.com/netboxlabs/netbox-learning/blob/develop/automation-zero-to-hero/docs/7\_Automated\_Network\_Changes\_Ansible.md](https://github.com/netboxlabs/netbox-learning/blob/develop/automation-zero-to-hero/docs/7_Automated_Network_Changes_Ansible.md)  
-32. Network Automation with Python and Ansible: Streamlining Configuration, Provisioning, and Troubleshooting Tasks | by Configr Technologies, 访问时间为 七月 27, 2025， [https://configr.medium.com/network-automation-with-python-and-ansible-streamlining-configuration-provisioning-and-adae19e2fad2](https://configr.medium.com/network-automation-with-python-and-ansible-streamlining-configuration-provisioning-and-adae19e2fad2)  
-33. Building a Network Automation Lab Environment \- EVE-NG Ansible \- Will Grana, 访问时间为 七月 27, 2025， [https://willgrana.com/posts/network-automation-lab-setup/](https://willgrana.com/posts/network-automation-lab-setup/)  
-34. Modernizing Network and Infrastructure Observability: SNMP to Streaming Telemetry \- WWT, 访问时间为 七月 27, 2025， [https://www.wwt.com/blog/modernizing-network-and-infrastructure-observability-snmp-to-streaming-telemetry](https://www.wwt.com/blog/modernizing-network-and-infrastructure-observability-snmp-to-streaming-telemetry)  
-35. What Is Telemetry? Telemetry vs. SNMP \- Huawei Technical Support, 访问时间为 七月 27, 2025， [https://info.support.huawei.com/info-finder/encyclopedia/en/Telemetry.html](https://info.support.huawei.com/info-finder/encyclopedia/en/Telemetry.html)  
-36. Netconf and YANG: The Future of Network Configuration \- Infosim, 访问时间为 七月 27, 2025， [https://www.infosim.net/stablenet/blog/netconf-yang-the-future-of-network-configuration/](https://www.infosim.net/stablenet/blog/netconf-yang-the-future-of-network-configuration/)  
-37. NETCONF/YANG for network automation over SNMP, 访问时间为 七月 27, 2025， [https://insyncit.net/netconf-yang-for-network-automation-over-snmp/](https://insyncit.net/netconf-yang-for-network-automation-over-snmp/)  
-38. Monitoring using NETCONF | network-automation-blog \- Anirudh Kamath, 访问时间为 七月 27, 2025， [https://anirudhkamath.github.io/network-automation-blog/notes/network-telemetry-using-netconf-telegraf-prometheus.html](https://anirudhkamath.github.io/network-automation-blog/notes/network-telemetry-using-netconf-telegraf-prometheus.html)  
-39. gNMI Service | Junos OS \- Juniper Networks, 访问时间为 七月 27, 2025， [https://www.juniper.net/documentation/us/en/software/junos/interfaces-telemetry/topics/concept/gnmi-operations.html](https://www.juniper.net/documentation/us/en/software/junos/interfaces-telemetry/topics/concept/gnmi-operations.html)  
-40. gNMI interface \- Nokia Documentation Center, 访问时间为 七月 27, 2025， [https://documentation.nokia.com/srlinux/21-11/SysMgmt\_Guide/gnmi-interface.html](https://documentation.nokia.com/srlinux/21-11/SysMgmt_Guide/gnmi-interface.html)  
-41. gNMI \- Nokia Documentation Center, 访问时间为 七月 27, 2025， [https://documentation.nokia.com/srlinux/23-10/books/system-mgmt/gnmi.html](https://documentation.nokia.com/srlinux/23-10/books/system-mgmt/gnmi.html)  
-42. gRPC Network Management Interface (gNMI) specification \- OpenConfig, 访问时间为 七月 27, 2025， [https://www.openconfig.net/docs/gnmi/gnmi-specification/](https://www.openconfig.net/docs/gnmi/gnmi-specification/)  
-43. gNMI Overview \- IETF, 访问时间为 七月 27, 2025， [https://www.ietf.org/proceedings/101/slides/slides-101-netconf-grpc-network-management-interface-gnmi-00.pdf](https://www.ietf.org/proceedings/101/slides/slides-101-netconf-grpc-network-management-interface-gnmi-00.pdf)  
-44. Get started with Grafana and Prometheus, 访问时间为 七月 27, 2025， [https://grafana.com/docs/grafana/latest/getting-started/get-started-grafana-prometheus/](https://grafana.com/docs/grafana/latest/getting-started/get-started-grafana-prometheus/)  
-45. Introduction to monitoring with Prometheus & Grafana | by Dinesh Murali \- Medium, 访问时间为 七月 27, 2025， [https://medium.com/@dineshmurali/introduction-to-monitoring-with-prometheus-grafana-ea338d93b2d9](https://medium.com/@dineshmurali/introduction-to-monitoring-with-prometheus-grafana-ea338d93b2d9)  
-46. zaneclaes/network-traffic-metrics: Monitor network traffic with Prometheus & Grafana \- GitHub, 访问时间为 七月 27, 2025， [https://github.com/zaneclaes/network-traffic-metrics](https://github.com/zaneclaes/network-traffic-metrics)  
-47. Grafana & Prometheus SNMP: beginner's network monitoring guide, 访问时间为 七月 27, 2025， [https://grafana.com/blog/2022/01/19/a-beginners-guide-to-network-monitoring-with-grafana-and-prometheus/](https://grafana.com/blog/2022/01/19/a-beginners-guide-to-network-monitoring-with-grafana-and-prometheus/)  
-48. Network Monitoring with Prometheus and Grafana \- YouTube, 访问时间为 七月 27, 2025， [https://www.youtube.com/watch?v=fnoTHoZzNSc](https://www.youtube.com/watch?v=fnoTHoZzNSc)  
-49. Grafana & Prometheus SNMP: advanced network monitoring guide, 访问时间为 七月 27, 2025， [https://grafana.com/blog/2022/02/01/an-advanced-guide-to-network-monitoring-with-grafana-and-prometheus/](https://grafana.com/blog/2022/02/01/an-advanced-guide-to-network-monitoring-with-grafana-and-prometheus/)  
-50. Event-Driven Automation: A Quick Guide \- TexAu, 访问时间为 七月 27, 2025， [https://www.texau.com/glossary/event-driven-automation](https://www.texau.com/glossary/event-driven-automation)  
-51. RSVP Overview | Junos OS \- Juniper Networks, 访问时间为 七月 27, 2025， [https://www.juniper.net/documentation/us/en/software/junos/mpls/topics/topic-map/rsvp-overview.html](https://www.juniper.net/documentation/us/en/software/junos/mpls/topics/topic-map/rsvp-overview.html)  
-52. RSVP-TE Overview | Traffic Engineering | IP/MPLS ⋆ IPCisco, 访问时间为 七月 27, 2025， [https://ipcisco.com/lesson/rsvp-te-overview/](https://ipcisco.com/lesson/rsvp-te-overview/)  
-53. MPLS Local Protection, Fast Reroute \- IPCisco, 访问时间为 七月 27, 2025， [https://ipcisco.com/lesson/mpls-local-protection-fast-reroute/](https://ipcisco.com/lesson/mpls-local-protection-fast-reroute/)  
-54. RSVP-TE Fast Reroute (FRR) \- Nokia Documentation Center, 访问时间为 七月 27, 2025， [https://infocenter.nokia.com/public/7705SAR234R1A/topic/com.nokia.mpls-guide/rsvp-te-fast-reroute-frr.html](https://infocenter.nokia.com/public/7705SAR234R1A/topic/com.nokia.mpls-guide/rsvp-te-fast-reroute-frr.html)  
-55. EOS 4.33.2F \- RSVP-TE LSR \- Arista, 访问时间为 七月 27, 2025， [https://www.arista.com/en/um-eos/eos-rsvp-te-lsr?searchword=eos%2027%203%20configuring%20ospfv2](https://www.arista.com/en/um-eos/eos-rsvp-te-lsr?searchword=eos+27+3+configuring+ospfv2)  
-56. Understanding Manual MPLS TE FRR \- CloudEngine S3700, S5700, and S6700 V600R024C00 Configuration Guide \- Huawei Technical Support, 访问时间为 七月 27, 2025， [https://support.huawei.com/enterprise/en/doc/EDOC1100421963/fd720a34/understanding-manual-mpls-te-frr](https://support.huawei.com/enterprise/en/doc/EDOC1100421963/fd720a34/understanding-manual-mpls-te-frr)  
-57. Fast Failover: Techniques and Technologies \- ipSpace.net blog, 访问时间为 七月 27, 2025， [https://blog.ipspace.net/2020/12/fast-failover-techniques/](https://blog.ipspace.net/2020/12/fast-failover-techniques/)  
-58. Yet Another Blog About Segment Routing, Part2 : TI-LFA \- Packet Pushers, 访问时间为 七月 27, 2025， [https://packetpushers.net/blog/yet-another-blog-about-segment-routing-part2-ti-lfa/](https://packetpushers.net/blog/yet-another-blog-about-segment-routing-part2-ti-lfa/)  
-59. ISIS-SR with TI-LFA in OcNOS \- IP Infusion, 访问时间为 七月 27, 2025， [https://www.ipinfusion.com/blogs/isis-sr-with-ti-lfa-in-ocnos/](https://www.ipinfusion.com/blogs/isis-sr-with-ti-lfa-in-ocnos/)  
-60. Topology-Independent Loop-Free Alternate for Link Protection, 访问时间为 七月 27, 2025， [https://documentation.nokia.com/acg/23-7-2/books/classic-cli-part-i/c208-ti-lfa-link.html](https://documentation.nokia.com/acg/23-7-2/books/classic-cli-part-i/c208-ti-lfa-link.html)  
-61. Understanding Topology-Independent Loop-Free Alternate with Segment Routing for IS-IS | Junos OS | Juniper Networks, 访问时间为 七月 27, 2025， [https://www.juniper.net/documentation/us/en/software/junos/is-is/topics/concept/understanding-ti-lfa-for-is-is.html](https://www.juniper.net/documentation/us/en/software/junos/is-is/topics/concept/understanding-ti-lfa-for-is-is.html)  
-62. Example: Configuring Topology Independent Loop-Free Alternate with Segment Routing for IS-IS | Junos OS | Juniper Networks, 访问时间为 七月 27, 2025， [https://www.juniper.net/documentation/us/en/software/junos/is-is/topics/example/example-configuring-ti-lfa-using-spring-is-is.html](https://www.juniper.net/documentation/us/en/software/junos/is-is/topics/example/example-configuring-ti-lfa-using-spring-is-is.html)  
-63. TI-LFA Configuration \- Nokia Documentation Center, 访问时间为 七月 27, 2025， [https://infocenter.nokia.com/public/7750SR215R1A/topic/com.nokia.Segment\_Routing\_and\_PCE\_User\_Guide\_21.5.R1/ti-lfa\_configur-ai9ekdb64s.html](https://infocenter.nokia.com/public/7750SR215R1A/topic/com.nokia.Segment_Routing_and_PCE_User_Guide_21.5.R1/ti-lfa_configur-ai9ekdb64s.html)  
-64. EOS 4.34.1F \- IS-IS \- Arista, 访问时间为 七月 27, 2025， [https://www.arista.com/en/um-eos/eos-is-is?searchword=eos%20section%2021%201%20vlan%20introduction](https://www.arista.com/en/um-eos/eos-is-is?searchword=eos+section+21+1+vlan+introduction)  
-65. ISIS — FRR latest documentation, 访问时间为 七月 27, 2025， [https://docs.frrouting.org/en/frr-8.2.2/isisd.html](https://docs.frrouting.org/en/frr-8.2.2/isisd.html)  
-66. Topology-Independent Loop-Free Alternates (TI-LFA) | Cloud-Native Router 24.4, 访问时间为 七月 27, 2025， [https://www.juniper.net/documentation/us/en/software/cloud-native-router24.4/cloud-native-router-user/topics/topic-map/ti-lfa-tm.html](https://www.juniper.net/documentation/us/en/software/cloud-native-router24.4/cloud-native-router-user/topics/topic-map/ti-lfa-tm.html)  
-67. From LFA to TI-LFA \- IoSonoUnRouter \- WordPress.com, 访问时间为 七月 27, 2025， [https://iosonounrouter.wordpress.com/2023/03/23/from-lfa-to-ti-lfa/](https://iosonounrouter.wordpress.com/2023/03/23/from-lfa-to-ti-lfa/)  
-68. MPLS – Fast Reroute (FRR) and TI-LFA \- QuistED.net, 访问时间为 七月 27, 2025， [https://www.quisted.net/index.php/2024/11/14/mpls-fast-reroute-frr/](https://www.quisted.net/index.php/2024/11/14/mpls-fast-reroute-frr/)  
-69. Configuring SRv6 TI-LFA FRR (IS-IS) \- Huawei Technical Support, 访问时间为 七月 27, 2025， [https://support.huawei.com/enterprise/en/doc/EDOC1100367121/ff34dea4/configuring-srv6-ti-lfa-frr-is-is](https://support.huawei.com/enterprise/en/doc/EDOC1100367121/ff34dea4/configuring-srv6-ti-lfa-frr-is-is)  
-70. DSCP vs CoS & Trust Boundary: Network Marking Demystified for Engineers \[CCNP Enterprise\], 访问时间为 七月 27, 2025， [https://networkjourney.com/dscp-vs-cos-trust-boundary-network-marking-demystified-for-engineers-ccnp-enterprise/](https://networkjourney.com/dscp-vs-cos-trust-boundary-network-marking-demystified-for-engineers-ccnp-enterprise/)  
-71. QoS Trust Boundary and Scavenger Class Explained \- Study CCNP, 访问时间为 七月 27, 2025， [https://study-ccnp.com/qos-trust-boundary-scavenger-class-explained/](https://study-ccnp.com/qos-trust-boundary-scavenger-class-explained/)  
-72. QoS Trust Boundary \- YouTube, 访问时间为 七月 27, 2025， [https://www.youtube.com/watch?v=Jgwaah0tZuI](https://www.youtube.com/watch?v=Jgwaah0tZuI)  
-73. QoS trust boundary on Cisco Switches \- NetworkLessons.com, 访问时间为 七月 27, 2025， [https://networklessons.com/quality-of-service/how-to-configure-qos-trust-boundary-on-cisco-switches](https://networklessons.com/quality-of-service/how-to-configure-qos-trust-boundary-on-cisco-switches)  
-74. MPLS L3 VPN QoS \- HPE Aruba Networking, 访问时间为 七月 27, 2025， [https://arubanetworking.hpe.com/techdocs/AOS-CX/10.14/HTML/mpls\_6400-8360/Content/Chp\_Protocol\_features/l3-mpls-vpn-qos.htm](https://arubanetworking.hpe.com/techdocs/AOS-CX/10.14/HTML/mpls_6400-8360/Content/Chp_Protocol_features/l3-mpls-vpn-qos.htm)  
-75. Understanding MPLS QoS \- CloudEngine S3700, S5700, and S6700 V600R023C00 Configuration Guide \- Huawei Technical Support, 访问时间为 七月 27, 2025， [https://support.huawei.com/enterprise/en/doc/EDOC1100334404/57da9c0e/understanding-mpls-qos](https://support.huawei.com/enterprise/en/doc/EDOC1100334404/57da9c0e/understanding-mpls-qos)  
-76. End-to-End QoS marking in MPLS/VPN-over-DMVPN networks \- ipSpace.net blog, 访问时间为 七月 27, 2025， [https://blog.ipspace.net/2011/02/end-to-end-qos-marking-in-mplsvpn-over/](https://blog.ipspace.net/2011/02/end-to-end-qos-marking-in-mplsvpn-over/)  
-77. QoS over MPLS/VPN Networks \- ipSpace.net blog, 访问时间为 七月 27, 2025， [https://blog.ipspace.net/2010/10/qos-over-mplsvpn-networks/](https://blog.ipspace.net/2010/10/qos-over-mplsvpn-networks/)  
-78. Low-latency queuing \- Wikipedia, 访问时间为 七月 27, 2025， [https://en.wikipedia.org/wiki/Low-latency\_queuing](https://en.wikipedia.org/wiki/Low-latency_queuing)  
-79. Class Based Weighted Fair Queuing / Low Latency Queue CBWFQ/LLQ \- Genesys, 访问时间为 七月 27, 2025， [https://help.genesys.com/pureconnect/mergedProjects/wh\_tr/mergedProjects/wh\_tr\_qos/desktop/class\_based\_weighted\_fair\_queuing\_low\_latency\_queue.htm](https://help.genesys.com/pureconnect/mergedProjects/wh_tr/mergedProjects/wh_tr_qos/desktop/class_based_weighted_fair_queuing_low_latency_queue.htm)  
-80. What are LLQ (Low Latency Queuing) and CBWFQ (Class-Based Weighted Fair Queuing)? How to configure LLQ and CBWFQ? \- Edgar C Francis, 访问时间为 七月 27, 2025， [https://edgarcf.medium.com/what-are-llq-low-latency-queuing-and-cbwfq-class-based-weighted-fair-queuing-8b50b0d934dc](https://edgarcf.medium.com/what-are-llq-low-latency-queuing-and-cbwfq-class-based-weighted-fair-queuing-8b50b0d934dc)  
-81. QoS LLQ (Low Latency Queueing) on Cisco IOS \- NetworkLessons.com, 访问时间为 七月 27, 2025， [https://networklessons.com/quality-of-service/qos-llq-low-latency-queueing-cisco-ios](https://networklessons.com/quality-of-service/qos-llq-low-latency-queueing-cisco-ios)  
-82. Weighted random early detection \- Wikipedia, 访问时间为 七月 27, 2025， [https://en.wikipedia.org/wiki/Weighted\_random\_early\_detection](https://en.wikipedia.org/wiki/Weighted_random_early_detection)  
-83. Weighted Random Early Detection | Dell Enterprise SONiC Quality of Service (QoS), 访问时间为 七月 27, 2025， [https://infohub.delltechnologies.com/en-us/l/dell-enterprise-sonic-quality-of-service-qos/weighted-random-early-detection/](https://infohub.delltechnologies.com/en-us/l/dell-enterprise-sonic-quality-of-service-qos/weighted-random-early-detection/)  
-84. WRED (Weighted Random Early Detection) \- NetworkLessons.com, 访问时间为 七月 27, 2025， [https://networklessons.com/cisco/ccie-routing-switching-written/wred-weighted-random-early-detection](https://networklessons.com/cisco/ccie-routing-switching-written/wred-weighted-random-early-detection)  
-85. Weighted Random Early Detection (WRED) Simplfied… Seriously\! \#ccna \#cisco \- YouTube, 访问时间为 七月 27, 2025， [https://www.youtube.com/watch?v=Q51kzwzQNFI](https://www.youtube.com/watch?v=Q51kzwzQNFI)  
-86. QoS Traffic Policing Explained \- NetworkLessons.com, 访问时间为 七月 27, 2025， [https://networklessons.com/ip-routing/qos-traffic-policing-explained](https://networklessons.com/ip-routing/qos-traffic-policing-explained)  
-87. Quality of Service (QoS) Traffic Shaping and Policing \- Study CCNA, 访问时间为 七月 27, 2025， [https://study-ccna.com/qos-traffic-shaping-policing/](https://study-ccna.com/qos-traffic-shaping-policing/)  
-88. QoS Traffic Shaping Explained \- NetworkLessons.com, 访问时间为 七月 27, 2025， [https://networklessons.com/quality-of-service/qos-traffic-shaping-explained](https://networklessons.com/quality-of-service/qos-traffic-shaping-explained)  
-89. Policing and Shaping | NetworkAcademy.io, 访问时间为 七月 27, 2025， [https://www.networkacademy.io/ccna/network-services/policing-and-shaping](https://www.networkacademy.io/ccna/network-services/policing-and-shaping)  
-90. SD Access inter VN route leaking \- Cisco Community, 访问时间为 七月 27, 2025， [https://community.cisco.com/t5/cisco-catalyst-center/sd-access-inter-vn-route-leaking/td-p/4072518](https://community.cisco.com/t5/cisco-catalyst-center/sd-access-inter-vn-route-leaking/td-p/4072518)  
-91. Does Cisco SD-Access worth implementing ? : r/networking \- Reddit, 访问时间为 七月 27, 2025， [https://www.reddit.com/r/networking/comments/1geg165/does\_cisco\_sdaccess\_worth\_implementing/](https://www.reddit.com/r/networking/comments/1geg165/does_cisco_sdaccess_worth_implementing/)  
-92. Building Data Centers with VXLAN BGP EVPN: A Cisco NX-OS Perspective \- HELLO DIGI, 访问时间为 七月 27, 2025， [https://dl.hellodigi.ir/dl.hellodigi.ir/dl/book/Building%20Data%20Centers%20with%20VXLAN%20BGP%20EVPN%20A%20Cisco%20NX-OS%20Perspective.pdf](https://dl.hellodigi.ir/dl.hellodigi.ir/dl/book/Building%20Data%20Centers%20with%20VXLAN%20BGP%20EVPN%20A%20Cisco%20NX-OS%20Perspective.pdf)  
-93. Building Data Centers with VXLAN BGP EVPN: A Cisco NX-OS Perspective \[1 ed.\] 1587144670, 9781587144677 \- DOKUMEN.PUB, 访问时间为 七月 27, 2025， [https://dokumen.pub/building-data-centers-with-vxlan-bgp-evpn-a-cisco-nx-os-perspective-1nbsped-1587144670-9781587144677.html](https://dokumen.pub/building-data-centers-with-vxlan-bgp-evpn-a-cisco-nx-os-perspective-1nbsped-1587144670-9781587144677.html)  
-94. Benefits of Layer 3 MPLS VPN's vs VRF-Lite : r/networking \- Reddit, 访问时间为 七月 27, 2025， [https://www.reddit.com/r/networking/comments/2d0ry3/benefits\_of\_layer\_3\_mpls\_vpns\_vs\_vrflite/](https://www.reddit.com/r/networking/comments/2d0ry3/benefits_of_layer_3_mpls_vpns_vs_vrflite/)  
-95. Pro's and Con's of Using Multiple VRFs : r/networking \- Reddit, 访问时间为 七月 27, 2025， [https://www.reddit.com/r/networking/comments/12lnumv/pros\_and\_cons\_of\_using\_multiple\_vrfs/](https://www.reddit.com/r/networking/comments/12lnumv/pros_and_cons_of_using_multiple_vrfs/)  
-96. NetDevOps Days – New York \- NetBox Labs, 访问时间为 七月 27, 2025， [https://netboxlabs.com/events/netdevops-days-new-york/](https://netboxlabs.com/events/netdevops-days-new-york/)  
-97. NetDevOps Days New York \- Our phased approach to network automation Karl \- YouTube, 访问时间为 七月 27, 2025， [https://www.youtube.com/watch?v=DG3pPtn5\_ik](https://www.youtube.com/watch?v=DG3pPtn5_ik)  
-98. How to Execute an MPLS to SD-WAN Migration Step-by-Step \- Palo Alto Networks, 访问时间为 七月 27, 2025， [https://www.paloaltonetworks.com/cyberpedia/mpls-to-sd-wan-migration](https://www.paloaltonetworks.com/cyberpedia/mpls-to-sd-wan-migration)  
-99. Migration Considerations and Techniques to MPLS-TP based Networks and Services \- IETF, 访问时间为 七月 27, 2025， [https://www.ietf.org/proceedings/80/slides/mpls-30.pdf](https://www.ietf.org/proceedings/80/slides/mpls-30.pdf)  
-100. MPLS to SD-WAN Migration: Everything You Need to Know \- Portnox, 访问时间为 七月 27, 2025， [https://www.portnox.com/blog/network-security/mpls-to-sd-wan-migration-everything-you-need-to-know/](https://www.portnox.com/blog/network-security/mpls-to-sd-wan-migration-everything-you-need-to-know/)  
-101. Nokia's Event-Driven Automation is the Future of Data Center Network Operations, 访问时间为 七月 27, 2025， [https://infinitytdc.com/nokia-event-driven-automation-eda/](https://infinitytdc.com/nokia-event-driven-automation-eda/)
