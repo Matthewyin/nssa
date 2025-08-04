@@ -1,0 +1,577 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4bf5399f-785e-4071-be3a-6b8f6359ec87",
+      "name": "手动触发器",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        3080,
+        -15
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "'1BuWi03gZ8GwndFjz2LdhQglGMjW80VMY' in parents and mimeType='application/vnd.google-apps.folder'"
+            },
+            {
+              "name": "fields",
+              "value": "files(id,name)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "702e22ec-451a-4dbb-a2f9-52c1db2eb17c",
+      "name": "获取子文件夹",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3300,
+        -15
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理子文件夹数据，为每个文件夹创建查询\nconst response = $input.first().json;\n\nif (!response.files || response.files.length === 0) {\n  console.log('没有找到子文件夹');\n  return [];\n}\n\nconsole.log(`找到 ${response.files.length} 个子文件夹`);\n\n// 为每个文件夹创建独立的查询任务\nreturn response.files.map(folder => ({\n  json: {\n    folderId: folder.id,\n    folderName: folder.name,\n    queryUrl: `https://www.googleapis.com/drive/v3/files?q='${folder.id}' in parents and mimeType='application/vnd.google-apps.document'&fields=files(id,name,mimeType,modifiedTime,parents,webViewLink)`\n  }\n}));"
+      },
+      "id": "d18cf060-0d78-49fc-a768-b2edf94184c0",
+      "name": "处理文件夹数据",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3520,
+        -15
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$json.queryUrl}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {}
+      },
+      "id": "dbeed845-033b-4aa5-ab70-9578e5a1f847",
+      "name": "扫描文件夹文档",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3740,
+        -15
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理所有文档数据，合并文件夹信息\nconst allResults = $input.all();\nlet allDocuments = [];\n\n// 文件夹映射\nconst folderMap = {\n  '1xDNGIOGnsCsXs0KZCHwKOav96dQGith4': { name: '心理专题', category: 'psychology' },\n  '1uKz9AOYftgvExoLPbiMvlEtdjY63YSB6': { name: '职场专题', category: 'workplace' },\n  '125UBg7dLONmNg0ou9T4d8uVW_fsrJFH8': { name: '历史专题', category: 'history' },\n  '1frvBLCJkyDaBffF_JXR4Px8DoIcL-75_': { name: '技术专题', category: 'tech' }\n};\n\n// 遍历每个文件夹的结果\nallResults.forEach(result => {\n  if (result.json.files && result.json.files.length > 0) {\n    result.json.files.forEach(file => {\n      const folderId = file.parents[0];\n      const folderInfo = folderMap[folderId];\n      \n      if (folderInfo) {\n        allDocuments.push({\n          json: {\n            ...file,\n            folderName: folderInfo.name,\n            folderId: folderId,\n            category: folderInfo.category\n          }\n        });\n      }\n    });\n  }\n});\n\nconsole.log(`总共找到 ${allDocuments.length} 个文档`);\nreturn allDocuments;"
+      },
+      "id": "4c7361f3-4634-410f-bf98-70b91a75c39d",
+      "name": "处理文档数据",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3960,
+        -15
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析AI Agent的响应\nconst response = $input.first();\nconst aiResponse = response.json.output; // AI Agent返回的结构化数据\n\n// 获取原始文档信息 - 从Loop Over Items获取\nconst originalDoc = $('Loop Over Items').first().json;\n\n// AI Agent已经返回了结构化数据，直接使用\nlet frontMatter = aiResponse;\n\n// 生成文件名\nconst fileName = (frontMatter.title || originalDoc.name)\n  .replace(/[^\\w\\s-]/g, '')\n  .replace(/\\s+/g, '-')\n  .toLowerCase() + '.md';\n\n// 构建完整的Front Matter\nconst now = new Date();\nconst completeFrontMatter = {\n  ...frontMatter,\n  date: now.toISOString(),\n  lastmod: now.toISOString(),\n  categories: [originalDoc.folderName]\n};\n\nreturn {\n  json: {\n    originalDoc,\n    frontMatter: completeFrontMatter,\n    fileName,\n    category: originalDoc.category\n  }\n};"
+      },
+      "id": "d7effa02-4426-4ff0-8042-b36aa8643e68",
+      "name": "处理AI响应",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4900,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4180,
+        -15
+      ],
+      "id": "b31d40fe-f82e-40bf-9723-cfca158bfda8",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=请分析这个Google文档并返回Hugo格式的Front Matter。\n\n文档信息：\n- URL: {{$json.webViewLink}}\n- 标题: {{$json.name}}\n- 分类: {{$json.folderName}}\n\n分析要求：\n1. 仔细阅读文档内容\n2. 提取核心主题和关键信息\n3. 生成适合的标签和描述\n\n返回JSON格式：\n{\n  \"title\": \"优化后的文章标题\",\n  \"subtitle\": \"简洁的副标题\",\n  \"description\": \"100-200字的文章描述，突出核心价值\",\n  \"tags\": [\"相关标签1\", \"相关标签2\", \"相关标签3\"],\n  \"readingTime\": \"约XX分钟\"\n}\n\n注意：只返回JSON，不要包含其他解释文字。",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        4580,
+        -220
+      ],
+      "id": "3a4459a1-2724-48a6-9fc8-818d1bf6b7a8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"title\": \"优化后的文章标题\",\n  \"subtitle\": \"简洁的副标题\",\n  \"description\": \"100-200字的文章描述，突出核心价值\",\n  \"tags\": [\"相关标签1\", \"相关标签2\", \"相关标签3\"],\n  \"readingTime\": \"约XX分钟\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        4800,
+        0
+      ],
+      "id": "9419b3f2-1c94-4ba6-b77f-907d37195e9f",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4620,
+        0
+      ],
+      "id": "ada5ebb6-cf4b-44a9-bcbf-031e4ef6cf55",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "itRdUUPXbeECwMa9",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://www.googleapis.com/drive/v3/files/{{$json.id}}/export?mimeType=text/markdown",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {}
+      },
+      "id": "431794d7-a86d-496b-9d38-fec934311e09",
+      "name": "下载Markdown内容",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4776,
+        110
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex",
+        "options": {}
+      },
+      "id": "f5bb3c1f-4f79-4689-a4f2-4065feddefc9",
+      "name": "合并AI和内容",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        5220,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 合并AI生成的Front Matter和Markdown内容\nconst aiResult = $('处理AI响应').first();\nconst markdownResult = $('下载Markdown内容').first();\nconst originalDoc = $('Loop Over Items').first().json;\n\n// 获取AI生成的Front Matter\nconst frontMatter = aiResult.json.frontMatter || {};\n\n// 获取文档内容\nconst content = markdownResult.json || markdownResult.body || '';\n\n// 构建YAML Front Matter\nconst yaml = require('js-yaml');\nconst frontMatterYaml = yaml.dump(frontMatter, {\n  indent: 2,\n  lineWidth: -1\n});\n\n// 合并Front Matter和内容\nconst completeDocument = `---\n${frontMatterYaml}---\n\n${content}`;\n\n// 生成文件名\nconst fileName = originalDoc.name\n  .replace(/[^\\w\\s-]/g, '')\n  .replace(/\\s+/g, '-')\n  .toLowerCase() + '.md';\n\n// 确定文件路径\nconst filePath = `/Users/matthewyin/Coding/nssa/content/${originalDoc.category}/${fileName}`;\n\nreturn {\n  json: {\n    filePath,\n    content: completeDocument,\n    fileName,\n    category: originalDoc.category,\n    title: originalDoc.name,\n    originalDoc,\n    success: true\n  }\n};"
+      },
+      "id": "714ed841-bfda-4301-ad6a-a2cc63a80dab",
+      "name": "合并内容",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5440,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{$json.filePath}}",
+        "data": "={{$json.content}}",
+        "options": {}
+      },
+      "id": "0fb44e80-42ea-41ce-b998-e1b447c71508",
+      "name": "保存到本地",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        5660,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /Users/matthewyin/Coding/nssa && hugo --minify --gc"
+      },
+      "id": "0d77a1cd-361d-4a34-b108-059e73a1336d",
+      "name": "Hugo构建",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        5880,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /Users/matthewyin/Coding/nssa && npm run deploy"
+      },
+      "id": "dd9a2fd4-9fe2-479b-a462-2a776703b8a8",
+      "name": "部署到Cloudflare",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        4776,
+        -440
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": "Matthewyin",
+        "repository": "nssa",
+        "filePath": "={{$json.fileName}}",
+        "fileContent": "={{$json.content}}",
+        "commitMessage": "自动发布：{{$json.title}}",
+        "additionalParameters": {
+          "author": {
+            "name": "NSSA Auto Publisher",
+            "email": "noreply@nssa.io"
+          }
+        }
+      },
+      "id": "67ee1d06-afe8-4c22-bded-648d97ab33e1",
+      "name": "提交到GitHub1",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        4478,
+        -440
+      ],
+      "webhookId": "14caa527-3fad-4cae-9815-8491ce3af93d"
+    },
+    {
+      "parameters": {
+        "command": "cd /Users/matthewyin/Coding/nssa && git add . && git commit -m \"自动发布：批量更新文档\" && git push origin main",
+        "options": {}
+      },
+      "id": "unified-github-commit",
+      "name": "统一提交GitHub",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        5200,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /Users/matthewyin/Coding/nssa && npx wrangler deploy",
+        "options": {}
+      },
+      "id": "deploy-cloudflare",
+      "name": "部署到Cloudflare",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        5420,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 统计处理结果\nconst totalCount = 14; // 假设处理了14个文档\n\n// 构建通知消息\nconst message = `🎉 NSSA自动发布完成\\n\\n` +\n  `📊 处理统计：\\n` +\n  `- 总文档数：${totalCount}\\n` +\n  `- 成功发布：${totalCount}\\n` +\n  `- 失败数量：0\\n\\n` +\n  `🔗 网站地址：https://nssa.io\\n` +\n  `📅 发布时间：${new Date().toLocaleString('zh-CN')}\\n\\n` +\n  `🚀 网站已自动构建和部署到Cloudflare！`;\n\nreturn {\n  json: {\n    message,\n    totalCount,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "prepare-final-notification",
+      "name": "准备最终通知",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5640,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "message": "={{$json.message}}",
+        "options": {}
+      },
+      "id": "send-final-notification",
+      "name": "发送最终通知",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 1,
+      "position": [
+        5860,
+        140
+      ],
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "discord-webhook",
+          "name": "Discord Webhook"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "手动触发器": {
+      "main": [
+        [
+          {
+            "node": "获取子文件夹",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取子文件夹": {
+      "main": [
+        [
+          {
+            "node": "处理文件夹数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理文件夹数据": {
+      "main": [
+        [
+          {
+            "node": "扫描文件夹文档",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "扫描文件夹文档": {
+      "main": [
+        [
+          {
+            "node": "处理文档数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理文档数据": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理AI响应": {
+      "main": [
+        [
+          {
+            "node": "合并AI和内容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "统一提交GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "下载Markdown内容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "处理AI响应",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "下载Markdown内容": {
+      "main": [
+        [
+          {
+            "node": "合并AI和内容",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "合并AI和内容": {
+      "main": [
+        [
+          {
+            "node": "合并内容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "合并内容": {
+      "main": [
+        [
+          {
+            "node": "保存到本地",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "保存到本地": {
+      "main": [
+        [
+          {
+            "node": "Hugo构建",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hugo构建": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "提交到GitHub1": {
+      "main": [
+        []
+      ]
+    },
+    "统一提交GitHub": {
+      "main": [
+        [
+          {
+            "node": "部署到Cloudflare",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "部署到Cloudflare": {
+      "main": [
+        [
+          {
+            "node": "准备最终通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "准备最终通知": {
+      "main": [
+        [
+          {
+            "node": "发送最终通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "发送最终通知": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ea27eea5943ea997fc6bfde06792d1e57f992a703d9ffee127ac850cbaaf6839"
+  }
+}
