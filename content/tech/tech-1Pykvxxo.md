@@ -1,11 +1,11 @@
 ---
 title: "网络重构方案：QoS与FRR"
-subtitle: "提升网络质量与韧性的关键技术解析"
-description: "本文详细阐述在网络重构背景下，如何运用服务质量（QoS）与快速重路由（FRR）这两项核心技术，实现网络性能的显著提升与故障恢复的秒级响应。旨在为网络工程师和架构师提供实用的优化策略与实施路径，确保业务连续性和用户体验。"
-tags: ["网络重构", "QoS", "FRR", "网络优化", "高可用性"]
-readingTime: "约12分钟"
-date: "2025-08-04T14:55:48.350Z"
-lastmod: "2025-08-04T14:55:48.350Z"
+subtitle: "文档内容无法访问，无法生成"
+description: "无法访问提供的Google文档URL（https://docs.com/document/d/1OhWiej2Von2UADfSN1dnBr3ziQZKjCTEDyo1Pykvxxo/edit?usp=drivesdk）进行内容分析。因此，无法生成详细的文章描述、准确的副标题和阅读时间。标签已根据提供的标题和分类进行初步推断。"
+tags: ["技术专题", "网络重构", "QoS", "FRR"]
+readingTime: "无法确定（需分析文档内容）"
+date: "2025-08-05T00:50:17.478Z"
+lastmod: "2025-08-05T00:50:17.478Z"
 categories: ["技术专题"]
 ---
 
