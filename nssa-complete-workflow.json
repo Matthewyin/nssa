@@ -37,7 +37,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 解析AI Agent的响应\nconst response = $input.first();\nconst aiResponse = response.json.output;\nconst originalDoc = $('Loop Over Items').first().json;\n\nlet frontMatter = aiResponse;\n\n// 修正文件名生成\nconst title = frontMatter.title || originalDoc.name || 'untitled';\n\nconsole.log('原始标题:', title); // 调试用\n\n// 更简单的文件名生成逻辑\nconst cleanTitle = title\n  .replace(/\\n/g, '')           // 移除换行符\n  .replace(/：/g, '-')          // 替换中文冒号\n  .replace(/:/g, '-')           // 替换英文冒号\n  .replace(/、/g, '-')          // 替换中文顿号\n  .replace(/，/g, '-')          // 替换中文逗号\n  .replace(/,/g, '-')           // 替换英文逗号\n  .replace(/\\s+/g, '-')         // 替换空格为连字符\n  .replace(/[^\\u4e00-\\u9fa5\\w-]/g, '') // 只保留中文、字母、数字、连字符\n  .replace(/-+/g, '-')          // 合并多个连字符\n  .replace(/^-|-$/g, '')        // 移除首尾连字符\n  .substring(0, 50);            // 限制长度\n\n// 确保文件名不为空\nconst fileName =  $input.first().json.output.title  + '.md';\n\nconsole.log('清理后的标题:', cleanTitle); // 调试用\nconsole.log('最终文件名:', fileName); // 调试用\n\nconst now = new Date();\nconst completeFrontMatter = {\n  ...frontMatter,\n  date: now.toISOString(),\n  lastmod: now.toISOString(),\n  categories: [originalDoc.folderName]\n};\n\nreturn {\n  json: {\n    originalDoc,\n    frontMatter: completeFrontMatter,\n    fileName,\n    category: originalDoc.category\n  }\n};"
+        "jsCode": "// 解析AI Agent的响应\nconst response = $input.first();\nconst aiResponse = response.json.output;\nconst originalDoc = $('Loop Over Items').first().json;\n\nlet frontMatter = aiResponse;\n\n// 直接使用文档ID的后8位作为文件名\nconst docId = originalDoc.id;\nconst shortId = docId.slice(-8);\nconst fileName = $('判断文件状态').first().json.category + `-${shortId}.md`;\n\n// 构建完整的Front Matter\nconst now = new Date();\nconst completeFrontMatter = {\n  ...frontMatter,\n  date: now.toISOString(),\n  lastmod: now.toISOString(),\n  categories: [originalDoc.folderName]\n};\n\nreturn {\n  json: {\n    originalDoc,\n    frontMatter: completeFrontMatter,\n    fileName,\n    category: originalDoc.category\n  }\n};"
       },
       "id": "4dbebaf1-9dd9-48d6-b521-655e8534d64b",
       "name": "处理AI响应",
@@ -149,7 +149,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 合并AI生成的Front Matter和Markdown内容\nconst aiData = $input.first().json;\nconst markdownData = $input.last().json;\n\n// 获取Front Matter数据\nconst fm = aiData.frontMatter;\n\n// 手动构建简单的YAML Front Matter\nconst frontMatterYaml = `title: \"${fm.title || ''}\"\nsubtitle: \"${fm.subtitle || ''}\"\ndescription: \"${fm.description || ''}\"\ntags: [${fm.tags ? fm.tags.map(tag => `\"${tag}\"`).join(', ') : ''}]\nreadingTime: \"${fm.readingTime || ''}\"\ndate: \"${fm.date || ''}\"\nlastmod: \"${fm.lastmod || ''}\"\ncategories: [${fm.categories ? fm.categories.map(cat => `\"${cat}\"`).join(', ') : ''}]`;\n\n// 获取Markdown内容\nconst content = markdownData.data || markdownData.body || '';\n\n// 合并Front Matter和内容\nconst completeDocument = `---\n${frontMatterYaml}\n---\n\n${content}`;\n\n// 确定文件路径\nconst filePath = `/Users/matthewyin/Coding/nssa/content/${aiData.category}/`;\n\n// 确定文件名\nconst fileName = $input.first().json.originalDoc.name.trim() + \".md\"\n\n// 将文本内容转换为二进制数据\nconst binaryData = Buffer.from(completeDocument, 'utf8');\n\nreturn {\n  json: {\n    filePath,\n    fileName,\n    category: aiData.category,\n    title: aiData.frontMatter.title,\n    originalDoc: aiData.originalDoc,\n    success: true\n  },\n  binary: {\n    data: binaryData\n  }\n};"
+        "jsCode": "// 合并AI生成的Front Matter和Markdown内容\nconst aiData = $input.first().json;\nconst markdownData = $input.last().json;\n\n// 获取Front Matter数据\nconst fm = aiData.frontMatter;\n\n// 手动构建简单的YAML Front Matter\nconst frontMatterYaml = `title: \"${fm.title || ''}\"\nsubtitle: \"${fm.subtitle || ''}\"\ndescription: \"${fm.description || ''}\"\ntags: [${fm.tags ? fm.tags.map(tag => `\"${tag}\"`).join(', ') : ''}]\nreadingTime: \"${fm.readingTime || ''}\"\ndate: \"${fm.date || ''}\"\nlastmod: \"${fm.lastmod || ''}\"\ncategories: [${fm.categories ? fm.categories.map(cat => `\"${cat}\"`).join(', ') : ''}]`;\n\n// 获取Markdown内容\nconst content = markdownData.data || markdownData.body || '';\n\n// 合并Front Matter和内容\nconst completeDocument = `---\n${frontMatterYaml}\n---\n\n${content}`;\n\n// 确定文件路径\nconst filePath = `/Users/matthewyin/Coding/nssa/content/${aiData.category}/`;\n\n// 确定文件名\nconst fileName = $input.first().json.fileName\n\n// 将文本内容转换为二进制数据\nconst binaryData = Buffer.from(completeDocument, 'utf8');\n\nreturn {\n  json: {\n    filePath,\n    fileName,\n    category: aiData.category,\n    title: aiData.frontMatter.title,\n    originalDoc: aiData.originalDoc,\n    success: true\n  },\n  binary: {\n    data: binaryData\n  }\n};"
       },
       "id": "b334e347-e28d-4206-8e32-2f2fb64aacf7",
       "name": "合并内容",
@@ -167,8 +167,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        2480,
-        2900
+        2320,
+        3060
       ]
     },
     {
@@ -302,7 +302,7 @@
     {
       "parameters": {
         "authentication": "privateKey",
-        "command": "=pwd && test -f \"/Users/matthewyin/Coding/nssa/content/{{ $json.category }}/{{ $json.name.trim() }}.md\" && echo 'EXISTS' || echo 'NOT_EXISTS'",
+        "command": "=pwd && test -f \"/Users/matthewyin/Coding/nssa/content/{{ $json.category }}/{{ $json.category  +  `-` + $json.id.slice(-8) }}.md\" && echo 'EXISTS' || echo 'NOT_EXISTS'",
         "cwd": "=/"
       },
       "type": "n8n-nodes-base.ssh",
@@ -342,8 +342,8 @@
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
       "position": [
-        3900,
-        2240
+        3940,
+        2340
       ],
       "id": "b3908a6a-32f4-45f2-a72d-3753b4a515a0",
       "name": "更新至GitHub",
@@ -374,6 +374,38 @@
         "sshPrivateKey": {
           "id": "N6eECZU7wEyeaTWT",
           "name": "SSH Password account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1BuWi03gZ8GwndFjz2LdhQglGMjW80VMY"
+        },
+        "event": "folderUpdated"
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        2500,
+        2900
+      ],
+      "id": "c2335974-6038-4e96-9fcc-bf667cd7f092",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
         }
       }
     }
@@ -602,6 +634,11 @@
       ]
     },
     "更新至GitHub": {
+      "main": [
+        []
+      ]
+    },
+    "Google Drive Trigger": {
       "main": [
         []
       ]
