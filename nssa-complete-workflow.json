@@ -2,28 +2,6 @@
   "nodes": [
     {
       "parameters": {
-        "url": "={{$json.queryUrl}}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleDriveOAuth2Api",
-        "options": {}
-      },
-      "id": "d1537216-42c2-4733-b9b3-33936e6d67e5",
-      "name": "扫描文件夹文档",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [
-        3100,
-        2900
-      ],
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JUnWEOwe7cbBmf5L",
-          "name": "Google Drive account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "jsCode": "// 处理所有文档数据，合并文件夹信息\nconst allResults = $input.all();\nlet allDocuments = [];\n\n// 文件夹映射\nconst folderMap = {\n  '1xDNGIOGnsCsXs0KZCHwKOav96dQGith4': { name: '心理专题', category: 'psychology' },\n  '1uKz9AOYftgvExoLPbiMvlEtdjY63YSB6': { name: '职场专题', category: 'workplace' },\n  '125UBg7dLONmNg0ou9T4d8uVW_fsrJFH8': { name: '历史专题', category: 'history' },\n  '1frvBLCJkyDaBffF_JXR4Px8DoIcL-75_': { name: '技术专题', category: 'tech' }\n};\n\n// 遍历每个文件夹的结果\nallResults.forEach(result => {\n  if (result.json.files && result.json.files.length > 0) {\n    result.json.files.forEach(file => {\n      const folderId = file.parents[0];\n      const folderInfo = folderMap[folderId];\n      \n      if (folderInfo) {\n        allDocuments.push({\n          json: {\n            ...file,\n            folderName: folderInfo.name,\n            folderId: folderId,\n            category: folderInfo.category\n          }\n        });\n      }\n    });\n  }\n});\n\nconsole.log(`总共找到 ${allDocuments.length} 个文档`);\nreturn allDocuments;"
       },
       "id": "054c65d8-e45a-4ea8-8d1e-b0873648e337",
@@ -161,65 +139,6 @@
       ]
     },
     {
-      "parameters": {},
-      "id": "4bf5399f-785e-4071-be3a-6b8f6359ec87",
-      "name": "手动触发器",
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        2320,
-        3060
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "// 处理子文件夹数据，为每个文件夹创建查询\nconst response = $input.first().json;\n\nif (!response.files || response.files.length === 0) {\n  console.log('没有找到子文件夹');\n  return [];\n}\n\nconsole.log(`找到 ${response.files.length} 个子文件夹`);\n\n// 为每个文件夹创建独立的查询任务\nreturn response.files.map(folder => ({\n  json: {\n    folderId: folder.id,\n    folderName: folder.name,\n    queryUrl: `https://www.googleapis.com/drive/v3/files?q='${folder.id}' in parents and mimeType='application/vnd.google-apps.document'&fields=files(id,name,mimeType,modifiedTime,parents,webViewLink)`\n  }\n}));"
-      },
-      "id": "1e5901f0-a917-4e4f-8029-8dab8d118296",
-      "name": "处理文件夹数据2",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2900,
-        2900
-      ]
-    },
-    {
-      "parameters": {
-        "url": "https://www.googleapis.com/drive/v3/files",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleDriveOAuth2Api",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "q",
-              "value": "'1BuWi03gZ8GwndFjz2LdhQglGMjW80VMY' in parents and mimeType='application/vnd.google-apps.folder'"
-            },
-            {
-              "name": "fields",
-              "value": "files(id,name)"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "969562c0-641d-4141-a08a-89e539c209e5",
-      "name": "获取子文件夹1",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [
-        2680,
-        2900
-      ],
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JUnWEOwe7cbBmf5L",
-          "name": "Google Drive account"
-        }
-      }
-    },
-    {
       "parameters": {
         "authentication": "privateKey",
         "resource": "file",
@@ -232,7 +151,7 @@
       "typeVersion": 1,
       "position": [
         5820,
-        2620
+        3080
       ],
       "id": "196812a7-eb04-4d07-9b0f-9d33ef770cf3",
       "name": "保存合并后的文件到本地",
@@ -253,8 +172,8 @@
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
       "position": [
-        6160,
-        3040
+        4160,
+        2540
       ],
       "id": "78a0791f-0e5c-40e3-81fc-1fd35b1d238f",
       "name": "执行Hugo",
@@ -364,8 +283,8 @@
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
       "position": [
-        3940,
-        2540
+        4500,
+        2100
       ],
       "id": "979a94f5-982a-43b8-8541-32bf3005d1b9",
       "name": "部署到Cloudflare",
@@ -379,10 +298,80 @@
     },
     {
       "parameters": {
+        "url": "https://www.googleapis.com/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "'1BuWi03gZ8GwndFjz2LdhQglGMjW80VMY' in parents and mimeType='application/vnd.google-apps.folder'"
+            },
+            {
+              "name": "fields",
+              "value": "files(id,name)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "969562c0-641d-4141-a08a-89e539c209e5",
+      "name": "获取Google Dri nssa的子目录",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2680,
+        2900
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理子文件夹数据，为每个文件夹创建查询\nconst response = $input.first().json;\n\nif (!response.files || response.files.length === 0) {\n  console.log('没有找到子文件夹');\n  return [];\n}\n\nconsole.log(`找到 ${response.files.length} 个子文件夹`);\n\n// 为每个文件夹创建独立的查询任务\nreturn response.files.map(folder => ({\n  json: {\n    folderId: folder.id,\n    folderName: folder.name,\n    queryUrl: `https://www.googleapis.com/drive/v3/files?q='${folder.id}' in parents and mimeType='application/vnd.google-apps.document'&fields=files(id,name,mimeType,modifiedTime,parents,webViewLink)`\n  }\n}));"
+      },
+      "id": "1e5901f0-a917-4e4f-8029-8dab8d118296",
+      "name": "处理nssa目录",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2900,
+        2900
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$json.queryUrl}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {}
+      },
+      "id": "d1537216-42c2-4733-b9b3-33936e6d67e5",
+      "name": "扫描nssa目录文档",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3100,
+        2900
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
         "pollTimes": {
           "item": [
             {
-              "mode": "everyMinute"
+              "mode": "everyHour"
             }
           ]
         },
@@ -397,10 +386,10 @@
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        2500,
+        2460,
         2900
       ],
-      "id": "c2335974-6038-4e96-9fcc-bf667cd7f092",
+      "id": "35100732-9140-4e76-8ca9-11014c9aa91e",
       "name": "Google Drive Trigger",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -411,17 +400,6 @@
     }
   ],
   "connections": {
-    "扫描文件夹文档": {
-      "main": [
-        [
-          {
-            "node": "处理文档数据",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "处理文档数据": {
       "main": [
         [
@@ -453,7 +431,7 @@
             "index": 0
           },
           {
-            "node": "部署到Cloudflare",
+            "node": "执行Hugo",
             "type": "main",
             "index": 0
           }
@@ -533,44 +511,11 @@
         ]
       ]
     },
-    "手动触发器": {
-      "main": [
-        [
-          {
-            "node": "获取子文件夹1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "处理文件夹数据2": {
-      "main": [
-        [
-          {
-            "node": "扫描文件夹文档",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "获取子文件夹1": {
-      "main": [
-        [
-          {
-            "node": "处理文件夹数据2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "保存合并后的文件到本地": {
       "main": [
         [
           {
-            "node": "执行Hugo",
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -581,7 +526,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "部署到Cloudflare",
             "type": "main",
             "index": 0
           }
@@ -638,9 +583,48 @@
         []
       ]
     },
+    "获取Google Dri nssa的子目录": {
+      "main": [
+        [
+          {
+            "node": "处理nssa目录",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理nssa目录": {
+      "main": [
+        [
+          {
+            "node": "扫描nssa目录文档",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "扫描nssa目录文档": {
+      "main": [
+        [
+          {
+            "node": "处理文档数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Google Drive Trigger": {
       "main": [
-        []
+        [
+          {
+            "node": "获取Google Dri nssa的子目录",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
