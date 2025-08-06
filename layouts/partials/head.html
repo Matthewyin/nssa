@@ -37,25 +37,100 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="alternate icon" type="image/x-icon" href="/favicon.svg">
 
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
+<!-- Tailwind CSS - 生产环境优化版本 -->
 <script>
-    tailwind.config = {
-        darkMode: 'class',
-        theme: {
-            extend: {
-                fontFamily: {
-                    'sf': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
-                },
-                colors: {
-                    'apple-blue': '#007AFF',
-                    'apple-gray': '#8E8E93',
-                    'apple-light-gray': '#F2F2F7',
-                }
-            }
-        }
+    // 仅在开发环境使用 CDN 版本
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        document.write('<script src="https://cdn.tailwindcss.com"><\/script>');
+        document.write('<script>tailwind.config = { darkMode: "class", theme: { extend: { fontFamily: { "sf": ["-apple-system", "BlinkMacSystemFont", "SF Pro Display", "Helvetica Neue", "Arial", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "sans-serif"] }, colors: { "apple-blue": "#007AFF", "apple-gray": "#8E8E93", "apple-light-gray": "#F2F2F7" } } } }<\/script>');
     }
 </script>
+
+<!-- 生产环境使用内联 CSS -->
+<style>
+    /* Tailwind CSS 核心样式 - 生产环境版本 */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+    .max-w-6xl { max-width: 72rem; }
+    .max-w-4xl { max-width: 56rem; }
+    .max-w-2xl { max-width: 42rem; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+    .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .p-6 { padding: 1.5rem; }
+    .p-4 { padding: 1rem; }
+    .mt-8 { margin-top: 2rem; }
+    .mt-6 { margin-top: 1.5rem; }
+    .mt-4 { margin-top: 1rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+    .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+    .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+    .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+    .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .font-medium { font-weight: 500; }
+    .text-gray-600 { color: #4b5563; }
+    .text-gray-500 { color: #6b7280; }
+    .text-gray-400 { color: #9ca3af; }
+    .text-blue-600 { color: #2563eb; }
+    .bg-white { background-color: #ffffff; }
+    .bg-gray-50 { background-color: #f9fafb; }
+    .bg-gray-100 { background-color: #f3f4f6; }
+    .border { border-width: 1px; }
+    .border-gray-200 { border-color: #e5e7eb; }
+    .rounded-lg { border-radius: 0.5rem; }
+    .rounded-xl { border-radius: 0.75rem; }
+    .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+    .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+    .flex { display: flex; }
+    .grid { display: grid; }
+    .hidden { display: none; }
+    .block { display: block; }
+    .inline-block { display: inline-block; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-4 { gap: 1rem; }
+    .gap-6 { gap: 1.5rem; }
+    .w-full { width: 100%; }
+    .h-full { height: 100%; }
+    .min-h-screen { min-height: 100vh; }
+    .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+    .hover\\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+    .hover\\:text-blue-600:hover { color: #2563eb; }
+    .cursor-pointer { cursor: pointer; }
+
+    /* 响应式设计 */
+    @media (min-width: 768px) {
+        .md\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .md\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .md\\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .md\\:py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+    }
+
+    @media (min-width: 1024px) {
+        .lg\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .lg\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .lg\\:px-12 { padding-left: 3rem; padding-right: 3rem; }
+    }
+
+    /* 暗色模式 */
+    .dark .text-gray-600 { color: #9ca3af; }
+    .dark .text-gray-500 { color: #6b7280; }
+    .dark .bg-white { background-color: #1f2937; }
+    .dark .bg-gray-50 { background-color: #111827; }
+    .dark .border-gray-200 { border-color: #374151; }
+</style>
 
 <!-- Custom Styles -->
 <style>
