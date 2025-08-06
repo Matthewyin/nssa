@@ -58,7 +58,8 @@ async function handleEvent(event) {
     response.headers.set('X-Content-Type-Options', 'nosniff')
     response.headers.set('X-Frame-Options', 'DENY')
     response.headers.set('Referrer-Policy', 'unsafe-url')
-    response.headers.set('Feature-Policy', 'none')
+    // 移除错误的 Feature-Policy 头部
+    // response.headers.set('Feature-Policy', 'none')
 
     return response
 
