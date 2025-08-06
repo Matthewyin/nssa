@@ -1,4 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NSSA on NSSA - Not-So-Stubby Area</title><link>https://nssa.io/</link><description>Recent content in NSSA on NSSA - Not-So-Stubby Area</description><generator>Hugo</generator><language>zh-CN</language><atom:link href="https://nssa.io/index.xml" rel="self" type="application/rss+xml"/><item><title>代金券安全：黑产攻击与技术防范</title><link>https://nssa.io/tech/tech-afs2c2-0/</link><pubDate>Tue, 05 Aug 2025 01:21:05 +0000</pubDate><guid>https://nssa.io/tech/tech-afs2c2-0/</guid><description>&lt;h1 id="保障体育彩票跨平台数字代金券推广战略性反欺诈框架">&lt;strong>保障体育彩票跨平台数字代金券推广：战略性反欺诈框架&lt;/strong>&lt;/h1>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NSSA on NSSA - Not-So-Stubby Area</title><link>https://nssa.io/</link><description>Recent content in NSSA on NSSA - Not-So-Stubby Area</description><generator>Hugo</generator><language>zh-CN</language><atom:link href="https://nssa.io/index.xml" rel="self" type="application/rss+xml"/><item><title>踏上eBPF之路：初识eBPF</title><link>https://nssa.io/tech/tech-idy3ydfw/</link><pubDate>Wed, 06 Aug 2025 04:32:23 +0000</pubDate><guid>https://nssa.io/tech/tech-idy3ydfw/</guid><description>&lt;h2 id="踏上ebpf之路---系列一初探ebpf">&lt;strong>踏上eBPF之路 - 系列一：初探eBPF&lt;/strong>&lt;/h2>
+&lt;p>这份笔记详尽记录了我们从零开始，逐步揭开 eBPF 神秘面纱的全过程。它遵循我们的对话轨迹，从一个个问题出发，最终汇成一幅完整的技术图景，为后续的探索奠定坚实的基础。&lt;/p>
+&lt;h3 id="第一步初识ebpf一个安全的内核通行证">&lt;strong>第一步：初识eBPF，一个安全的“内核通行证”&lt;/strong>&lt;/h3>
+&lt;p>我们的旅程始于一个最基本的问题：“eBPF是什么？”&lt;/p>
+&lt;p>为了理解这个概念，我们引入了一个比喻：将 Linux 内核想象成一个安保森严的“大使馆”，它通常不允许外部人员随意进入或改变其内部规则。而 &lt;strong>eBPF&lt;/strong> 就好比一种**“特殊通行证”和一套“行为准则”**。它允许我们派遣一个经过严格审查的“临时顾问”（eBPF 程序）进入内核，去完成特定的任务，例如：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>观察 (Observability)&lt;/strong>：像侦探一样记录系统内部的活动，如网络流量、系统调用、文件访问等。&lt;/li>
+&lt;li>&lt;strong>行动 (Networking &amp;amp; Security)&lt;/strong>：像安保人员一样，根据预设规则拦截可疑的网络请求或进程行为。&lt;/li>
+&lt;/ul>
+&lt;p>最关键的是，这个过程是&lt;strong>绝对安全&lt;/strong>的。在“顾问”进入内核前，一个名为&lt;strong>验证器 (Verifier)&lt;/strong> 的安检系统会仔细检查其所有行动计划，确保它不会导致系统崩溃、不会陷入死循环、也不会访问未授权的内存。&lt;/p>
+&lt;p>&lt;strong>结论&lt;/strong>：eBPF 是一种让我们能够&lt;strong>安全、高效地在 Linux 内核中运行自定义代码&lt;/strong>的技术，它像即插即用的“内核插件”，功能强大且无风险。&lt;/p>
+&lt;h3 id="第二步探寻舞台理解linux内核这位ceo">&lt;strong>第二步：探寻舞台，理解Linux内核这位“CEO”&lt;/strong>&lt;/h3>
+&lt;p>要理解 eBPF 的强大，必须先了解它的运行舞台——Linux 内核。我们将其比作一个庞大公司的 &lt;strong>CEO&lt;/strong>。这位 CEO 不直接参与具体业务，但掌控和管理着公司的一切核心运作，包括：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>进程管理&lt;/strong>：决定哪个程序可以使用 CPU。&lt;/li>
+&lt;li>&lt;strong>内存管理&lt;/strong>：精确管理内存的分配和回收。&lt;/li>
+&lt;li>&lt;strong>设备驱动&lt;/strong>：作为“翻译官”，与硬件进行沟通。&lt;/li>
+&lt;li>&lt;strong>系统调用&lt;/strong>：作为“秘书处”，处理应用程序提交的资源请求。&lt;/li>
+&lt;/ul>
+&lt;p>为了保证 CEO 的安全，公司被划分为两个区域：&lt;strong>内核空间&lt;/strong>（CEO 办公室，最高权限）和&lt;strong>用户空间&lt;/strong>（员工工位，权限受限）。这种隔离机制是系统稳定的基石。&lt;/p>
+&lt;h3 id="第三步深挖细节揭秘内核的特权环">&lt;strong>第三步：深挖细节，揭秘内核的“特权环”&lt;/strong>&lt;/h3>
+&lt;p>我们进一步探究，发现内核态和用户态的划分背后，是 CPU 硬件层面的&lt;strong>保护环 (Protection Rings)&lt;/strong> 机制。&lt;/p>
+&lt;ul>
+&lt;li>现代 CPU 提供了 &lt;strong>Ring 0 到 Ring 3&lt;/strong> 四个权限级别，Ring 0 权限最高。&lt;/li>
+&lt;li>Linux 为了&lt;strong>简化设计和增强可移植性&lt;/strong>，只使用了 &lt;strong>Ring 0（内核态）&lt;/strong> 和 &lt;strong>Ring 3（用户态）&lt;/strong>。&lt;/li>
+&lt;li>这意味着，那些理论上可以放在中间层（Ring 1, Ring 2）的组件，比如&lt;strong>设备驱动程序&lt;/strong>，在 Linux 中被直接放在了 Ring 0 运行。&lt;/li>
+&lt;/ul>
+&lt;p>这个设计决策带来了极致的性能，但也引入了一个风险：一个有 Bug 的驱动程序可能会导致整个系统崩溃。这正是 eBPF 通过其安全验证机制想要解决的核心痛点之一。&lt;/p></description></item><item><title>代金券安全：黑产攻击与技术防范</title><link>https://nssa.io/tech/tech-afs2c2-0/</link><pubDate>Tue, 05 Aug 2025 01:21:05 +0000</pubDate><guid>https://nssa.io/tech/tech-afs2c2-0/</guid><description>&lt;h1 id="保障体育彩票跨平台数字代金券推广战略性反欺诈框架">&lt;strong>保障体育彩票跨平台数字代金券推广：战略性反欺诈框架&lt;/strong>&lt;/h1>
 &lt;p>执行摘要&lt;br>
 （本节将在报告完成最后撰写，旨在总结关键发现、威胁本质、合作代金券模式的核心特征，以及针对体育彩票运营独特背景的强有力反欺诈措施的战略性建议。）&lt;/p>
 &lt;hr>
