@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NSSA on NSSA - Not-So-Stubby Area</title><link>https://nssa.io/</link><description>Recent content in NSSA on NSSA - Not-So-Stubby Area</description><generator>Hugo</generator><language>zh-CN</language><atom:link href="https://nssa.io/index.xml" rel="self" type="application/rss+xml"/><item><title>路由协议深度解析：IGP与BGP的全面对比</title><link>https://nssa.io/tech/tech-ervw8grq/</link><pubDate>Sun, 17 Aug 2025 15:06:24 +0000</pubDate><guid>https://nssa.io/tech/tech-ervw8grq/</guid><description>&lt;h2 id="路由协议之对比igp与bgp协议深度解析">路由协议之对比：IGP与BGP协议深度解析&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NSSA on NSSA - Not-So-Stubby Area</title><link>https://nssa.io/</link><description>Recent content in NSSA on NSSA - Not-So-Stubby Area</description><generator>Hugo</generator><language>zh-CN</language><atom:link href="https://nssa.io/index.xml" rel="self" type="application/rss+xml"/><item><title>路由协议之对比：IGP与BGP协议深度解析</title><link>https://nssa.io/tech/tech-ervw8grq/</link><pubDate>Sun, 17 Aug 2025 15:23:43 +0000</pubDate><guid>https://nssa.io/tech/tech-ervw8grq/</guid><description>&lt;h2 id="路由协议之对比igp与bgp协议深度解析">&lt;strong>路由协议之对比：IGP与BGP协议深度解析&lt;/strong>&lt;/h2>
 &lt;p>本文档将首先分别详细阐述OSPF、IS-IS这两种主流的内部网关协议（IGP），以及BGP这一关键的外部网关协议（EGP）的核心工作机制，然后再通过一个清晰的表格对两种IGP进行全方位的深度对比。&lt;/p>
-&lt;h3 id="第一部分ospf核心机制详解-参考rfc-2328">&lt;strong>第一部分：OSPF核心机制详解 (参考RFC 2328)&lt;/strong>&lt;/h3>
+&lt;h3 id="第一部分ospf核心机制详解">&lt;strong>第一部分：OSPF核心机制详解&lt;/strong>&lt;/h3>
 &lt;h4 id="1-基本概念-basic-concepts">&lt;strong>1. 基本概念 (Basic Concepts)&lt;/strong>&lt;/h4>
 &lt;p>OSPF (Open Shortest Path First) 是一种为IP网络设计的、基于链路状态的内部网关协议（IGP）。其核心思想是，网络中的每台路由器都创建并维护一个描述整个网络拓扑的数据库（LSDB），并基于此数据库计算出无环的最短路径。&lt;/p>
 &lt;ul>
@@ -58,7 +58,10 @@
 &lt;li>&lt;strong>循环&lt;/strong>：重复第二步，直到“候选列表”为空。&lt;/li>
 &lt;li>&lt;strong>生成路由&lt;/strong>：SPT构建完成后，路由器就拥有了到达区域内所有节点的最短路径。据此生成路由表项（目的地址、出接口、下一跳、总开销）。&lt;/li>
 &lt;/ol>
-&lt;p>这个&lt;strong>分布式计算&lt;/strong>的过程（每台路由器都基于&lt;strong>完全相同的数据&lt;/strong>独立计算）确保了在稳定的网络中，所有路由器都能得出一致且无环的路由结果。&lt;/p></description></item><item><title>AI与彩票结合的未来展望</title><link>https://nssa.io/tech/tech-sbdrvuts/</link><pubDate>Sun, 17 Aug 2025 14:57:27 +0000</pubDate><guid>https://nssa.io/tech/tech-sbdrvuts/</guid><description>&lt;h1 id="人工智能与彩票业务与技术融合的战略分析报告">&lt;strong>人工智能与彩票：业务与技术融合的战略分析报告&lt;/strong>&lt;/h1>
+&lt;p>这个&lt;strong>分布式计算&lt;/strong>的过程（每台路由器都基于&lt;strong>完全相同的数据&lt;/strong>独立计算）确保了在稳定的网络中，所有路由器都能得出一致且无环的路由结果。&lt;/p>
+&lt;h3 id="第二部分is-is核心机制详解">&lt;strong>第二部分：IS-IS核心机制详解&lt;/strong>&lt;/h3>
+&lt;h4 id="1-基本概念-basic-concepts-1">&lt;strong>1. 基本概念 (Basic Concepts)&lt;/strong>&lt;/h4>
+&lt;p>IS-IS (Intermediate System to Intermediate System) 最初是为OSI的CLNS网络设计的链路状态协议，后来被扩展以支持IP路由（称为集成IS-IS）。它的设计哲学非常优雅，尤其以稳定性和扩展性著称。&lt;/p></description></item><item><title>AI与彩票结合的未来展望</title><link>https://nssa.io/tech/tech-sbdrvuts/</link><pubDate>Sun, 17 Aug 2025 14:57:27 +0000</pubDate><guid>https://nssa.io/tech/tech-sbdrvuts/</guid><description>&lt;h1 id="人工智能与彩票业务与技术融合的战略分析报告">&lt;strong>人工智能与彩票：业务与技术融合的战略分析报告&lt;/strong>&lt;/h1>
 &lt;h2 id="引言">&lt;strong>引言&lt;/strong>&lt;/h2>
 &lt;h3 id="战略要务">&lt;strong>战略要务&lt;/strong>&lt;/h3>
 &lt;p>彩票（以下简称“彩票”）作为国家特许发行的公益事业，肩负着筹集社会公益金和以对社会负责的方式运营的双重使命。当前，彩票正处在一个关键的战略转折点。一方面，它面临着如何吸引和接触伴随互联网成长的年轻一代彩民的时代挑战 1；另一方面，其业务模式又受到国家严格监管政策的深刻塑造，特别是长期以来对互联网销售渠道的禁令，这使得其必须依赖一个庞大而传统的线下实体销售网络 3。在这一独特的“机遇与枷锁并存”的背景下，寻求新的增长动力和运营范式，成为彩票可持续发展的核心议题。&lt;/p>
