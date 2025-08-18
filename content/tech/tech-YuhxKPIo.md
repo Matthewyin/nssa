@@ -26,40 +26,37 @@ GitHub Flow 是一个以“拉取请求”（Pull Request）为核心的、轻�
 
 下面是 GitHub Flow 的可视化流程图。它从远程的 main 分支开始，展示了如何在本地进行开发，并通过 GitHub 的拉取请求（Pull Request）机制与团队协作，最终将代码安全地合并回 main 分支。
 
-graph TD  
-    subgraph "远程仓库 (GitHub Remote)"  
-        A\[main 分支\]  
+```mermaid
+graph TD
+    subgraph "远程仓库 (GitHub Remote)"
+        A[main 分支]
     end
 
-    subgraph "本地仓库 (Your Local Machine)"  
-        B(本地 main 分支)  
-        C{功能/修复分支\<br\>feature/login}  
-        D\[1. 修改代码\<br\>2. git add .\<br\>3. git commit \-am "..."\]  
-        E\[git push origin feature/login\]  
+    subgraph "本地仓库 (Your Local Machine)"
+        B(本地 main 分支)
+        C{功能/修复分支<br>feature/login}
+        D[1. 修改代码<br>2. git add .<br>3. git commit -am &quot;...&quot;]
+        E[git push origin feature/login]
     end
 
-    subgraph "协作平台 (GitHub.com)"  
-        F(创建 Pull Request)  
-        G{代码审查 & 讨论\<br\>CI/CD 自动化测试}  
-        H\[合并 Pull Request\<br\>Merge to main\]  
+    subgraph "协作平台 (GitHub.com)"
+        F(创建 Pull Request)
+        G{代码审查 & 讨论<br>CI/CD 自动化测试}
+        H[合并 Pull Request<br>Merge to main]
     end
 
-    A \-- "git clone / git pull origin main\<br\>\<b\>获取/同步最新代码\</b\>" \--\> B;  
-    B \-- "git checkout \-b feature/login\<br\>\<b\>创建新分支开始工作\</b\>" \--\> C;  
-    C \-- "\<b\>本地开发循环\</b\>" \--\> D;  
-    D \-- "\<b\>频繁提交\</b\>" \--\> D;  
-    D \-- "git push\<br\>\<b\>将本地提交推送到远程\</b\>" \--\> E;  
-    E \-- "\<b\>在 GitHub 上发起合并请求\</b\>" \--\> F;  
-    F \-- "\<b\>邀请团队成员审查\</b\>" \--\> G;  
-    G \-- "\<b\>审查通过\</b\>" \--\> H;  
-    G \-- "\<b\>需要修改\</b\>" \--\> D;  
-    H \-- "\<b\>代码合并到远程 main 分支\</b\>" \--\> A;  
-    B \-- "git pull origin main\<br\>\<b\>在合并后，同步本地 main 分支\</b\>" \--\> A;
-
-    %% Styling  
-    style A fill:\#2da44e,stroke:\#fff,stroke-width:2px,color:\#fff  
-    style H fill:\#8957e5,stroke:\#fff,stroke-width:2px,color:\#fff  
-    style F fill:\#0969da,stroke:\#fff,stroke-width:2px,color:\#fff
+    A -- "git clone / git pull origin main<br><b>获取/同步最新代码</b>" --> B;
+    B -- "git checkout -b feature/login<br><b>创建新分支开始工作</b>" --> C;
+    C -- "<b>本地开发循环</b>" --> D;
+    D -- "<b>频繁提交</b>" --> D;
+    D -- "git push<br><b>将本地提交推送到远程</b>" --> E;
+    E -- "<b>在 GitHub 上发起合并请求</b>" --> F;
+    F -- "<b>邀请团队成员审查</b>" --> G;
+    G -- "<b>审查通过</b>" --> H;
+    G -- "<b>需要修改</b>" --> D;
+    H -- "<b>代码合并到远程 main 分支</b>" --> A;
+    B -- "git pull origin main<br><b>在合并后，同步本地 main 分支</b>" --> A;
+```
 
 ### **详细步骤与核心命令**
 
