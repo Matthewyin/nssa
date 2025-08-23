@@ -17,3 +17,8 @@ env:
     value: production
   - variable: NPM_CONFIG_PRODUCTION
     value: "false"
+  - variable: PORT
+    value: "8080"
+
+# 启动命令
+startCommand: npm start
