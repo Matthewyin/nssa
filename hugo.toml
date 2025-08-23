@@ -1,8 +1,27 @@
 # NSSA Hugo Configuration
 baseURL = 'https://nssa.io'
-languageCode = 'zh-CN'
-title = 'NSSA - Not-So-Stubby Area'
 defaultContentLanguage = 'zh'
+defaultContentLanguageInSubdir = false
+
+# Languages Configuration
+[languages]
+  [languages.zh]
+    languageCode = 'zh-CN'
+    languageName = '中文'
+    title = 'NSSA - Not-So-Stubby Area'
+    weight = 1
+    [languages.zh.params]
+      description = "NSSA 平台 - 历史研究与分析的交互式探索"
+      keywords = ["历史研究", "战略分析", "交互式学习", "学术平台"]
+
+  [languages.en]
+    languageCode = 'en-US'
+    languageName = 'English'
+    title = 'NSSA - Not-So-Stubby Area'
+    weight = 2
+    [languages.en.params]
+      description = "NSSA Platform - Interactive Exploration of Historical Research and Analysis"
+      keywords = ["Historical Research", "Strategic Analysis", "Interactive Learning", "Academic Platform"]
 
 # Build Configuration
 buildDrafts = false
@@ -33,7 +52,7 @@ enableEmoji = true
 
 # Menu Configuration
 [menu]
-
+  # Chinese Menu
   [[menu.main]]
     name = "技术专题"
     url = "/tech/"
@@ -55,11 +74,31 @@ enableEmoji = true
     url = "/about/"
     weight = 60
 
+# English Menu
+[[languages.en.menu.main]]
+  name = "Technology"
+  url = "/en/tech/"
+  weight = 20
+[[languages.en.menu.main]]
+  name = "History"
+  url = "/en/history/"
+  weight = 30
+[[languages.en.menu.main]]
+  name = "Psychology"
+  url = "/en/psychology/"
+  weight = 40
+[[languages.en.menu.main]]
+  name = "Workplace"
+  url = "/en/workplace/"
+  weight = 50
+[[languages.en.menu.main]]
+  name = "About"
+  url = "/en/about/"
+  weight = 60
+
 # Params Configuration
 [params]
-  description = "NSSA 平台 - 历史研究与分析的交互式探索"
   author = "NSSA Team"
-  keywords = ["历史研究", "战略分析", "交互式学习", "学术平台"]
 
   # Apple Style Design
   applestyle = true
