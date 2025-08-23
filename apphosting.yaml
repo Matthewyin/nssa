@@ -15,3 +15,5 @@ env:
     value: production
   - variable: HUGO_ENV
     value: production
+  - variable: NPM_CONFIG_PRODUCTION
+    value: "false"
