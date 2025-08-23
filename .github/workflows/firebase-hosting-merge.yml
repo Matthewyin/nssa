@@ -28,6 +28,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_NSSA_GAME_MATTHEW }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_N8N_PROJECT_460516 }}'
           channelId: live
-          projectId: nssa-game-matthew
+          projectId: n8n-project-460516
