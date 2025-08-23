@@ -3,9 +3,35 @@
 ## 🎯 当前配置状态
 
 - **项目ID**: `nssa-game-matthew`
-- **主站点**: `nssa-platform` 
-- **网站URL**: https://nssa-platform.web.app
+- **默认站点**: `nssa-game-matthew` (旧)
+- **新站点**: `nssa` ✨
+- **网站URL**: https://nssa.web.app
 - **自定义域名**: 待配置 nssa.io
+
+## 🔄 站点名称更改
+
+### 为什么要更改站点名称？
+- 默认站点名称 `nssa-game-matthew` 来自项目ID
+- 更简洁的名称 `nssa` 更专业、更易记
+- URL从 `nssa-game-matthew.web.app` 变为 `nssa.web.app`
+
+### 更改方法
+```bash
+# 1. 创建新站点
+firebase hosting:sites:create nssa
+
+# 2. 更新 firebase.json 配置
+# 添加 "site": "nssa" 到 hosting 配置中
+
+# 3. 部署到新站点
+firebase deploy --only hosting
+
+# 4. 验证新站点
+curl -I https://nssa.web.app
+
+# 5. 删除旧站点（可选）
+firebase hosting:sites:delete nssa-game-matthew
+```
 
 ## 📋 Firebase Hosting 核心命令
 
