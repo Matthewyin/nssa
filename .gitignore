@@ -101,5 +101,8 @@ public/
 resources/
 .hugo_build.lock
 
+# Firebase
+firebase-debug.log
+.firebase/
 
 .taskmaster/
