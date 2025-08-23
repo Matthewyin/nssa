@@ -30,11 +30,15 @@
     "history",
     "research",
     "education",
-    "cloudflare-workers"
+    "firebase-hosting"
   ],
   "author": "NSSA Team",
   "license": "MIT",
   "type": "commonjs",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
   "bugs": {
     "url": "https://github.com/Matthewyin/nssa/issues"
   },
