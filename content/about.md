@@ -5,6 +5,6 @@ type: "page"
 layout: "single"
 ---
 
-NSSA (Not-So-Stubby Area) 是一个专注于历史研究与分析的交互式探索平台。
+NSSA (Network System Security Application) 深度解析网络技术、职场心理与历史。本站旨在探索科技、组织与人性的复杂系统
 
 **联系邮箱**: alkaidy2025@gmail.com
