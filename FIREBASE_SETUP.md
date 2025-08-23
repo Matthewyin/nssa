@@ -24,9 +24,10 @@ npm ci && npm run build
 public
 ```
 
-**环境变量（可选）：**
+**环境变量（重要）：**
 - `NODE_ENV=production`
 - `HUGO_ENV=production`
+- `NPM_CONFIG_PRODUCTION=false` （确保安装devDependencies）
 
 ### 4. 自动部署
 配置完成后，Firebase App Hosting将：
