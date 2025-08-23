@@ -1,0 +1,45 @@
+# Firebase App Hosting Configuration
+runConfig:
+  # 运行时配置
+  cpu: 1
+  memoryMiB: 512
+  maxInstances: 10
+  minInstances: 0
+  concurrency: 100
+
+# 环境变量
+env:
+  - variable: NODE_ENV
+    value: production
+  - variable: HUGO_ENV
+    value: production
+
+# 构建配置
+build:
+  commands:
+    - npm ci
+    - hugo --minify --gc --environment production
+  outputDirectory: public
+
+# 静态文件服务配置
+staticAssets:
+  - source: public
+    glob: "**"
+    headers:
+      - key: "Cache-Control"
+        value: "public, max-age=3600"
+      - key: "X-Content-Type-Options"
+        value: "nosniff"
+      - key: "X-Frame-Options"
+        value: "DENY"
+      - key: "X-XSS-Protection"
+        value: "1; mode=block"
+
+# 路由配置
+rewrites:
+  - source: "**"
+    destination: "/index.html"
+
+# 清理URL和尾部斜杠
+cleanUrls: true
+trailingSlash: false
