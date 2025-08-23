@@ -27,7 +27,7 @@ npm ci
 
 # 构建 Hugo 网站
 echo "🏗️ 构建 Hugo 网站..."
-hugo --minify --gc --environment production
+npm run build
 
 # 检查构建结果
 if [ ! -d "public" ]; then
@@ -50,7 +50,7 @@ firebase deploy --only apphosting:nssa --project nssa-game-matthew || {
     echo "2. 选择 'nssa' 后端"
     echo "3. 连接到 GitHub 仓库 Matthewyin/nssa"
     echo "4. 配置构建设置："
-    echo "   - 构建命令: npm ci && hugo --minify --gc --environment production"
+    echo "   - 构建命令: npm ci && npm run build"
     echo "   - 输出目录: public"
     echo "5. 触发部署"
     exit 1
