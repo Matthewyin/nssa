@@ -1,0 +1,180 @@
+# English Translation File
+
+# Common Terms
+[home]
+other = "Home"
+
+[about]
+other = "About"
+
+[contact]
+other = "Contact"
+
+[search]
+other = "Search"
+
+[language]
+other = "Language"
+
+[read_more]
+other = "Read More"
+
+[back_to_top]
+other = "Back to Top"
+
+[share]
+other = "Share"
+
+[tags]
+other = "Tags"
+
+[categories]
+other = "Categories"
+
+[date]
+other = "Date"
+
+[author]
+other = "Author"
+
+[views]
+other = "Views"
+
+[likes]
+other = "Likes"
+
+# Topic Related
+[tech_topics]
+other = "Technology Topics"
+
+[history_topics]
+other = "History Topics"
+
+[psychology_topics]
+other = "Psychology Topics"
+
+[workplace_topics]
+other = "Workplace Topics"
+
+# Page Titles
+[tech_title]
+other = "Technology Topics - Exploring Cutting-edge Technology"
+
+[history_title]
+other = "History Topics - Reviewing Historical Footprints"
+
+[psychology_title]
+other = "Psychology Topics - Insights into Human Nature"
+
+[workplace_title]
+other = "Workplace Topics - Career Development Guide"
+
+# Page Descriptions
+[tech_description]
+other = "Deep dive into cutting-edge technology, programming practices, and tech trends, providing professional insights for tech enthusiasts."
+
+[history_description]
+other = "Review important historical events, analyze historical development patterns, and draw wisdom from history."
+
+[psychology_description]
+other = "Explore psychological principles, understand human behavior patterns, and enhance self-awareness and interpersonal relationships."
+
+[workplace_description]
+other = "Share workplace experience, provide career development advice, and empower personal career growth."
+
+# Navigation Related
+[nav_toggle]
+other = "Toggle Navigation"
+
+[language_switch]
+other = "Switch Language"
+
+# Error Pages
+[page_not_found]
+other = "Page Not Found"
+
+[error_404_message]
+other = "Sorry, the page you are looking for does not exist."
+
+[back_to_home]
+other = "Back to Home"
+
+# Article Related
+[article_list]
+other = "Article List"
+
+[latest_articles]
+other = "Latest Articles"
+
+[related_articles]
+other = "Related Articles"
+
+[no_articles]
+other = "No Articles"
+
+# Time Format
+[time_format]
+other = "January 02, 2006"
+
+[time_format_short]
+other = "01-02"
+
+# Social Media
+[follow_us]
+other = "Follow Us"
+
+[github]
+other = "GitHub"
+
+# Footer
+[copyright]
+other = "All Rights Reserved"
+
+[powered_by]
+other = "Powered by Hugo"
+
+# Search Related
+[search_placeholder]
+other = "Search articles..."
+
+[search_results]
+other = "Search Results"
+
+[no_search_results]
+other = "No results found"
+
+# Loading States
+[loading]
+other = "Loading..."
+
+[load_more]
+other = "Load More"
+
+# Form Related
+[submit]
+other = "Submit"
+
+[cancel]
+other = "Cancel"
+
+[save]
+other = "Save"
+
+[edit]
+other = "Edit"
+
+[delete]
+other = "Delete"
+
+[confirm]
+other = "Confirm"
+
+# Statistics Related
+[total_views]
+other = "Total Views"
+
+[total_likes]
+other = "Total Likes"
+
+[article_count]
+other = "Article Count"

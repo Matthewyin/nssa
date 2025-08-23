@@ -173,6 +173,30 @@
         }
     }
 
+    // 语言切换功能
+    function initLanguageToggle() {
+        const languageToggle = document.getElementById('language-toggle');
+        const languageMenu = document.getElementById('language-menu');
+
+        if (languageToggle && languageMenu) {
+            // 点击语言按钮显示/隐藏菜单
+            languageToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageMenu.classList.toggle('hidden');
+            });
+
+            // 点击页面其他地方隐藏菜单
+            document.addEventListener('click', function() {
+                languageMenu.classList.add('hidden');
+            });
+
+            // 阻止菜单内部点击事件冒泡
+            languageMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+    }
+
     // 平滑滚动
     function initSmoothScroll() {
         const links = document.querySelectorAll('a[href^="#"]');
@@ -194,6 +218,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         initThemeToggle();
         initSearch();
+        initLanguageToggle();
         initSmoothScroll();
     });
 </script>
