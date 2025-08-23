@@ -19,6 +19,11 @@
 npm ci && npm run build
 ```
 
+**启动命令：**
+```bash
+npm start
+```
+
 **输出目录：**
 ```
 public
