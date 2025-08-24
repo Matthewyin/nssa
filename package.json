@@ -9,7 +9,7 @@
     "dev": "npm run css:build && hugo server --buildDrafts --bind 0.0.0.0",
     "build": "npm run css:build && npx hugo --minify --gc",
     "preview": "npm run css:build && npx hugo server --environment production",
-    "clean": "rm -rf public resources static/css/main.css",
+    "clean": "rm -rf public resources",
     "deploy": "npm run build && firebase deploy --only hosting",
     "deploy:integrated": "node scripts/deploy-integrated.js",
     "deploy:integrated:staging": "node scripts/deploy-integrated.js staging",
