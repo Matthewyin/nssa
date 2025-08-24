@@ -101,9 +101,6 @@ public/
 resources/
 .hugo_build.lock
 
-# Tailwind CSS 生成的文件
-static/css/main.css
-
 # Firebase
 firebase-debug.log
 .firebase/
