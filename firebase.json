@@ -14,8 +14,25 @@
     ],
     "headers": [
       {
-        "source": "**/*.@(js|css)",
+        "source": "**/*.css",
         "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/css"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.js",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/javascript"
+          },
           {
             "key": "Cache-Control",
             "value": "max-age=31536000"
