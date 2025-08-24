@@ -7,6 +7,10 @@ class ArticleStats {
     constructor() {
         this.baseUrl = window.location.origin;
         this.clientId = this.getOrCreateClientId();
+        // 配置选项：是否启用API调用（当前为静态网站，禁用API）
+        this.apiEnabled = false;
+        // 本地存储键名
+        this.localStoragePrefix = 'nssa_stats_';
     }
 
     /**
@@ -33,9 +37,18 @@ class ArticleStats {
      * 增加当前文章的PV数
      */
     async incrementViews(articlePath = null) {
+        const path = articlePath || this.getArticlePath();
+
+        if (!this.apiEnabled) {
+            // API禁用时，使用本地存储
+            const key = this.localStoragePrefix + 'views_' + path;
+            const currentViews = parseInt(localStorage.getItem(key) || '0');
+            const newViews = currentViews + 1;
+            localStorage.setItem(key, newViews.toString());
+            return { views: newViews };
+        }
+
         try {
-            const path = articlePath || this.getArticlePath();
-            
             const response = await fetch(`${this.baseUrl}/api/views/increment`, {
                 method: 'POST',
                 headers: {
@@ -63,11 +76,17 @@ class ArticleStats {
      * 获取单篇文章的PV数
      */
     async getViews(articlePath = null) {
+        const path = articlePath || this.getArticlePath();
+
+        if (!this.apiEnabled) {
+            // API禁用时，从本地存储获取数据
+            const key = this.localStoragePrefix + 'views_' + path;
+            return parseInt(localStorage.getItem(key) || '0');
+        }
+
         try {
-            const path = articlePath || this.getArticlePath();
-            
             const response = await fetch(`${this.baseUrl}/api/views/get?path=${encodeURIComponent(path)}`);
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -84,6 +103,16 @@ class ArticleStats {
      * 批量获取多篇文章的PV数
      */
     async getBatchViews(articlePaths) {
+        if (!this.apiEnabled) {
+            // API禁用时，从本地存储获取数据
+            const views = {};
+            articlePaths.forEach(path => {
+                const key = this.localStoragePrefix + 'views_' + path;
+                views[path] = parseInt(localStorage.getItem(key) || '0');
+            });
+            return views;
+        }
+
         try {
             const pathsParam = articlePaths.join(',');
             const response = await fetch(`${this.baseUrl}/api/views/batch?paths=${encodeURIComponent(pathsParam)}`);
@@ -104,9 +133,19 @@ class ArticleStats {
      * 获取文章点赞数和用户点赞状态
      */
     async getLikes(articlePath = null) {
-        try {
-            const path = articlePath || this.getArticlePath();
+        const path = articlePath || this.getArticlePath();
 
+        if (!this.apiEnabled) {
+            // API禁用时，从本地存储获取数据
+            const likesKey = this.localStoragePrefix + 'likes_' + path;
+            const userLikedKey = this.localStoragePrefix + 'userliked_' + path + '_' + this.clientId;
+            return {
+                likes: parseInt(localStorage.getItem(likesKey) || '0'),
+                userLiked: localStorage.getItem(userLikedKey) === 'true'
+            };
+        }
+
+        try {
             const response = await fetch(`${this.baseUrl}/api/likes/get?path=${encodeURIComponent(path)}&clientId=${encodeURIComponent(this.clientId)}`);
 
             if (!response.ok) {
@@ -125,9 +164,30 @@ class ArticleStats {
      * 切换文章点赞状态
      */
     async toggleLike(articlePath = null) {
-        try {
-            const path = articlePath || this.getArticlePath();
+        const path = articlePath || this.getArticlePath();
 
+        if (!this.apiEnabled) {
+            // API禁用时，使用本地存储
+            const likesKey = this.localStoragePrefix + 'likes_' + path;
+            const userLikedKey = this.localStoragePrefix + 'userliked_' + path + '_' + this.clientId;
+
+            const currentLikes = parseInt(localStorage.getItem(likesKey) || '0');
+            const userLiked = localStorage.getItem(userLikedKey) === 'true';
+
+            if (userLiked) {
+                // 取消点赞
+                localStorage.setItem(likesKey, Math.max(0, currentLikes - 1).toString());
+                localStorage.setItem(userLikedKey, 'false');
+                return { likes: Math.max(0, currentLikes - 1), userLiked: false };
+            } else {
+                // 点赞
+                localStorage.setItem(likesKey, (currentLikes + 1).toString());
+                localStorage.setItem(userLikedKey, 'true');
+                return { likes: currentLikes + 1, userLiked: true };
+            }
+        }
+
+        try {
             const response = await fetch(`${this.baseUrl}/api/likes/toggle`, {
                 method: 'POST',
                 headers: {
@@ -155,6 +215,16 @@ class ArticleStats {
      * 批量获取多篇文章的点赞数
      */
     async getBatchLikes(articlePaths) {
+        if (!this.apiEnabled) {
+            // API禁用时，从本地存储获取数据
+            const likes = {};
+            articlePaths.forEach(path => {
+                const key = this.localStoragePrefix + 'likes_' + path;
+                likes[path] = parseInt(localStorage.getItem(key) || '0');
+            });
+            return likes;
+        }
+
         try {
             const pathsParam = articlePaths.join(',');
             const response = await fetch(`${this.baseUrl}/api/likes/batch?paths=${encodeURIComponent(pathsParam)}&clientId=${encodeURIComponent(this.clientId)}`);
