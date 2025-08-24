@@ -1,5 +1,5 @@
 # NSSA Hugo Configuration
-baseURL = 'https://nssa.io'
+baseURL = 'https://n8n-project-460516.web.app'
 defaultContentLanguage = 'zh'
 defaultContentLanguageInSubdir = false
 
