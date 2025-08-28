@@ -8,7 +8,7 @@ defaultContentLanguageInSubdir = false
   [languages.zh]
     languageCode = 'zh-CN'
     languageName = '中文'
-    title = 'NSSA - Not-So-Stubby Area'
+    title = 'NSSA - Network-System-Security-Application'
     weight = 1
     [languages.zh.params]
       description = "NSSA 平台 - 历史研究与分析的交互式探索"
@@ -17,7 +17,7 @@ defaultContentLanguageInSubdir = false
   [languages.en]
     languageCode = 'en-US'
     languageName = 'English'
-    title = 'NSSA - Not-So-Stubby Area'
+    title = 'NSSA - Network-System-Security-Application'
     weight = 2
     [languages.en.params]
       description = "NSSA Platform - Interactive Exploration of Historical Research and Analysis"
