@@ -15,5 +15,5 @@ pattern = "nssa.io/*"
 zone_name = "nssa.io"
 
 [[routes]]
-pattern = "www.nssa.io/*"
+pattern = "nssa.io/*"
 zone_name = "nssa.io"
