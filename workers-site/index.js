@@ -32,28 +32,28 @@ async function handleRequest(request) {
 
 async function handleStaticSite(request) {
   const url = new URL(request.url)
-  
+
   try {
     // 自定义资源映射
     const options = {
       mapRequestToAsset: req => {
         const url = new URL(req.url)
-        
+
         // 处理根路径
         if (url.pathname === '/') {
           return mapRequestToAsset(new Request(`${url.origin}/index.html`, req))
         }
-        
+
         // 处理 Hugo 的 clean URLs
         if (!url.pathname.includes('.') && !url.pathname.endsWith('/')) {
           return mapRequestToAsset(new Request(`${url.origin}${url.pathname}/index.html`, req))
         }
-        
+
         return mapRequestToAsset(req)
       },
     }
 
-    const page = await getAssetFromKV(request, options)
+    const page = await getAssetFromKV({ request }, options)
     
     // 添加安全头
     const response = new Response(page.body, page)
@@ -76,7 +76,7 @@ async function handleStaticSite(request) {
   } catch (e) {
     // 如果资源不存在，返回 404 页面
     try {
-      let notFoundResponse = await getAssetFromKV(request, {
+      let notFoundResponse = await getAssetFromKV({ request }, {
         mapRequestToAsset: req => new Request(`${new URL(req.url).origin}/404.html`, req),
       })
       
