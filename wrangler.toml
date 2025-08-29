@@ -10,10 +10,11 @@ bucket = "./public"
 ENVIRONMENT = "production"
 
 # 自定义域名配置（生产环境）
-[[routes]]
-pattern = "nssa.io/*"
+[[domains]]
 zone_name = "nssa.io"
 
 [[routes]]
+pattern = "nssa.io/*"
+
+[[routes]]
 pattern = "www.nssa.io/*"
-zone_name = "nssa.io"
