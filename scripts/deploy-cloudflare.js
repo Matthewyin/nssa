@@ -9,6 +9,9 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+// 加载环境变量
+require('dotenv').config();
+
 // 颜色输出
 const colors = {
   reset: '\x1b[0m',
@@ -90,7 +93,7 @@ function buildSite() {
   }
   
   // 构建 Hugo 网站
-  if (!execCommand('npx hugo --minify --gc', '构建 Hugo 网站')) {
+  if (!execCommand('npx hugo --minify --gc --quiet', '构建 Hugo 网站')) {
     return false;
   }
   
