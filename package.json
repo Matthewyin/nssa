@@ -10,7 +10,9 @@
     "build": "npm run css:build && npx hugo --minify --gc",
     "preview": "npm run css:build && npx hugo server --environment production",
     "clean": "rm -rf public resources",
-    "deploy": "npm run build && firebase deploy --only hosting",
+    "deploy": "node scripts/deploy-cloudflare.js",
+    "deploy:staging": "node scripts/deploy-cloudflare.js --staging",
+    "deploy:dry-run": "node scripts/deploy-cloudflare.js --dry-run",
     "deploy:integrated": "node scripts/deploy-integrated.js",
     "deploy:integrated:staging": "node scripts/deploy-integrated.js staging",
     "deploy:integrated:skip-build": "node scripts/deploy-integrated.js --skip-build",
@@ -32,7 +34,8 @@
     "history",
     "research",
     "education",
-    "firebase-hosting"
+    "cloudflare-workers",
+    "edge-computing"
   ],
   "author": "NSSA Team",
   "license": "MIT",
@@ -46,6 +49,7 @@
   },
   "homepage": "https://github.com/Matthewyin/nssa#readme",
   "dependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.4",
     "hugo-bin": "^0.145.2"
   },
   "devDependencies": {

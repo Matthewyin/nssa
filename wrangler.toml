@@ -1,0 +1,29 @@
+name = "nssa-site"
+main = "workers-site/index.js"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./public"
+
+# 环境变量配置
+[vars]
+ENVIRONMENT = "production"
+
+# 自定义域名配置（生产环境）
+[[routes]]
+pattern = "nssa.io/*"
+zone_name = "nssa.io"
+
+[[routes]]
+pattern = "www.nssa.io/*"
+zone_name = "nssa.io"
+
+[env.staging]
+name = "nssa-site-staging"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+
+[[env.staging.routes]]
+pattern = "staging.nssa.io/*"
+zone_name = "nssa.io"
