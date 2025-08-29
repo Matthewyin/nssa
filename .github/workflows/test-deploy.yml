@@ -1,13 +1,12 @@
-name: Deploy to Cloudflare Workers
+name: Test Cloudflare Deployment
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:  # 手动触发
 
 jobs:
-  deploy:
+  test-deploy:
     runs-on: ubuntu-latest
-    name: Deploy NSSA to Cloudflare Workers
+    name: Test Cloudflare Workers Deployment
 
     steps:
     - name: Checkout
@@ -31,11 +30,21 @@ jobs:
       run: |
         ls -la public/
         echo "Build completed successfully"
+        echo "Checking key files:"
+        ls -la public/index.html
+        ls -la workers-site/index.js
+        ls -la wrangler.toml
+
+    - name: Test wrangler dry run
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        command: deploy --dry-run
 
     - name: Deploy to Cloudflare Workers
       uses: cloudflare/wrangler-action@v3
       with:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-
+        command: deploy
