@@ -6,12 +6,12 @@
 
 **一个专注于技术、历史、心理学和职场发展的知识分享平台**
 
-[![Deploy Status](https://github.com/Matthewyin/nssa/workflows/Deploy%20to%20Firebase%20Hosting%20on%20merge/badge.svg)](https://github.com/Matthewyin/nssa/actions)
+[![Deploy Status](https://github.com/Matthewyin/nssa/workflows/Deploy%20to%20Cloudflare%20Workers/badge.svg)](https://github.com/Matthewyin/nssa/actions)
 [![Hugo](https://img.shields.io/badge/Hugo-0.148+-blue.svg)](https://gohugo.io)
-[![Firebase](https://img.shields.io/badge/Firebase-Hosting-orange.svg)](https://firebase.google.com)
+[![Cloudflare](https://img.shields.io/badge/Cloudflare-Workers-orange.svg)](https://workers.cloudflare.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-[🌐 访问网站](https://n8n-project-460516.web.app) | [📚 文档](https://github.com/Matthewyin/nssa/wiki) | [🐛 报告问题](https://github.com/Matthewyin/nssa/issues)
+[🌐 访问网站](https://nssa.io) | [📚 文档](https://github.com/Matthewyin/nssa/wiki) | [🐛 报告问题](https://github.com/Matthewyin/nssa/issues)
 
 </div>
 
@@ -23,7 +23,7 @@
 - 📱 **响应式**: 完美适配桌面、平板和移动设备
 - 🔍 **智能搜索**: 内置全文搜索功能
 - 🌙 **深色模式**: 支持明暗主题切换
-- ⚡ **自动部署**: GitHub推送自动部署到Firebase
+- ⚡ **自动部署**: GitHub推送自动部署到Cloudflare Workers
 - 📊 **SEO优化**: 完整的SEO和性能优化
 
 ## 🏗️ 技术架构
@@ -32,7 +32,7 @@
 - **静态网站生成**: [Hugo](https://gohugo.io) (Extended)
 - **前端技术**: HTML5, CSS3, Vanilla JavaScript
 - **样式框架**: Tailwind CSS
-- **部署平台**: Firebase Hosting
+- **部署平台**: Cloudflare Workers
 - **CI/CD**: GitHub Actions
 - **内容管理**: Markdown + Front Matter
 
