@@ -103,22 +103,56 @@ git push origin feature/new-content
 
 ### 常见问题
 
-1. **API Token 权限不足**
-   - 确保 Token 有正确的权限
+1. **wrangler-action 失败**
+   ```
+   Error: The process '/opt/hostedtoolcache/node/20.19.4/x64/bin/npx' failed with exit code 1
+   ```
+   **解决方案**：
+   - 检查 API Token 权限
+   - 验证 wrangler.toml 配置
+   - 确保 Secrets 正确设置
+
+2. **API Token 权限不足**
+   - 确保 Token 有以下权限：
+     - `Account:Cloudflare Workers:Edit`
+     - `Zone:Zone:Read`
+     - `Zone:DNS:Edit`
    - 重新生成 Token 并更新 Secret
 
-2. **构建失败**
+3. **构建失败**
    - 检查 Hugo 配置文件
    - 确保所有依赖都在 package.json 中
+   - 验证 public/ 目录生成
 
-3. **部署失败**
+4. **部署失败**
    - 检查 wrangler.toml 配置
    - 确保域名配置正确
+   - 验证路由设置
 
 ### 调试步骤
-1. 查看 GitHub Actions 日志
-2. 检查 Cloudflare Workers 控制台
-3. 验证 Secrets 配置
+
+1. **手动测试部署**
+   - 访问 GitHub Actions 页面
+   - 点击 "Actions" → "Test Cloudflare Deployment"
+   - 点击 "Run workflow" 手动触发测试
+
+2. **查看详细日志**
+   - 在 GitHub Actions 中查看失败的步骤
+   - 检查 "Deploy to Cloudflare Workers" 步骤的详细输出
+
+3. **本地验证**
+   ```bash
+   # 本地测试部署
+   npm run deploy:dry-run
+
+   # 检查配置
+   npx wrangler whoami
+   ```
+
+4. **验证 Secrets**
+   - 确保 `CLOUDFLARE_API_TOKEN` 已设置
+   - 确保 `CLOUDFLARE_ACCOUNT_ID` 已设置
+   - Token 应该有足够的权限
 
 ## 🎉 完成！
 
