@@ -53,7 +53,7 @@ async function handleStaticSite(request) {
       },
     }
 
-    const page = await getAssetFromKV(event, options)
+    const page = await getAssetFromKV(request, options)
     
     // 添加安全头
     const response = new Response(page.body, page)
@@ -76,7 +76,7 @@ async function handleStaticSite(request) {
   } catch (e) {
     // 如果资源不存在，返回 404 页面
     try {
-      let notFoundResponse = await getAssetFromKV(event, {
+      let notFoundResponse = await getAssetFromKV(request, {
         mapRequestToAsset: req => new Request(`${new URL(req.url).origin}/404.html`, req),
       })
       
