@@ -22,14 +22,29 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build website
+    - name: Build CSS
       run: |
+        echo "Building Tailwind CSS..."
         npm run css:build
+        echo "CSS build completed"
+        ls -la static/css/
+
+    - name: Build Hugo site
+      run: |
+        echo "Building Hugo site..."
         npx hugo --minify --gc
+        echo "Hugo build completed"
 
     - name: Verify build output
       run: |
+        echo "Checking public directory:"
         ls -la public/
+        echo "Checking CSS file:"
+        ls -la public/css/
+        echo "Verifying CSS contains responsive grid classes:"
+        grep -c "grid-cols-2" public/css/main.css || echo "grid-cols-2 not found"
+        grep -c "md:grid-cols-4" public/css/main.css || echo "md:grid-cols-4 not found"
+        grep -c "lg:grid-cols-3" public/css/main.css || echo "lg:grid-cols-3 not found"
         echo "Build completed successfully"
 
     - name: Check wrangler configuration
