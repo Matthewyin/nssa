@@ -10,10 +10,7 @@ bucket = "./public"
 ENVIRONMENT = "production"
 
 # 自定义域名配置（生产环境）
+# 注意：确保域名已在Cloudflare账户中正确配置
 [[routes]]
 pattern = "nssa.io/*"
 zone_name = "nssa.io"
-
-[[routes]]
-pattern = "www.nssa.io/*"
-zone_name = "www.nssa.io"
