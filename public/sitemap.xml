@@ -1,16 +1,1 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  
-  <sitemap>
-    <loc>http://localhost:1313/zh/sitemap.xml</loc>
-    
-      <lastmod>2025-08-26T08:07:12+00:00</lastmod>
-    
-  </sitemap>
-  
-  <sitemap>
-    <loc>http://localhost:1313/en/sitemap.xml</loc>
-    
-  </sitemap>
-  
-</sitemapindex>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://nssa.io/zh/sitemap.xml</loc><lastmod>2025-08-30T03:29:52+00:00</lastmod></sitemap><sitemap><loc>https://nssa.io/en/sitemap.xml</loc></sitemap></sitemapindex>
