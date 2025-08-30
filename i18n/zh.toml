@@ -44,11 +44,11 @@ other = "阅读量"
 other = "点赞"
 
 # 专题相关
+[business_topics]
+other = "业务专题"
+
 [tech_topics]
 other = "技术专题"
-
-[history_topics]
-other = "历史专题"
 
 [psychology_topics]
 other = "心理专题"
@@ -56,12 +56,15 @@ other = "心理专题"
 [workplace_topics]
 other = "职场专题"
 
+[history_topics]
+other = "历史专题"
+
 # 页面标题
+[business_title]
+other = "业务专题 - 商业洞察与战略"
+
 [tech_title]
 other = "技术专题 - 探索前沿科技"
-
-[history_title]
-other = "历史专题 - 回顾历史足迹"
 
 [psychology_title]
 other = "心理专题 - 洞察人性奥秘"
@@ -69,18 +72,24 @@ other = "心理专题 - 洞察人性奥秘"
 [workplace_title]
 other = "职场专题 - 职业发展指南"
 
+[history_title]
+other = "历史专题 - 回顾历史足迹"
+
 # 页面描述
+[business_description]
+other = "深度商业分析与市场洞察，探索商业模式创新与企业战略发展。"
+
 [tech_description]
 other = "深入探讨前沿技术、编程实践和技术趋势，为技术爱好者提供专业见解。"
-
-[history_description]
-other = "回顾重要历史事件，分析历史发展脉络，从历史中汲取智慧。"
 
 [psychology_description]
 other = "探索心理学原理，理解人类行为模式，提升自我认知和人际关系。"
 
 [workplace_description]
 other = "分享职场经验，提供职业发展建议，助力个人职业成长。"
+
+[history_description]
+other = "回顾重要历史事件，分析历史发展脉络，从历史中汲取智慧。"
 
 # 导航相关
 [nav_toggle]

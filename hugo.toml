@@ -54,20 +54,24 @@ enableEmoji = true
 [menu]
   # Chinese Menu
   [[menu.main]]
+    name = "业务专题"
+    url = "/business/"
+    weight = 10
+  [[menu.main]]
     name = "技术专题"
     url = "/tech/"
     weight = 20
   [[menu.main]]
-    name = "历史专题"
-    url = "/history/"
-    weight = 30
-  [[menu.main]]
     name = "心理专题"
     url = "/psychology/"
-    weight = 40
+    weight = 30
   [[menu.main]]
     name = "职场专题"
     url = "/workplace/"
+    weight = 40
+  [[menu.main]]
+    name = "历史专题"
+    url = "/history/"
     weight = 50
   [[menu.main]]
     name = "关于"
@@ -76,20 +80,24 @@ enableEmoji = true
 
 # English Menu
 [[languages.en.menu.main]]
+  name = "Business"
+  url = "/en/business/"
+  weight = 10
+[[languages.en.menu.main]]
   name = "Technology"
   url = "/en/tech/"
   weight = 20
 [[languages.en.menu.main]]
-  name = "History"
-  url = "/en/history/"
-  weight = 30
-[[languages.en.menu.main]]
   name = "Psychology"
   url = "/en/psychology/"
-  weight = 40
+  weight = 30
 [[languages.en.menu.main]]
   name = "Workplace"
   url = "/en/workplace/"
+  weight = 40
+[[languages.en.menu.main]]
+  name = "History"
+  url = "/en/history/"
   weight = 50
 [[languages.en.menu.main]]
   name = "About"

@@ -44,11 +44,11 @@ other = "Views"
 other = "Likes"
 
 # Topic Related
+[business_topics]
+other = "Business Topics"
+
 [tech_topics]
 other = "Technology Topics"
-
-[history_topics]
-other = "History Topics"
 
 [psychology_topics]
 other = "Psychology Topics"
@@ -56,12 +56,15 @@ other = "Psychology Topics"
 [workplace_topics]
 other = "Workplace Topics"
 
+[history_topics]
+other = "History Topics"
+
 # Page Titles
+[business_title]
+other = "Business Topics - Business Insights & Strategy"
+
 [tech_title]
 other = "Technology Topics - Exploring Cutting-edge Technology"
-
-[history_title]
-other = "History Topics - Reviewing Historical Footprints"
 
 [psychology_title]
 other = "Psychology Topics - Insights into Human Nature"
@@ -69,18 +72,24 @@ other = "Psychology Topics - Insights into Human Nature"
 [workplace_title]
 other = "Workplace Topics - Career Development Guide"
 
+[history_title]
+other = "History Topics - Reviewing Historical Footprints"
+
 # Page Descriptions
+[business_description]
+other = "In-depth business analysis and market insights, exploring business model innovation and corporate strategic development."
+
 [tech_description]
 other = "Deep dive into cutting-edge technology, programming practices, and tech trends, providing professional insights for tech enthusiasts."
-
-[history_description]
-other = "Review important historical events, analyze historical development patterns, and draw wisdom from history."
 
 [psychology_description]
 other = "Explore psychological principles, understand human behavior patterns, and enhance self-awareness and interpersonal relationships."
 
 [workplace_description]
 other = "Share workplace experience, provide career development advice, and empower personal career growth."
+
+[history_description]
+other = "Review important historical events, analyze historical development patterns, and draw wisdom from history."
 
 # Navigation Related
 [nav_toggle]
