@@ -82,19 +82,12 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# Wrangler
-.wrangler/
-dist/
-
-# push_github_cloudflare/
-push_github_cloudflare/
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
 
 .augment/
-
-# 本地发布系统生成的文件
-articles-config.json
-wechat-publish-results.json
-publish-status.json
 
 # Hugo生成的文件
 public/
