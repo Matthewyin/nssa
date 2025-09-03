@@ -28,3 +28,4 @@ pnpm-debug.log*
 firebase-adminsdk*.json
 *firebase-key*.json
 serviceAccountKey.json
+nssa-470903-firebase-adminsdk-*.json
