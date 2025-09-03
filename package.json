@@ -4,11 +4,14 @@
   "version": "3.0.0",
   "scripts": {
     "dev": "astro dev",
-    "start": "astro dev",
+    "start": "nginx -g 'daemon off;'",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "docker:build": "docker build -t nssa-nginx .",
+    "docker:run": "docker run -p 8080:8080 --name nssa-test nssa-nginx",
+    "docker:test": "npm run docker:build && npm run docker:run"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
