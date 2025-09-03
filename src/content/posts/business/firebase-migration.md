@@ -1,10 +1,12 @@
 ---
 title: "从Cloudflare到Firebase的迁移之路"
 description: "详细记录NSSA网站从Cloudflare Pages迁移到Firebase App Hosting的完整过程"
-pubDate: 2025-09-03
+date: 2025-09-03
 category: "business"
+categories: ["business"]
 tags: ["迁移", "firebase", "cloudflare", "部署"]
 author: "NSSA Team"
+lang: "zh"
 ---
 
 # 从Cloudflare到Firebase的迁移之路

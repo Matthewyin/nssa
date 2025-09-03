@@ -1,10 +1,12 @@
 ---
-title: "测试文章：Astro SSR动态加载"
-description: "这是一篇测试文章，用于验证Astro SSR模式下的动态内容加载功能"
-pubDate: 2025-09-03
+title: "测试文章：Astro静态网站"
+description: "这是一篇测试文章，用于验证Astro静态模式下的内容展示功能"
+date: 2025-09-03
 category: "tech"
-tags: ["astro", "ssr", "测试"]
+categories: ["tech"]
+tags: ["astro", "静态网站", "测试"]
 author: "NSSA Team"
+lang: "zh"
 ---
 
 # Astro SSR动态加载测试

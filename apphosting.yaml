@@ -16,14 +16,10 @@ runConfig:
       value: production
     - variable: PORT
       value: "8080"
-    - variable: HOST
-      value: "0.0.0.0"
-    - variable: GITHUB_TOKEN
-      value: ${GITHUB_TOKEN}
   
   # 健康检查配置
   healthCheck:
-    path: "/api/posts.json"
+    path: "/health"
     port: 8080
     timeoutSeconds: 4
     checkIntervalSeconds: 30
@@ -33,7 +29,6 @@ runConfig:
 # 构建配置
 buildConfig:
   runtime: docker
-  dockerfile: "Dockerfile.ssr"
 
   # 构建环境变量
   env:
