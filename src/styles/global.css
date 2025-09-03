@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Apple-style variables */
+:root {
+  --apple-blue: #007AFF;
+  --apple-gray: #8E8E93;
+  --apple-light-gray: #F2F2F7;
+}
+
+/* Dark mode variables */
+.dark {
+  --apple-gray: #98989D;
+}
+
+/* Custom utility classes */
+.text-apple-blue {
+  color: var(--apple-blue);
+}
+
+.text-apple-gray {
+  color: var(--apple-gray);
+}
+
+.bg-apple-light-gray {
+  background-color: var(--apple-light-gray);
+}
+
+/* Content card styles */
+.content-card {
+  @apply bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:shadow-lg;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-apple-blue focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+}
+
+/* Navigation link styles */
+.nav-link {
+  @apply relative transition-colors duration-200;
+}
+
+.nav-link:hover::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--apple-blue);
+  border-radius: 1px;
+}
+
+/* Search highlight styles */
+.search-highlight {
+  @apply bg-yellow-200 dark:bg-yellow-600 px-1 rounded;
+}
+
+/* Prose styles for markdown content */
+.prose {
+  @apply text-gray-900 dark:text-gray-100;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply text-gray-900 dark:text-white font-semibold;
+}
+
+.prose a {
+  @apply text-apple-blue hover:underline;
+}
+
+.prose code {
+  @apply bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-gray-100 dark:bg-gray-800 rounded-lg p-4 overflow-x-auto;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-apple-blue pl-4 italic text-gray-600 dark:text-gray-400;
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Loading spinner */
+.spinner {
+  @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-apple-blue rounded-full animate-spin;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-apple-blue text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors focus-ring;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors focus-ring;
+}
+
+/* Form styles */
+.form-input {
+  @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus-ring;
+}
+
+/* Tag styles */
+.tag {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .nav-link:hover::after {
+    display: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .content-card {
+    @apply border border-gray-300 shadow-none;
+  }
+}

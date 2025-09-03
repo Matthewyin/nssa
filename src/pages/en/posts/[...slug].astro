@@ -1,0 +1,224 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import LanguageSwitcher from '../../../components/LanguageSwitcher.astro';
+import TranslationStatus from '../../../components/TranslationStatus.astro';
+import OptimizedImage from '../../../components/OptimizedImage.astro';
+import ImageGallery from '../../../components/ImageGallery.astro';
+import { t } from '../../../utils/i18n';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => data.lang === 'en');
+  return posts.map((post) => {
+    // 处理嵌套目录结构的slug
+    // 例如：business/digital-transformation-2025/index -> business/digital-transformation-2025
+    let slug = post.slug;
+    if (slug.endsWith('/index')) {
+      slug = slug.replace('/index', '');
+    }
+
+    return {
+      params: { slug: slug },
+      props: post,
+    };
+  });
+}
+
+const post = Astro.props;
+const { Content } = await post.render();
+
+// 获取相关文章（基于标签和分类）
+const allPosts = await getCollection('posts', ({ data }) => {
+  return data.lang === 'en' && !data.draft;
+});
+
+const relatedPosts = allPosts
+  .filter(p => p.slug !== post.slug)
+  .filter(p => {
+    const commonTags = p.data.tags?.filter(tag => post.data.tags?.includes(tag)) || [];
+    const commonCategories = p.data.categories?.filter(cat => post.data.categories?.includes(cat)) || [];
+    return commonTags.length > 0 || commonCategories.length > 0;
+  })
+  .slice(0, 3);
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+};
+---
+
+<Layout 
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image}
+  lang="en"
+>
+  <main class="max-w-4xl mx-auto px-6 py-8">
+    <!-- Language Switcher -->
+    <LanguageSwitcher currentPost={post} currentLang={post.data.lang || 'en'} />
+
+    <!-- Article Header -->
+    <header class="mb-8">
+      <div class="mb-4">
+        <nav class="text-sm text-gray-500 dark:text-gray-400">
+          <a href="/en" class="hover:text-apple-blue transition-colors">Home</a>
+          {post.data.categories?.map((category) => (
+            <span class="mx-2">→</span>
+            <a href={`/en/${category}/`} class="hover:text-apple-blue transition-colors capitalize">
+              {category}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- Translation Status -->
+      <TranslationStatus post={post} currentLang={post.data.lang || 'en'} />
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+        {post.data.title}
+      </h1>
+      
+      {post.data.description && (
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+          {post.data.description}
+        </p>
+      )}
+      
+      <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <time datetime={post.data.date.toISOString()}>
+            {formatDate(post.data.date)}
+          </time>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+          </svg>
+          <span>{post.data.author}</span>
+        </div>
+      </div>
+      
+      <!-- Tags -->
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {post.data.tags.map((tag) => (
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+    
+    <!-- Article Content -->
+    <article class="prose prose-lg dark:prose-invert max-w-none mb-12">
+      <Content />
+    </article>
+    
+    <!-- Share Buttons -->
+    <div class="border-t border-gray-200 dark:border-gray-700 pt-8 mb-12">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Share Article</h3>
+      <div class="flex flex-wrap gap-3">
+        <button 
+          onclick="shareToWeChat()"
+          class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+        >
+          <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8.5 12.5c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5.7-1.5 1.5-1.5 1.5.7 1.5 1.5zm9 0c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5.7-1.5 1.5-1.5 1.5.7 1.5 1.5z"/>
+          </svg>
+          WeChat
+        </button>
+        
+        <button 
+          onclick="shareToTwitter()"
+          class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+        >
+          <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+          </svg>
+          Twitter
+        </button>
+        
+        <button 
+          onclick="copyLink()"
+          class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+          </svg>
+          Copy Link
+        </button>
+      </div>
+    </div>
+    
+    <!-- Related Articles -->
+    {relatedPosts.length > 0 && (
+      <section class="border-t border-gray-200 dark:border-gray-700 pt-8">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Related Articles</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {relatedPosts.map((relatedPost) => (
+            <a 
+              href={`/en/posts/${relatedPost.slug}/`}
+              class="content-card group block p-6 hover:no-underline"
+            >
+              <h4 class="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue transition-colors line-clamp-2">
+                {relatedPost.data.title}
+              </h4>
+              {relatedPost.data.description && (
+                <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">
+                  {relatedPost.data.description}
+                </p>
+              )}
+              <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                {formatDate(relatedPost.data.date)}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</Layout>
+
+<script>
+  // 分享功能
+  window.shareToWeChat = function() {
+    // 微信分享逻辑
+    if (navigator.share) {
+      navigator.share({
+        title: document.title,
+        url: window.location.href
+      });
+    } else {
+      copyLink();
+    }
+  }
+  
+  window.shareToTwitter = function() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
+  }
+  
+  window.copyLink = function() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert('Link copied to clipboard');
+    }).catch(() => {
+      // 降级方案
+      const textArea = document.createElement('textarea');
+      textArea.value = window.location.href;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('Link copied to clipboard');
+    });
+  }
+</script>

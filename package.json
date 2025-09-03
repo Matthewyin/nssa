@@ -1,46 +1,24 @@
 {
-  "name": "nssa-hugo-site",
-  "version": "2.0.0",
-  "description": "NSSA - Hugo-powered historical research and analysis platform",
-  "main": "index.js",
+  "name": "nssa-astro-site",
+  "type": "module",
+  "version": "3.0.0",
   "scripts": {
-    "css:build": "npx tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch=false",
-    "css:watch": "npx tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch",
-    "dev": "npm run css:build && hugo server --buildDrafts --bind 0.0.0.0",
-    "build": "npm run css:build && npx hugo --minify --gc",
-    "preview": "npm run css:build && npx hugo server --environment production",
-    "clean": "rm -rf public resources",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Matthewyin/nssa.git"
-  },
-  "keywords": [
-    "hugo",
-    "static-site",
-    "history",
-    "research",
-    "education",
-    "firebase",
-    "static-hosting"
-  ],
-  "author": "NSSA Team",
-  "license": "MIT",
-  "type": "commonjs",
-  "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=9.0.0"
-  },
-  "bugs": {
-    "url": "https://github.com/Matthewyin/nssa/issues"
-  },
-  "homepage": "https://github.com/Matthewyin/nssa#readme",
   "dependencies": {
-    "hugo-bin": "^0.145.2"
-  },
-  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.3.4",
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.5.1",
+    "@astrojs/tailwind": "^6.0.2",
     "@tailwindcss/typography": "^0.5.16",
-    "tailwindcss": "^3.4.17"
+    "astro": "^5.13.5",
+    "fuse.js": "^7.1.0",
+    "typescript": "^5.9.2"
   }
 }

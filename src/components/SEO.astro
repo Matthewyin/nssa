@@ -1,0 +1,117 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  article?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  tags?: string[];
+  lang?: 'zh' | 'en';
+}
+
+const {
+  title,
+  description,
+  image,
+  article = false,
+  publishedTime,
+  modifiedTime,
+  tags = [],
+  lang = 'zh'
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = image ? new URL(image, Astro.site) : null;
+
+// Generate structured data
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": article ? "Article" : "WebPage",
+  "headline": title,
+  "description": description,
+  "url": canonicalURL.toString(),
+  "author": {
+    "@type": "Organization",
+    "name": "NSSA Team",
+    "url": "https://nssa.io"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "NSSA",
+    "url": "https://nssa.io",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://nssa.io/logo.svg"
+    }
+  },
+  ...(imageURL && {
+    "image": {
+      "@type": "ImageObject",
+      "url": imageURL.toString()
+    }
+  }),
+  ...(publishedTime && {
+    "datePublished": publishedTime
+  }),
+  ...(modifiedTime && {
+    "dateModified": modifiedTime
+  }),
+  ...(tags.length > 0 && {
+    "keywords": tags.join(", ")
+  })
+};
+
+if (article) {
+  structuredData["@type"] = "Article";
+  structuredData["articleSection"] = tags[0] || "General";
+}
+---
+
+<!-- Basic Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="keywords" content={tags.join(", ")} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={article ? "article" : "website"} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:site_name" content="NSSA - Network-System-Security-Application" />
+<meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+{imageURL && <meta property="og:image" content={imageURL} />}
+{imageURL && <meta property="og:image:width" content="1200" />}
+{imageURL && <meta property="og:image:height" content="630" />}
+{article && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{article && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+{article && tags.map(tag => <meta property="article:tag" content={tag} />)}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{imageURL && <meta name="twitter:image" content={imageURL} />}
+
+<!-- Additional Meta Tags -->
+<meta name="robots" content="index, follow" />
+<meta name="author" content="NSSA Team" />
+<meta name="language" content={lang === 'zh' ? 'Chinese' : 'English'} />
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+<!-- Preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
+<!-- DNS Prefetch -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+
+<!-- Alternate language versions -->
+{lang === 'zh' && <link rel="alternate" hreflang="en" href={`https://nssa.io/en${Astro.url.pathname}`} />}
+{lang === 'en' && <link rel="alternate" hreflang="zh" href={`https://nssa.io${Astro.url.pathname.replace('/en', '')}`} />}
+<link rel="alternate" hreflang="x-default" href={`https://nssa.io${Astro.url.pathname}`} />

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "username": "admin",
+    "email": "tccio2023@gmail.com",
+    "displayName": "系统管理员",
+    "role": "admin",
+    "isActive": true,
+    "passwordHash": "$2b$10$6MaiGRmzsOM2r9ge7DZGvuTe.oF119FZyf8t.1tzZk5Wc7d5O2f9O",
+    "lastLoginAt": "2025-07-31T23:19:39.227Z",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "avatar": null,
+    "permissions": [
+      "*"
+    ],
+    "updatedAt": "2025-07-31T15:34:39.816Z"
+  }
+]

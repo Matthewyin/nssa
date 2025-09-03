@@ -1,0 +1,132 @@
+---
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, t } from '../utils/i18n';
+
+export interface Props {
+  currentPost?: any;
+  currentLang: string;
+}
+
+const { currentPost, currentLang } = Astro.props;
+
+let availableTranslations: Array<{lang: string, slug: string, title: string}> = [];
+
+if (currentPost) {
+  // 如果有当前文章，查找其翻译版本
+  const allPosts = await getCollection('posts');
+  
+  if (currentPost.data.articleId) {
+    // 通过articleId查找所有相关翻译
+    const relatedPosts = allPosts.filter(post => 
+      post.data.articleId === currentPost.data.articleId && 
+      post.data.lang !== currentLang &&
+      !post.data.draft
+    );
+    
+    availableTranslations = relatedPosts.map(post => ({
+      lang: post.data.lang || 'zh',
+      slug: post.slug,
+      title: post.data.title
+    }));
+  } else if (currentPost.data.translations) {
+    // 通过translations字段查找
+    for (const [lang, slug] of Object.entries(currentPost.data.translations)) {
+      if (lang !== currentLang) {
+        const translatedPost = allPosts.find(post => post.slug === slug);
+        if (translatedPost && !translatedPost.data.draft) {
+          availableTranslations.push({
+            lang,
+            slug,
+            title: translatedPost.data.title
+          });
+        }
+      }
+    }
+  }
+}
+
+// 语言显示名称
+const languageNames = {
+  zh: '中文',
+  en: 'English'
+};
+
+// 构建翻译链接
+const getTranslationUrl = (lang: string, slug: string) => {
+  if (lang === 'en') {
+    return `/en/posts/${slug}/`;
+  } else {
+    return `/posts/${slug}/`;
+  }
+};
+---
+
+{availableTranslations.length > 0 && (
+  <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+    <div class="flex items-start gap-3">
+      <div class="flex-shrink-0 mt-0.5">
+        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+        </svg>
+      </div>
+      <div class="flex-1">
+        <h3 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
+          {t('article.available_in_other_languages', currentLang)}
+        </h3>
+        <div class="space-y-2">
+          {availableTranslations.map(translation => (
+            <a 
+              href={getTranslationUrl(translation.lang, translation.slug)}
+              class="block text-sm text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-blue-100 transition-colors"
+            >
+              <span class="inline-flex items-center gap-2">
+                <span class="font-medium">{languageNames[translation.lang as keyof typeof languageNames]}</span>
+                <span class="text-blue-600 dark:text-blue-400">→</span>
+                <span class="truncate">{translation.title}</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+<!-- 页面级别的语言切换（如果没有文章翻译） -->
+{availableTranslations.length === 0 && (
+  <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-6">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+        </svg>
+        <span class="text-sm text-gray-600 dark:text-gray-300">
+          {t('article.view_in_other_language', currentLang)}
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        {currentLang === 'zh' ? (
+          <a 
+            href="/en/" 
+            class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors"
+          >
+            English
+          </a>
+        ) : (
+          <a 
+            href="/" 
+            class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors"
+          >
+            中文
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+<style>
+  .truncate {
+    max-width: 200px;
+  }
+</style>

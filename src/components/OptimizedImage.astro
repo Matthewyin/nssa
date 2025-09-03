@@ -1,0 +1,144 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+  caption?: string;
+  quality?: number;
+  rounded?: boolean;
+  shadow?: boolean;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw',
+  caption,
+  quality = 80,
+  rounded = true,
+  shadow = true
+} = Astro.props;
+
+// 检查是否是外部链接或public路径
+const isExternal = src.startsWith('http') || src.startsWith('//');
+const isPublicPath = src.startsWith('/');
+const isRelativePath = src.startsWith('./');
+
+// 处理相对路径：将相对路径转换为绝对路径
+let processedSrc = src;
+if (isRelativePath && Astro.url) {
+  // 获取当前页面的路径，用于解析相对路径
+  const currentPath = Astro.url.pathname;
+  const pathParts = currentPath.split('/').filter(Boolean);
+
+  // 如果是文章页面，构建到文章目录的路径
+  if (pathParts.includes('posts') && pathParts.length >= 2) {
+    const category = pathParts[pathParts.length - 2];
+    const articleName = pathParts[pathParts.length - 1];
+    processedSrc = `/src/content/posts/${category}/${articleName}/${src.replace('./', '')}`;
+  }
+}
+
+// 生成响应式图片源（仅用于public路径）
+const generateSrcSet = (baseSrc: string) => {
+  if (isExternal || isRelativePath) return '';
+  const widths = [320, 640, 768, 1024, 1280, 1920];
+  return widths.map(w => `${baseSrc}?w=${w}&q=${quality} ${w}w`).join(', ');
+};
+
+const srcSet = isPublicPath ? generateSrcSet(processedSrc) : '';
+
+// 构建CSS类
+const imageClasses = [
+  'w-full h-auto transition-all duration-300',
+  rounded ? 'rounded-lg' : '',
+  shadow ? 'shadow-md hover:shadow-lg' : '',
+  'hover:scale-105',
+  className
+].filter(Boolean).join(' ');
+---
+
+<figure class="image-figure mb-6">
+  <img
+    src={processedSrc}
+    srcset={srcSet}
+    sizes={sizes}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    class={imageClasses}
+    onload="this.style.opacity='1'"
+    style="opacity: 0;"
+  />
+
+  {caption && (
+    <figcaption class="mt-3 text-sm text-gray-600 dark:text-gray-400 text-center italic leading-relaxed">
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .image-figure {
+    @apply max-w-full;
+  }
+
+  .image-figure img {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+
+  .image-figure img[data-loaded="true"] {
+    opacity: 1;
+  }
+
+  /* 响应式调整 */
+  @media (max-width: 768px) {
+    .image-figure img {
+      @apply rounded-md;
+    }
+  }
+
+  /* 图片容器居中 */
+  .image-figure {
+    @apply flex flex-col items-center;
+  }
+</style>
+
+<script>
+  // Intersection Observer for lazy loading
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement;
+          
+          // Load the image
+          const tempImg = new Image();
+          tempImg.onload = () => {
+            img.src = tempImg.src;
+            img.style.opacity = '1';
+            img.setAttribute('data-loaded', 'true');
+          };
+          tempImg.src = img.dataset.src || img.src;
+          
+          observer.unobserve(img);
+        }
+      });
+    });
+
+    // Observe all images with loading="lazy"
+    document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+      imageObserver.observe(img);
+    });
+  }
+</script>

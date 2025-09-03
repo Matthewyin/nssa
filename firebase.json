@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "public",
+    "site": "n8n-project-460516",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",

@@ -1,0 +1,257 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { t } from '../../utils/i18n';
+
+export async function getStaticPaths() {
+  const categories = ['business', 'tech', 'psychology', 'workplace', 'history'];
+  return categories.map((category) => ({
+    params: { category },
+  }));
+}
+
+const { category } = Astro.params;
+
+// 获取该分类的所有英文文章
+const allPosts = await getCollection('posts', ({ data }) => {
+  return data.lang === 'en' && !data.draft && data.categories?.includes(category);
+});
+
+// 按日期排序
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+// 获取所有标签
+const allTags = [...new Set(sortedPosts.flatMap(post => post.data.tags || []))];
+
+// 分类信息
+const categoryInfo = {
+  business: {
+    title: t('category.business.title', 'en'),
+    description: t('category.business.description', 'en'),
+    icon: '📊'
+  },
+  tech: {
+    title: t('category.tech.title', 'en'),
+    description: t('category.tech.description', 'en'),
+    icon: '🔬'
+  },
+  psychology: {
+    title: t('category.psychology.title', 'en'),
+    description: t('category.psychology.description', 'en'),
+    icon: '🧠'
+  },
+  workplace: {
+    title: t('category.workplace.title', 'en'),
+    description: t('category.workplace.description', 'en'),
+    icon: '💼'
+  },
+  history: {
+    title: t('category.history.title', 'en'),
+    description: t('category.history.description', 'en'),
+    icon: '📚'
+  }
+};
+
+const currentCategory = categoryInfo[category] || { title: category, description: '', icon: '📄' };
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+};
+---
+
+<Layout 
+  title={`${currentCategory.title} - NSSA`}
+  description={currentCategory.description}
+  lang="en"
+>
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    <!-- Category Header -->
+    <header class="mb-12">
+      <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        <a href="/en" class="hover:text-apple-blue transition-colors">Home</a>
+        <span class="mx-2">→</span>
+        <span class="text-gray-900 dark:text-white">{currentCategory.title}</span>
+      </nav>
+      
+      <div class="flex items-center gap-4 mb-6">
+        <span class="text-4xl">{currentCategory.icon}</span>
+        <div>
+          <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+            {currentCategory.title}
+          </h1>
+          <p class="text-lg text-gray-600 dark:text-gray-300">
+            {currentCategory.description}
+          </p>
+        </div>
+      </div>
+      
+      <div class="flex items-center justify-between">
+        <p class="text-gray-500 dark:text-gray-400">
+          {sortedPosts.length} articles total
+        </p>
+        
+        <!-- Filter Controls -->
+        <div class="flex items-center gap-4">
+          <!-- Tag Filter -->
+          <div class="relative">
+            <select 
+              id="tag-filter"
+              class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue"
+            >
+              <option value="">All Tags</option>
+              {allTags.map((tag) => (
+                <option value={tag}>{tag}</option>
+              ))}
+            </select>
+          </div>
+          
+          <!-- Sort Options -->
+          <div class="relative">
+            <select 
+              id="sort-filter"
+              class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue"
+            >
+              <option value="date-desc">Latest First</option>
+              <option value="date-asc">Oldest First</option>
+              <option value="title-asc">Title A-Z</option>
+              <option value="title-desc">Title Z-A</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Articles Grid -->
+    <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {sortedPosts.map((post) => (
+        <article 
+          class="content-card group article-item"
+          data-tags={JSON.stringify(post.data.tags || [])}
+          data-date={post.data.date.toISOString()}
+          data-title={post.data.title}
+        >
+          <a href={`/en/posts/${post.slug}/`} class="block p-6 hover:no-underline">
+            {post.data.image && (
+              <div class="mb-4 rounded-lg overflow-hidden">
+                <img 
+                  src={post.data.image} 
+                  alt={post.data.title}
+                  class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
+                />
+              </div>
+            )}
+            
+            <div class="flex flex-wrap gap-2 mb-3">
+              {post.data.tags?.slice(0, 3).map((tag) => (
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+            
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-apple-blue transition-colors line-clamp-2">
+              {post.data.title}
+            </h2>
+            
+            {post.data.description && (
+              <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                {post.data.description}
+              </p>
+            )}
+            
+            <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <time datetime={post.data.date.toISOString()}>
+                  {formatDate(post.data.date)}
+                </time>
+              </div>
+              
+              <span class="text-apple-blue group-hover:translate-x-1 transition-transform">
+                Read More →
+              </span>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+    
+    <!-- No Results Message -->
+    <div id="no-results" class="hidden text-center py-12">
+      <div class="text-gray-400 dark:text-gray-500 mb-4">
+        <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.467-.881-6.08-2.33"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No matching articles found</h3>
+      <p class="text-gray-500 dark:text-gray-400">Try adjusting your filter criteria</p>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // 文章筛选和排序功能
+  document.addEventListener('DOMContentLoaded', function() {
+    const tagFilter = document.getElementById('tag-filter');
+    const sortFilter = document.getElementById('sort-filter');
+    const articlesContainer = document.getElementById('articles-container');
+    const noResults = document.getElementById('no-results');
+    
+    function filterAndSortArticles() {
+      const selectedTag = tagFilter.value;
+      const sortOption = sortFilter.value;
+      const articles = Array.from(document.querySelectorAll('.article-item'));
+      
+      // 筛选文章
+      const filteredArticles = articles.filter(article => {
+        if (!selectedTag) return true;
+        
+        const articleTags = JSON.parse(article.dataset.tags || '[]');
+        return articleTags.includes(selectedTag);
+      });
+      
+      // 排序文章
+      filteredArticles.sort((a, b) => {
+        switch (sortOption) {
+          case 'date-desc':
+            return new Date(b.dataset.date).getTime() - new Date(a.dataset.date).getTime();
+          case 'date-asc':
+            return new Date(a.dataset.date).getTime() - new Date(b.dataset.date).getTime();
+          case 'title-asc':
+            return a.dataset.title.localeCompare(b.dataset.title);
+          case 'title-desc':
+            return b.dataset.title.localeCompare(a.dataset.title);
+          default:
+            return 0;
+        }
+      });
+      
+      // 隐藏所有文章
+      articles.forEach(article => {
+        article.style.display = 'none';
+      });
+      
+      // 显示筛选后的文章
+      if (filteredArticles.length > 0) {
+        filteredArticles.forEach(article => {
+          article.style.display = 'block';
+        });
+        noResults.classList.add('hidden');
+      } else {
+        noResults.classList.remove('hidden');
+      }
+    }
+    
+    // 绑定事件监听器
+    tagFilter.addEventListener('change', filterAndSortArticles);
+    sortFilter.addEventListener('change', filterAndSortArticles);
+  });
+</script>

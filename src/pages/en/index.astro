@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all English articles
+const allPosts = await getCollection('posts', ({ data }) => {
+  return data.lang === 'en' && !data.draft;
+});
+
+// Sort by date
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+// Get latest posts
+const latestPosts = sortedPosts.slice(0, 6);
+
+// Group by category
+const categories = {
+  business: sortedPosts.filter(post => post.data.categories?.includes('business')).slice(0, 3),
+  tech: sortedPosts.filter(post => post.data.categories?.includes('tech')).slice(0, 3),
+  psychology: sortedPosts.filter(post => post.data.categories?.includes('psychology')).slice(0, 3),
+  workplace: sortedPosts.filter(post => post.data.categories?.includes('workplace')).slice(0, 3),
+  history: sortedPosts.filter(post => post.data.categories?.includes('history')).slice(0, 3),
+};
+---
+
+<Layout 
+  title="NSSA - Network-System-Security-Application"
+  description="Interactive exploration of IT, history, workplace, and psychology"
+  lang="en"
+>
+  <main>
+    <!-- Hero Section -->
+    <div class="max-w-6xl mx-auto px-6 py-16">
+      <div class="text-center mb-20">
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 dark:text-white tracking-tight mb-8">
+          NSSA
+        </h1>
+        <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+          Network System Security Application
+        </p>
+        <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-8">
+          In-depth analysis of business insights, network technology, workplace psychology, and history. This site aims to explore the complex systems of business, technology, organizations, and human nature.
+        </p>
+        <p class="text-lg text-apple-gray max-w-3xl mx-auto leading-relaxed">
+          Through modern web technologies, we transform complex business, technical, historical, psychological, and workplace concepts into engaging digital experiences.
+        </p>
+      </div>
+
+      <!-- Category Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <a href="/en/business/" class="content-card group block p-6 sm:p-8">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                📊 Business Topics
+              </h3>
+              <p class="text-apple-gray text-base sm:text-lg">
+                In-depth business analysis and market insights, exploring business model innovation and corporate strategy
+              </p>
+            </div>
+            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <a href="/en/tech/" class="content-card group block p-6 sm:p-8">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                🔬 Technology Topics
+              </h3>
+              <p class="text-apple-gray text-base sm:text-lg">
+                Exploring cutting-edge technology, analyzing tech trends, and studying technology's impact on society
+              </p>
+            </div>
+            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <a href="/en/psychology/" class="content-card group block p-6 sm:p-8">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                🧠 Psychology Topics
+              </h3>
+              <p class="text-apple-gray text-base sm:text-lg">
+                Psychological research and behavioral analysis, exploring human psychological phenomena and behavioral patterns
+              </p>
+            </div>
+            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <a href="/en/workplace/" class="content-card group block p-6 sm:p-8">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                💼 Workplace Topics
+              </h3>
+              <p class="text-apple-gray text-base sm:text-lg">
+                Workplace dynamics and organizational behavior research, mastering workplace survival wisdom
+              </p>
+            </div>
+            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <a href="/en/history/" class="content-card group block p-6 sm:p-8">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors">
+                📚 History Topics
+              </h3>
+              <p class="text-apple-gray text-base sm:text-lg">
+                In-depth historical research and analysis, exploring the inherent laws of historical development
+              </p>
+            </div>
+            <div class="text-apple-gray group-hover:text-apple-blue transition-colors ml-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

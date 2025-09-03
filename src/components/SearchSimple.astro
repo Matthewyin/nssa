@@ -1,0 +1,215 @@
+---
+import { getCollection } from 'astro:content';
+import { getLangFromUrl } from '../utils/i18n';
+
+// 获取当前语言
+const currentLang = getLangFromUrl(Astro.url);
+
+// 获取所有文章用于搜索
+const allPosts = await getCollection('posts', ({ data }) => {
+  return !data.draft;
+});
+
+// 准备搜索数据
+const searchData = allPosts.map(post => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description || '',
+  tags: post.data.tags || [],
+  categories: post.data.categories || [],
+  content: post.body.slice(0, 300),
+  date: post.data.date.toISOString(),
+  lang: post.data.lang || 'zh',
+  author: post.data.author || 'NSSA Team'
+}));
+---
+
+<script define:vars={{ searchData, currentLang }}>
+  console.log('Search component loaded, data length:', searchData.length);
+  
+  // 简单搜索功能
+  function simpleSearch(query, data) {
+    if (!query || query.length < 1) return [];
+    
+    const lowerQuery = query.toLowerCase();
+    return data
+      .filter(item => 
+        item.title.toLowerCase().includes(lowerQuery) ||
+        item.description.toLowerCase().includes(lowerQuery) ||
+        item.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
+        item.content.toLowerCase().includes(lowerQuery)
+      )
+      .map((item, index) => ({
+        item,
+        score: 0.8,
+        matches: []
+      }))
+      .slice(0, 6);
+  }
+  
+  // 显示搜索结果
+  function displaySearchResults(results, query, isMobile = false) {
+    const searchResults = document.getElementById(isMobile ? 'mobile-search-results' : 'search-results');
+    const searchResultsContent = document.getElementById(isMobile ? 'mobile-search-results-content' : 'search-results-content');
+
+    if (!searchResults || !searchResultsContent) {
+      console.error('Search result containers not found', { isMobile, searchResults: !!searchResults, searchResultsContent: !!searchResultsContent });
+      return;
+    }
+    
+    if (results.length === 0) {
+      searchResultsContent.innerHTML = `
+        <div class="text-center py-6">
+          <p class="text-gray-500 dark:text-gray-400">没有找到匹配的结果</p>
+        </div>
+      `;
+    } else {
+      const resultsHTML = results.map((result, index) => {
+        const post = result.item;
+        const postUrl = post.lang === 'en' ? `/en/posts/${post.slug}/` : `/posts/${post.slug}/`;
+        
+        return `
+          <a href="${postUrl}" class="block p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                ${index + 1}
+              </div>
+              <div class="flex-1">
+                <h3 class="font-medium text-gray-900 dark:text-white mb-1">
+                  ${post.title}
+                </h3>
+                ${post.description ? `
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                    ${post.description.slice(0, 100)}...
+                  </p>
+                ` : ''}
+                <div class="flex items-center gap-2 text-xs text-gray-500">
+                  ${post.categories.map(cat => `<span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">${cat}</span>`).join('')}
+                  ${post.lang !== currentLang ? `<span class="px-2 py-1 bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 rounded">${post.lang === 'en' ? 'English' : '中文'}</span>` : ''}
+                </div>
+              </div>
+            </div>
+          </a>
+        `;
+      }).join('');
+      
+      searchResultsContent.innerHTML = `
+        <div class="mb-2 px-3 py-2 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-gray-600">
+          找到 ${results.length} 个结果
+        </div>
+        ${resultsHTML}
+      `;
+    }
+    
+    searchResults.classList.remove('hidden');
+  }
+  
+  // 隐藏搜索结果
+  function hideSearchResults() {
+    const searchResults = document.getElementById('search-results');
+    const mobileSearchResults = document.getElementById('mobile-search-results');
+    if (searchResults) {
+      searchResults.classList.add('hidden');
+    }
+    if (mobileSearchResults) {
+      mobileSearchResults.classList.add('hidden');
+    }
+  }
+  
+  // 执行搜索
+  function performSearch(query, isMobile = false) {
+    console.log('Performing search for:', query, 'isMobile:', isMobile);
+
+    if (!query || query.length < 1) {
+      hideSearchResults();
+      return;
+    }
+
+    // 优先搜索当前语言的内容
+    const currentLangData = searchData.filter(post => post.lang === currentLang);
+    let results = simpleSearch(query, currentLangData);
+
+    // 如果当前语言结果不足，搜索全部
+    if (results.length < 3) {
+      const allResults = simpleSearch(query, searchData);
+      const otherLangResults = allResults.filter(result =>
+        result.item.lang !== currentLang &&
+        !results.some(curr => curr.item.slug === result.item.slug)
+      );
+      results = [...results, ...otherLangResults].slice(0, 6);
+    }
+
+    console.log('Search results:', results.length);
+    displaySearchResults(results, query, isMobile);
+  }
+  
+  // 等待DOM加载完成
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, binding search events');
+    
+    const searchInputs = document.querySelectorAll('#search-input, #mobile-search-input');
+    console.log('Found search inputs:', searchInputs.length);
+    
+    searchInputs.forEach((input, index) => {
+      if (input) {
+        console.log(`Binding events to input ${index + 1}:`, input.id);
+        
+        // 输入事件
+        input.addEventListener('input', function(e) {
+          const query = e.target.value.trim();
+          const isMobile = input.id === 'mobile-search-input';
+          console.log('Input event, query:', query, 'isMobile:', isMobile);
+          performSearch(query, isMobile);
+        });
+
+        // 焦点事件
+        input.addEventListener('focus', function(e) {
+          const query = e.target.value.trim();
+          const isMobile = input.id === 'mobile-search-input';
+          if (query.length >= 1) {
+            performSearch(query, isMobile);
+          }
+        });
+        
+        // 回车键
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            const query = e.target.value.trim();
+            if (query) {
+              window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+            }
+          }
+        });
+      }
+    });
+    
+    // 点击外部隐藏结果
+    document.addEventListener('click', function(e) {
+      const searchResults = document.getElementById('search-results');
+      const mobileSearchResults = document.getElementById('mobile-search-results');
+      const searchInputs = document.querySelectorAll('#search-input, #mobile-search-input');
+
+      let clickedOnSearch = false;
+      searchInputs.forEach(input => {
+        if (input && (input.contains(e.target) || input === e.target)) {
+          clickedOnSearch = true;
+        }
+      });
+
+      const clickedOnResults = (searchResults && searchResults.contains(e.target)) ||
+                               (mobileSearchResults && mobileSearchResults.contains(e.target));
+
+      if (!clickedOnSearch && !clickedOnResults) {
+        hideSearchResults();
+      }
+    });
+    
+    // ESC键隐藏结果
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        hideSearchResults();
+      }
+    });
+  });
+</script>
