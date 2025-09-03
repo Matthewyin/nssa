@@ -17,8 +17,8 @@ FROM nginx:alpine
 # 复制构建好的静态文件
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# 复制nginx配置文件
-COPY nginx.conf /etc/nginx/nginx.conf
+# 复制简化的nginx配置文件
+COPY nginx-simple.conf /etc/nginx/nginx.conf
 
 # 创建健康检查文件
 RUN echo "OK" > /usr/share/nginx/html/health
@@ -26,15 +26,15 @@ RUN echo "OK" > /usr/share/nginx/html/health
 # 设置正确的权限
 RUN chown -R nginx:nginx /usr/share/nginx/html
 
+# 安装curl用于健康检查
+RUN apk add --no-cache curl
+
 # 添加健康检查
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+  CMD curl -f http://localhost:8080/health || exit 1
 
 # 暴露8080端口（Firebase App Hosting要求）
 EXPOSE 8080
 
-# 以nginx用户运行
-USER nginx
-
-# 启动nginx
+# 启动nginx（以root用户运行以绑定8080端口）
 CMD ["nginx", "-g", "daemon off;"]
