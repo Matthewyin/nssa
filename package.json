@@ -4,24 +4,30 @@
   "version": "3.0.0",
   "scripts": {
     "dev": "astro dev",
-    "start": "nginx -g 'daemon off;'",
+    "start": "node ./dist/server/entry.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "docker:build": "docker build -t nssa-nginx .",
-    "docker:run": "docker run -p 8080:8080 --name nssa-test nssa-nginx",
-    "docker:test": "npm run docker:build && npm run docker:run"
+    "docker:build": "docker build -f Dockerfile.ssr -t nssa-ssr .",
+    "docker:run": "docker run -p 8080:8080 --name nssa-ssr-test nssa-ssr",
+    "docker:test": "npm run docker:build && npm run docker:run",
+    "docker:build-static": "docker build -t nssa-nginx .",
+    "docker:run-static": "docker run -p 8080:8080 --name nssa-test nssa-nginx"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.4",
+    "@astrojs/node": "^9.4.3",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.5.1",
     "@astrojs/tailwind": "^6.0.2",
+    "@octokit/rest": "^22.0.0",
     "@tailwindcss/typography": "^0.5.16",
     "astro": "^5.13.5",
     "fuse.js": "^7.1.0",
+    "gray-matter": "^4.0.3",
+    "marked": "^16.2.1",
     "typescript": "^5.9.2"
   }
 }

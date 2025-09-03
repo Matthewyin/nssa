@@ -1,27 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getAllPosts, getPostsByCategory } from '../lib/github';
 
-// 获取所有中文文章
-const allPosts = await getCollection('posts', ({ data }) => {
-  return data.lang === 'zh' && !data.draft;
-});
-
-// 按日期排序
-const sortedPosts = allPosts.sort((a, b) =>
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+// 动态获取所有文章
+const allPosts = await getAllPosts();
 
 // 获取最新文章
-const latestPosts = sortedPosts.slice(0, 6);
+const latestPosts = allPosts.slice(0, 6);
 
 // 按分类分组
 const categories = {
-  business: sortedPosts.filter(post => post.data.categories?.includes('business')).slice(0, 3),
-  tech: sortedPosts.filter(post => post.data.categories?.includes('tech')).slice(0, 3),
-  psychology: sortedPosts.filter(post => post.data.categories?.includes('psychology')).slice(0, 3),
-  workplace: sortedPosts.filter(post => post.data.categories?.includes('workplace')).slice(0, 3),
-  history: sortedPosts.filter(post => post.data.categories?.includes('history')).slice(0, 3),
+  business: await getPostsByCategory('business').then(posts => posts.slice(0, 3)),
+  tech: await getPostsByCategory('tech').then(posts => posts.slice(0, 3)),
+  psychology: await getPostsByCategory('psychology').then(posts => posts.slice(0, 3)),
+  workplace: await getPostsByCategory('workplace').then(posts => posts.slice(0, 3)),
+  history: await getPostsByCategory('history').then(posts => posts.slice(0, 3)),
 };
 ---
 
