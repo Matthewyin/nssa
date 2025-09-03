@@ -8,10 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check",
-    "docker:build": "docker build -t nssa-nginx .",
-    "docker:run": "docker run -p 8080:8080 --name nssa-test nssa-nginx",
-    "docker:test": "npm run docker:build && npm run docker:run"
+    "check": "astro check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
