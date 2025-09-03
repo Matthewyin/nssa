@@ -4,8 +4,8 @@ subtitle: ""
 description: ""
 tags: []
 readingTime: ""
-date: "2025-09-03T12:26:52.114Z"
-lastmod: "2025-09-03T12:26:52.114Z"
+date: "2025-09-03T13:14:37.184Z"
+lastmod: "2025-09-03T13:14:37.184Z"
 categories: ["职场专题"]
 ---
 # **解决工作中架构团队积极性不高的问题**
