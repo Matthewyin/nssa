@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "n8n-project-460516",
+    "site": "nssa-470903",
     "public": "dist",
     "ignore": [
       "firebase.json",
