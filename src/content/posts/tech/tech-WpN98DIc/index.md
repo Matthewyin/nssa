@@ -4,8 +4,8 @@ subtitle: ""
 description: ""
 tags: []
 readingTime: ""
-date: "2025-09-03T13:27:19.025Z"
-lastmod: "2025-09-03T13:27:19.025Z"
+date: "2025-09-04T00:08:33.684Z"
+lastmod: "2025-09-04T00:08:33.684Z"
 categories: ["技术专题"]
 ---
 
@@ -223,3 +223,35 @@ SD-WAN 赋予分支机构直接访问云的能力，同时也造成了一个安�
 从 MPLS VPN 到 SD-WAN 和 SRv6 的演进，并非简单的线性发展，而是一场反映企业 IT 根本性转变的多维度变革。MPLS VPN 仍然是可靠性的基准，但它代表了一个僵化的、以网络为中心的过去。SD-WAN 已成为变革的主导力量，它是一个敏捷的、以应用为中心的覆盖网络，响应了云时代的呼唤。与此同时，SRv6 正在悄然重构底层网络本身，预示着一个前所未有的简洁和可编程的未来。
 
 未来的终极企业网络，很可能不是这三种技术中任何一种的孤立存在，而是一种战略性的综合体：将 SD-WAN 覆盖层的应用感知智能，无缝地编程到底层 SRv6 网络的优雅、简化的传输之上。对于任何肩负构建未来网络的架构师而言，深入理解这些范式之间在技术实现上的“异同”，是迈向成功的第一步，也是最关键的一步。
+
+#### **引用的著作**
+
+1. What is SD-WAN? \- Cloudflare, 访问时间为 八月 14, 2025， [https://www.cloudflare.com/learning/network-layer/what-is-an-sd-wan/](https://www.cloudflare.com/learning/network-layer/what-is-an-sd-wan/)  
+2. What Is SD-WAN? Software-Defined WAN \- Intel, 访问时间为 八月 14, 2025， [https://www.intel.com/content/www/us/en/communications/what-is-sd-wan.html](https://www.intel.com/content/www/us/en/communications/what-is-sd-wan.html)  
+3. The Evolution of WAN \- Apcela, 访问时间为 八月 14, 2025， [https://www.apcela.com/the-evolution-of-wan/](https://www.apcela.com/the-evolution-of-wan/)  
+4. VPN and Connectivity Services, 访问时间为 八月 14, 2025， [https://docs.oracle.com/communications/E88199\_01/doc.74/e88200/con\_vpn.htm](https://docs.oracle.com/communications/E88199_01/doc.74/e88200/con_vpn.htm)  
+5. BGP / MPLS Layer3 VPNs \- Noction, 访问时间为 八月 14, 2025， [https://www.noction.com/blog/bgp-mpls-layer3-vpns](https://www.noction.com/blog/bgp-mpls-layer3-vpns)  
+6. BGP/MPLS IP VPN architecture. | Download Scientific Diagram, 访问时间为 八月 14, 2025， [https://www.researchgate.net/figure/BGP-MPLS-IP-VPN-architecture\_fig1\_4353457](https://www.researchgate.net/figure/BGP-MPLS-IP-VPN-architecture_fig1_4353457)  
+7. Understanding BGP/MPLS IP VPN \- ME60 V800R023C00SPC500 Feature Description \- Huawei Technical Support, 访问时间为 八月 14, 2025， [https://support.huawei.com/enterprise/en/doc/EDOC1100334521/e68f24ef/understanding-bgp-mpls-ip-vpn](https://support.huawei.com/enterprise/en/doc/EDOC1100334521/e68f24ef/understanding-bgp-mpls-ip-vpn)  
+8. 6\. MPLS VPN Control Plane and Data Plane \- Courses, 访问时间为 八月 14, 2025， [https://rayka-co.com/lesson/mpls-vpn-control-plane-and-data-plane/](https://rayka-co.com/lesson/mpls-vpn-control-plane-and-data-plane/)  
+9. What is An MPLS VPN? Types, Protocols & Benefits Explained \- Netmaker, 访问时间为 八月 14, 2025， [https://www.netmaker.io/resources/mpls-vpn](https://www.netmaker.io/resources/mpls-vpn)  
+10. MPLS vs VPN: What Are the Key Differences? \- Cato Networks, 访问时间为 八月 14, 2025， [https://www.catonetworks.com/what-is-mpls/mpls-vs-vpn-what-are-the-key-differences/](https://www.catonetworks.com/what-is-mpls/mpls-vs-vpn-what-are-the-key-differences/)  
+11. MPLS Networks: Guide for Newbies \- SynchroNet, 访问时间为 八月 14, 2025， [https://synchronet.net/mpls-network/](https://synchronet.net/mpls-network/)  
+12. SD-WAN vs MPLS: Cost, Performance & Security Breakdown, 访问时间为 八月 14, 2025， [https://www.zscaler.com/zpedia/sd-wan-vs-mpls](https://www.zscaler.com/zpedia/sd-wan-vs-mpls)  
+13. SD-WAN vs MPLS: Key Differences, Benefits & Use Cases | Fortinet, 访问时间为 八月 14, 2025， [https://www.fortinet.com/resources/cyberglossary/sd-wan-vs-mpls](https://www.fortinet.com/resources/cyberglossary/sd-wan-vs-mpls)  
+14. SD-WAN vs. MPLS | SD-WAN benefits and drawbacks | Cloudflare, 访问时间为 八月 14, 2025， [https://www.cloudflare.com/learning/network-layer/sd-wan-vs-mpls/](https://www.cloudflare.com/learning/network-layer/sd-wan-vs-mpls/)  
+15. What is SD-WAN? | Glossary | HPE, 访问时间为 八月 14, 2025， [https://www.hpe.com/us/en/what-is/sd-wan.html](https://www.hpe.com/us/en/what-is/sd-wan.html)  
+16. What is WAN (Wide Area Network)? | Glossary | HPE, 访问时间为 八月 14, 2025， [https://www.hpe.com/us/en/what-is/wide-area-network.html](https://www.hpe.com/us/en/what-is/wide-area-network.html)  
+17. What are the Components of SD-WAN? \- PyNet Labs, 访问时间为 八月 14, 2025， [https://www.pynetlabs.com/components-of-sd-wan/](https://www.pynetlabs.com/components-of-sd-wan/)  
+18. Understanding The Architecture Of SD-WAN | Expereo, 访问时间为 八月 14, 2025， [https://www.expereo.com/blog/understanding-sd-wan-architecture](https://www.expereo.com/blog/understanding-sd-wan-architecture)  
+19. www.pynetlabs.com, 访问时间为 八月 14, 2025， [https://www.pynetlabs.com/components-of-sd-wan/\#:\~:text=SD%2DWAN%20solutions%20consist%20of,Management%20Plane%2C%20and%20Orchestration%20plane.](https://www.pynetlabs.com/components-of-sd-wan/#:~:text=SD%2DWAN%20solutions%20consist%20of,Management%20Plane%2C%20and%20Orchestration%20plane.)  
+20. www.hpe.com, 访问时间为 八月 14, 2025， [https://www.hpe.com/us/en/what-is/sd-wan.html\#:\~:text=A%20Software%2Ddefined%20Wide%20Area,cloud%20or%20across%20hybrid%20IT](https://www.hpe.com/us/en/what-is/sd-wan.html#:~:text=A%20Software%2Ddefined%20Wide%20Area,cloud%20or%20across%20hybrid%20IT)  
+21. Top 8 Business Cases for Implementing SD-WAN \- Verus, 访问时间为 八月 14, 2025， [https://veruscorp.com/top-8-business-cases-for-implementing-sd-wan/](https://veruscorp.com/top-8-business-cases-for-implementing-sd-wan/)  
+22. Segment Routing: The Future of MPLS \- WWT, 访问时间为 八月 14, 2025， [https://www.wwt.com/article/segment-routing-the-future-of-mpls](https://www.wwt.com/article/segment-routing-the-future-of-mpls)  
+23. What Is SRv6? How Does SRv6 Work? \- Huawei Technical Support, 访问时间为 八月 14, 2025， [https://info.support.huawei.com/info-finder/encyclopedia/en/SRv6.html](https://info.support.huawei.com/info-finder/encyclopedia/en/SRv6.html)  
+24. Kickstart your journey to IPv6 with Segment Routing over IPv6 (SRv6) \- Cisco Blogs, 访问时间为 八月 14, 2025， [https://blogs.cisco.com/industries/kickstart-your-journey-to-ipv6-with-segment-routing-over-ipv6-srv6](https://blogs.cisco.com/industries/kickstart-your-journey-to-ipv6-with-segment-routing-over-ipv6-srv6)  
+25. Segment routing with IPv6 data plane (SRv6) \- Nokia Documentation Center, 访问时间为 八月 14, 2025， [https://documentation.nokia.com/sr/22-10/books/Segment%20Routing%20and%20PCE%20User%20Guide/segment-rout-with-ipv6-data-plane-srv6.html](https://documentation.nokia.com/sr/22-10/books/Segment%20Routing%20and%20PCE%20User%20Guide/segment-rout-with-ipv6-data-plane-srv6.html)  
+26. RFC 9602: Segment Routing over IPv6 (SRv6) Segment Identifiers in the IPv6 Addressing Architecture \- » RFC Editor, 访问时间为 八月 14, 2025， [https://www.rfc-editor.org/rfc/rfc9602.html](https://www.rfc-editor.org/rfc/rfc9602.html)  
+27. Segment Routing over IPv6 \- Nokia Documentation Center, 访问时间为 八月 14, 2025， [https://documentation.nokia.com/acg/23-7-2/books/classic-cli-part-i/c233-seg-rout-ipv6.html](https://documentation.nokia.com/acg/23-7-2/books/classic-cli-part-i/c233-seg-rout-ipv6.html)  
+28. DAY ONE: INTRODUCTION TO SRV6 | Juniper Networks, 访问时间为 八月 14, 2025， [https://www.juniper.net/documentation/en\_US/day-one-books/DayOne-Intro-SRv6.pdf](https://www.juniper.net/documentation/en_US/day-one-books/DayOne-Intro-SRv6.pdf)  
+29. 4 Primary Use Cases for Secure SD-WAN | Fortinet Blog, 访问时间为 八月 14, 2025， [https://www.fortinet.com/blog/industry-trends/secure-sd-wan-solution-based-on-use-case-requirements](https://www.fortinet.com/blog/industry-trends/secure-sd-wan-solution-based-on-use-case-requirements)
