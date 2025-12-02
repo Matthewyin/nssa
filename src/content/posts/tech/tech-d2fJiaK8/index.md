@@ -1,11 +1,11 @@
 ---
-title: "无法访问Google文档"
+title: "UALMT架构"
 subtitle: ""
-description: "抱歉，我无法访问您提供的Google文档链接进行分析。由于安全和隐私限制，我不能打开外部网站或私人文件。请将文档的纯文本内容提供给我，我将为您提取核心主题，并生成所需的Hugo Front Matter（标题、描述和标签）。"
-tags: ["访问失败", "需要文本内容", "安全限制"]
+description: "本文深入探讨了UALMT（Unified Architecture of Large Model for Translation）架构，旨在解决大语言模型在翻译领域微调成本高、模型管理复杂的问题。通过引入创新的路由模型，该架构统一调度通用、领域及质量预估等多种模型，实现成本优化、效率提升和翻译质量的显著增强。"
+tags: ["大语言模型", "机器翻译", "系统架构", "UALMT", "成本优化", "模型路由"]
 readingTime: ""
-date: "2025-12-02T14:33:23.208Z"
-lastmod: "2025-12-02T14:33:23.208Z"
+date: "2025-12-02T14:38:38.658Z"
+lastmod: "2025-12-02T14:38:38.658Z"
 categories: ["技术专题"]
 ---
 # UI+Agent+LLM+MCP+Tools架构(UALMT)
@@ -187,18 +187,12 @@ categories: ["技术专题"]
 
 可以分为几块：
 
-mcp\_bus/
-
- ├─ connection.py   \# McpConnection：单个 MCP server 的连接
-
- ├─ registry.py     \# McpRegistry：全局工具注册表
-
- ├─ router.py       \# McpRouter：根据 tool name 路由到对应 server
-
- └─ adapters/
-
-     ├─ langchain.py  \# 把 MCP tools → LangChain Tool 列表
-
+mcp\_bus/  
+ ├─ connection.py   \# McpConnection：单个 MCP server 的连接  
+ ├─ registry.py     \# McpRegistry：全局工具注册表  
+ ├─ router.py       \# McpRouter：根据 tool name 路由到对应 server  
+ └─ adapters/  
+     ├─ langchain.py  \# 把 MCP tools → LangChain Tool 列表  
      └─ (future) openai\_tools.py / others
 
 #### **5.2 主要职责**
@@ -217,22 +211,22 @@ mcp\_bus/
      * parameters（JSON schema）  
    * 写入 McpRegistry，形成全局工具表：
 
-network.ping         → server=network-mcp, schema=...
+   network.ping         → server=network-mcp, schema=...
 
-network.trace        → server=network-mcp, schema=...
+   network.trace        → server=network-mcp, schema=...
 
-rag.search\_cases     → server=rag-mcp, schema=...
+   rag.search\_cases     → server=rag-mcp, schema=...
 
-rag.summarize\_case   → server=rag-mcp, schema=...
+   rag.summarize\_case   → server=rag-mcp, schema=...
 
 2. **工具调用路由**  
    * 提供统一接口：
 
-mcp\_bus.call\_tool("network.ping", {"target": "8.8.8.8", "count": 4})
+   mcp\_bus.call\_tool("network.ping", {"target": "8.8.8.8", "count": 4})
 
-mcp\_bus.call\_tool("rag.summarize\_case", {"case\_id": "...", "diag\_json": {...}})
+   mcp\_bus.call\_tool("rag.summarize\_case", {"case\_id": "...", "diag\_json": {...}})
 
-* 内部根据名称查 registry，找到对应 MCP server，走 MCP 协议发送请求，返回 JSON 结果。  
+   * 内部根据名称查 registry，找到对应 MCP server，走 MCP 协议发送请求，返回 JSON 结果。  
 4. **对上层框架的 Adapter**  
    * adapters.langchain.build\_langchain\_tools(prefix="network.")  
      * 从 registry 中选出 network.\* 的 tool  
@@ -310,114 +304,62 @@ mcp\_bus.call\_tool("rag.summarize\_case", {"case\_id": "...", "diag\_json": {..
 
 ###  **场景 1：用户要求「帮我诊断 8.8.8.8 网络情况」**
 
-1\. 用户在 OpenWebUI 输入：
-
-  “帮我诊断一下到 8.8.8.8 的网络，看看丢包、路径和 DNS。”
-
-​
-
-2\. OpenWebUI → Graph Service（LangGraph HTTP API）
-
-  \- body: {message: "...", session\_id: ...}
-
-​
-
-3\. LangGraph:
-
-  3.1 UserInputNode：把 message 写入 state
-
-  3.2 RouterNode：
-
-      \- 判断这是“网络诊断”意图
-
-      \- 将 flow 导向 NetworkAgentNode
-
-​
-
-4\. NetworkAgentNode（内部是 LangChain NetworkDiagAgent）：
-
-  4.1 从 MCP Bus adapter 拿 tools \= build\_langchain\_tools(prefix="network.")
-
-  4.2 用 LLM（Ollama）+ ReAct / Tools 规划：
-
-      \- 调用 network.ping(target="8.8.8.8", count=4)
-
-      \- 如果有丢包，再调用 network.traceroute(...)
-
-  4.3 对每次工具调用：
-
-      \- 实际函数调用：lc\_tool(...) → adapter → mcp\_bus.call\_tool(...)
-
-      \- mcp\_bus → router → network-mcp → ping/traceroute → 系统命令
-
-      \- 结果 JSON 回到 Agent
-
-  4.4 Agent 聚合结果，生成一个结构化诊断 JSON \+ 文本总结
-
-  4.5 把这些写入 LangGraph state
-
-​
-
-5\. FinalAnswerNode：
-
-  \- 根据 state 中的诊断结果，生成给用户看的最终说明
-
+1\. 用户在 OpenWebUI 输入：  
+  “帮我诊断一下到 8.8.8.8 的网络，看看丢包、路径和 DNS。”  
+​  
+2\. OpenWebUI → Graph Service（LangGraph HTTP API）  
+  \- body: {message: "...", session\_id: ...}  
+​  
+3\. LangGraph:  
+  3.1 UserInputNode：把 message 写入 state  
+  3.2 RouterNode：  
+      \- 判断这是“网络诊断”意图  
+      \- 将 flow 导向 NetworkAgentNode  
+​  
+4\. NetworkAgentNode（内部是 LangChain NetworkDiagAgent）：  
+  4.1 从 MCP Bus adapter 拿 tools \= build\_langchain\_tools(prefix="network.")  
+  4.2 用 LLM（Ollama）+ ReAct / Tools 规划：  
+      \- 调用 network.ping(target="8.8.8.8", count=4)  
+      \- 如果有丢包，再调用 network.traceroute(...)  
+  4.3 对每次工具调用：  
+      \- 实际函数调用：lc\_tool(...) → adapter → mcp\_bus.call\_tool(...)  
+      \- mcp\_bus → router → network-mcp → ping/traceroute → 系统命令  
+      \- 结果 JSON 回到 Agent  
+  4.4 Agent 聚合结果，生成一个结构化诊断 JSON \+ 文本总结  
+  4.5 把这些写入 LangGraph state  
+​  
+5\. FinalAnswerNode：  
+  \- 根据 state 中的诊断结果，生成给用户看的最终说明  
   \- 返回给 Graph Service → OpenWebUI → 用户看到结果
 
 ### **场景 2：诊断完再请 RAG 分析历史案例**
 
 在场景 1 的基础上：
 
-​
-
-6\. LangGraph Router 发现：
-
-  \- “有诊断结果了，可以让 RAG 再分析一下历史案例/最佳实践”
-
-  → 流程进入 RagAgentNode
-
-​
-
-7\. RagAgentNode（LangChain RagAgent）：
-
-  7.1 tools \= build\_langchain\_tools(prefix="rag.")
-
-  7.2 把 NetworkDiagAgent 的诊断 JSON \+ 用户问题整理成 prompt
-
-  7.3 通过 LLM 规划：
-
-      \- 调用 rag.search\_cases(query="BGP 丢包 8.8.8.8 类似场景")
-
-      \- 调用 rag.summarize\_context(context=\<检索结果 \+ 诊断 JSON\>)
-
-  7.4 对工具调用仍然走：
-
-      rag.\* Tool → LangChain Tool → MCP Bus → rag-mcp → vectorDB/日志库
-
-​
-
-8\. RagAgent 输出：
-
-  \- 历史上类似故障的解决方案
-
-  \- 是否存在已知 bug 或运营商问题
-
-  \- 建议的下一步（如提工单、扩容、改路由策略）
-
-​
-
-9\. FinalAnswerNode：
-
-  \- 把“实时诊断 \+ RAG 分析”融合成一个完整的报告：
-
-    \- 当前状态：可达/不可达、丢包、路径问题点
-
-    \- 历史案例：类似问题的原因/解决方案
-
-    \- 建议操作：xx 步骤
-
-  \- 返回给 OpenWebUI。
-
+6\. LangGraph Router 发现：  
+  \- “有诊断结果了，可以让 RAG 再分析一下历史案例/最佳实践”  
+  → 流程进入 RagAgentNode  
+​  
+7\. RagAgentNode（LangChain RagAgent）：  
+  7.1 tools \= build\_langchain\_tools(prefix="rag.")  
+  7.2 把 NetworkDiagAgent 的诊断 JSON \+ 用户问题整理成 prompt  
+  7.3 通过 LLM 规划：  
+      \- 调用 rag.search\_cases(query="BGP 丢包 8.8.8.8 类似场景")  
+      \- 调用 rag.summarize\_context(context=\<检索结果 \+ 诊断 JSON\>)  
+  7.4 对工具调用仍然走：  
+      rag.\* Tool → LangChain Tool → MCP Bus → rag-mcp → vectorDB/日志库  
+​  
+8\. RagAgent 输出：  
+  \- 历史上类似故障的解决方案  
+  \- 是否存在已知 bug 或运营商问题  
+  \- 建议的下一步（如提工单、扩容、改路由策略）  
+​  
+9\. FinalAnswerNode：  
+  \- 把“实时诊断 \+ RAG 分析”融合成一个完整的报告：  
+    \- 当前状态：可达/不可达、丢包、路径问题点  
+    \- 历史案例：类似问题的原因/解决方案  
+    \- 建议操作：xx 步骤  
+  \- 返回给 OpenWebUI。  
 ---
 
 ## **四、扩展性 & 兼容性：以后要加东西怎么加？**
