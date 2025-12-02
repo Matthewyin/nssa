@@ -1,11 +1,11 @@
 ---
 title: "UALMT架构"
 subtitle: ""
-description: "本文深入探讨了UALMT（Unified Architecture of Large Model for Translation）架构，旨在解决大语言模型在翻译领域微调成本高、模型管理复杂的问题。通过引入创新的路由模型，该架构统一调度通用、领域及质量预估等多种模型，实现成本优化、效率提升和翻译质量的显著增强。"
-tags: ["大语言模型", "机器翻译", "系统架构", "UALMT", "成本优化", "模型路由"]
+description: "UALMT是一套旨在解决传统烟囱式开发弊病的统一大模型架构。它通过标准化的特征、训练、服务流程，整合了搜索、推荐等多个业务场景的模型开发。该架构注重模块化与高效率，旨在提升模型迭代速度，降低资源成本，为业务的快速创新和增长提供强大的技术支持。"
+tags: ["大模型", "系统架构", "推荐系统", "机器学习", "模型训练", "在线服务"]
 readingTime: ""
-date: "2025-12-02T14:38:38.658Z"
-lastmod: "2025-12-02T14:38:38.658Z"
+date: "2025-12-02T14:42:52.453Z"
+lastmod: "2025-12-02T14:42:52.453Z"
 categories: ["技术专题"]
 ---
 # UI+Agent+LLM+MCP+Tools架构(UALMT)
@@ -249,9 +249,7 @@ mcp\_bus/
 
 ### **6\. 多个 MCP Server（工具服务层）**
 
-####  **6.1** 
-
-#### **network-mcp**
+####  **6.1 network-mcp**
 
 * **提供工具**：  
   * network.ping  
@@ -263,9 +261,7 @@ mcp\_bus/
   * Python subprocess 调用系统命令  
   * 对输出做解析，返回结构化 JSON \+ 原始文本
 
-####  **6.2** 
-
-#### **rag-mcp**
+####  **6.2 rag-mcp**
 
 * **提供工具**：  
   * rag.search\_cases(query, tags, limit)  
@@ -334,8 +330,7 @@ mcp\_bus/
 
 ### **场景 2：诊断完再请 RAG 分析历史案例**
 
-在场景 1 的基础上：
-
+在场景 1 的基础上：  
 6\. LangGraph Router 发现：  
   \- “有诊断结果了，可以让 RAG 再分析一下历史案例/最佳实践”  
   → 流程进入 RagAgentNode  
