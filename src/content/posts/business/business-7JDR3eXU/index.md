@@ -4,8 +4,8 @@ subtitle: ""
 description: ""
 tags: []
 readingTime: ""
-date: "2025-12-04T10:55:27.206Z"
-lastmod: "2025-12-04T10:55:27.206Z"
+date: "2025-12-04T11:04:58.050Z"
+lastmod: "2025-12-04T11:04:58.050Z"
 categories: ["业务专题"]
 ---
 # **“小镇的100元”经济学寓言**
