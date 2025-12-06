@@ -24,6 +24,16 @@ const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, current
     <meta name="generator" content={Astro.generator} />
 
     <!-- SEO Meta Tags -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-42PG0XQ79M"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-42PG0XQ79M');
+    </script>
+
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={currentLang === 'zh' ? '历史研究,战略分析,交互式学习,学术平台' : 'historical research,strategic analysis,interactive learning,academic platform'} />
