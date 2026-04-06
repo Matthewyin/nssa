@@ -1,12 +1,12 @@
 ---
 title: "DeerFlow系列之二：DeerFlow整体架构"
-description: "本文深入解析DeerFlow系统的整体架构设计，重点介绍了其在高性能数据流处理中的关键模块与逻辑组件。通过分析其分布式架构、模块间通信机制及核心处理流程，展示了DeerFlow如何解决大规模数据场景下的高并发与低延迟挑战，为构建稳健的数据流平台提供了架构级指导。"
-tags: ["DeerFlow", "系统架构", "数据处理", "分布式系统"]
-date: "2026-04-06T00:57:40.576Z"
-lastmod: "2026-04-06T00:57:40.576Z"
+description: "本文深入剖析了DeerFlow系统的整体架构设计，详细阐述了其作为分布式处理框架的核心组件构成、各模块间的交互机制以及数据流转路径。通过对架构层级的层层解构，揭示了DeerFlow如何实现高可用、高扩展性及性能优化，为开发者理解系统底层逻辑与工程实践提供了清晰的指导，是掌握该系列技术栈不可或缺的深度架构参考。"
+tags: ["DeerFlow", "分布式系统", "架构设计", "技术架构"]
+date: "2026-04-06T01:00:30.766Z"
+lastmod: "2026-04-06T01:00:30.766Z"
 categories: ["技术专题"]
 ---
-MERMAID\_START  
+MERMAIDSTART  
 flowchart TB  
     Client\["Client / Browser\<br/\>Web 用户、开发者、调用方"\]  
     IM\["IM Channels\<br/\>Feishu / Slack / Telegram"\]  
@@ -45,4 +45,4 @@ flowchart TB
     LangGraph \--\> Backend  
     Gateway \--\> Backend  
     Provisioner \--\> Backend  
-MERMAID\_END
+MERMAIDEND
