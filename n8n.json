@@ -4,7 +4,7 @@
       "parameters": {
         "jsCode": "// 处理所有文档数据，合并文件夹信息\nconst allResults = $input.all();\nlet allDocuments = [];\n\n// 文件夹映射\nconst folderMap = {\n  '1xDNGIOGnsCsXs0KZCHwKOav96dQGith4': { name: '心理专题', category: 'psychology' },\n  '1uKz9AOYftgvExoLPbiMvlEtdjY63YSB6': { name: '职场专题', category: 'workplace' },\n  '125UBg7dLONmNg0ou9T4d8uVW_fsrJFH8': { name: '历史专题', category: 'history' },\n  '1frvBLCJkyDaBffF_JXR4Px8DoIcL-75_': { name: '技术专题', category: 'tech' },\n  '1hVM2Q2doBl2Sb9HeUvTawjxIhP_MGd6P': { name: '业务专题', category: 'business'}\n};\n\n// 遍历每个文件夹的结果\nallResults.forEach(result => {\n  if (result.json.files && result.json.files.length > 0) {\n    result.json.files.forEach(file => {\n      const folderId = file.parents[0];\n      const folderInfo = folderMap[folderId];\n      \n      if (folderInfo) {\n        allDocuments.push({\n          json: {\n            ...file,\n            folderName: folderInfo.name,\n            folderId: folderId,\n            category: folderInfo.category\n          }\n        });\n      }\n    });\n  }\n});\n\nconsole.log(`总共找到 ${allDocuments.length} 个文档`);\nreturn allDocuments;"
       },
-      "id": "f4f44f4a-52f1-4e22-9866-fcab4085f511",
+      "id": "8674ce6d-4cf6-4b04-9ab0-e7a0ee2761cd",
       "name": "处理文档数据",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -17,13 +17,13 @@
       "parameters": {
         "jsCode": "// 解析AI Agent的响应\nconst response = $input.first();\nconst aiResponse = response.json.output;\nconst originalDoc = $('Loop Over Items').first().json;\n\nlet frontMatter = aiResponse;\n\n// 直接使用文档ID的后8位作为文件名\nconst docId = originalDoc.id;\nconst shortId = docId.slice(-8);\nconst fileName = $('判断文件状态').first().json.category + `-${shortId}.md`;\n\n// 构建完整的Front Matter\nconst now = new Date();\nconst completeFrontMatter = {\n  ...frontMatter,\n  date: now.toISOString(),\n  lastmod: now.toISOString(),\n  categories: [originalDoc.folderName]\n};\n\nreturn {\n  json: {\n    originalDoc,\n    frontMatter: completeFrontMatter,\n    fileName,\n    category: originalDoc.category\n  }\n};"
       },
-      "id": "444f1c3f-432e-4ec3-9bcf-fee3af4022bd",
+      "id": "958a6e78-594e-4fd8-bdc1-3ad73b26046b",
       "name": "处理AI响应",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -176,
-        416
+        -32,
+        -224
       ]
     },
     {
@@ -36,57 +36,52 @@
         -1456,
         192
       ],
-      "id": "2364d11a-e536-48ca-8e1a-1f283b65953b",
+      "id": "48491a92-3ad1-4898-a0f8-31779323b490",
       "name": "Loop Over Items"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=请分析这个Google文档并返回Hugo格式的Front Matter。\n\n文档信息：\n- URL: {{$json.webViewLink}}\n- 标题: {{$json.name}}\n- 分类: {{$json.folderName}}\n\n分析要求：\n1. 仔细阅读文档内容\n2. 提取核心主题和关键信息\n3. 生成适合的标签和描述\n\n返回JSON格式：\n{\n  \"title\": \"优化后的文章标题\",\n  \"subtitle\": \"简洁的副标题\",\n  \"description\": \"100-200字的文章描述，突出核心价值\",\n  \"tags\": [\"相关标签1\", \"相关标签2\", \"相关标签3\"],\n  \"readingTime\": \"约XX分钟\"\n}\n\n注意：只返回JSON，不要包含其他解释文字。",
+        "text": "=请分析这个Google文档并返回Hugo格式的Front Matter。\n\n文档信息：\n- URL: {{$json.webViewLink}}\n- 标题: {{$json.name}}\n- 分类: {{$json.folderName}}\n\n分析要求：\n1. 仔细阅读文档内容\n2. 提取核心主题和关键信息\n3. 生成适合的标签和描述\n\n返回JSON格式：\n{\n  \"title\": \"简洁的标题\",\n  \"description\": \"80-100字的文章描述，突出核心价值\",\n  \"tags\": [\"相关标签1\", \"相关标签2\", \"相关标签3\"]\n}\n\n注意：只返回JSON，不要包含其他解释文字。",
         "hasOutputParser": true,
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.8,
       "position": [
-        -528,
-        416
+        -448,
+        -224
       ],
-      "id": "6c778d04-e568-4139-99c1-cdd1b1886195",
+      "id": "1179425e-0c73-48f2-b7bf-d6f02c24b12d",
       "name": "AI Agent",
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"title\": \"优化后的文章标题\",\n  \"subtitle\": \"简洁的副标题\",\n  \"description\": \"100-200字的文章描述，突出核心价值\",\n  \"tags\": [\"相关标签1\", \"相关标签2\", \"相关标签3\"],\n  \"readingTime\": \"约XX分钟\"\n}"
+        "jsonSchemaExample": "{\n  \"title\": \"简洁的标题\",\n  \"description\": \"80-100字的文章描述，突出核心价值\",\n  \"tags\": [\"相关标签1\", \"相关标签2\", \"相关标签3\"]\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        -240,
-        720
+        -144,
+        48
       ],
-      "id": "08db73e1-1b6f-4f1e-af47-1ad1a8e3dbf3",
+      "id": "86d2d57b-cdfd-4150-a648-0c42e374685c",
       "name": "Structured Output Parser"
     },
     {
       "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite-preview",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -496,
-        720
+        -384,
+        48
       ],
-      "id": "70c78851-e18d-4886-b946-40d69fc4dc4e",
-      "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "itRdUUPXbeECwMa9",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
+      "id": "a55391c3-7b73-447e-8fa6-5d2021b14517",
+      "name": "Google Gemini Chat Model"
     },
     {
       "parameters": {
@@ -95,20 +90,14 @@
         "nodeCredentialType": "googleDriveOAuth2Api",
         "options": {}
       },
-      "id": "57b166ba-2590-4c29-aacf-024b4fdfe2b1",
+      "id": "a709290b-f023-457a-bfa8-c63117d5e6e6",
       "name": "下载Markdown内容",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        -496,
-        208
+        -336,
+        288
       ],
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JUnWEOwe7cbBmf5L",
-          "name": "Google Drive account"
-        }
-      },
       "onError": "continueRegularOutput"
     },
     {
@@ -117,28 +106,43 @@
         "combinationMode": "mergeByPosition",
         "options": {}
       },
-      "id": "770bc8fc-4352-44e9-9b2c-6e086d21aa8a",
+      "id": "4f83843a-8ea4-4cb4-b59f-85ff6d197ed0",
       "name": "合并AI和内容",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 2.1,
       "position": [
-        80,
-        256
+        160,
+        160
       ],
       "alwaysOutputData": false,
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "jsCode": "// 合并内容 (SSH专用binary格式)\nconsole.log(\"--- [合并内容] 节点开始执行 ---\");\ntry {\n    // 1. 获取由Merge节点合并后的单个输入项\n    const input = $input.first();\n    const data = input.json;\n    console.log(\"收到的输入数据类型:\", typeof data);\n    console.log(\"收到的binary数据:\", input.binary ? \"存在\" : \"不存在\");\n\n    // 2. 严格检查合并后的数据是否有效\n    if (!data || !data.frontMatter || !data.fileName) {\n        console.error(\"错误：合并后的数据无效或不完整，将跳过此项。\");\n        return []; \n    }\n    console.log(`数据检查通过: ${data.fileName}`);\n\n    // 3. 准备Front Matter\n    const fm = data.frontMatter;\n    const frontMatterYaml = `title: \"${fm.title || ''}\"\nsubtitle: \"${fm.subtitle || ''}\"\ndescription: \"${fm.description || ''}\"\ntags: [${fm.tags ? fm.tags.map(tag => `\"${tag}\"`).join(', ') : ''}]\nreadingTime: \"${fm.readingTime || ''}\"\ndate: \"${fm.date || ''}\"\nlastmod: \"${fm.lastmod || ''}\"\ncategories: [${fm.categories ? fm.categories.map(cat => `\"${cat}\"`).join(', ') : ''}]`;\n\n    // 4. 获取Markdown内容\n    let content = '';\n    \n    if (input.binary && input.binary.data) {\n        if (Buffer.isBuffer(input.binary.data)) {\n            content = input.binary.data.toString('utf8');\n        } else {\n            content = Buffer.from(input.binary.data).toString('utf8');\n        }\n        console.log(\"从binary数据获取内容，长度:\", content.length);\n    } else if (typeof data.data === 'string') {\n        content = data.data;\n        console.log(\"从data.data获取内容，长度:\", content.length);\n    } else if (typeof data.body === 'string') {\n        content = data.body;\n        console.log(\"从data.body获取内容，长度:\", content.length);\n    } else {\n        console.error(`错误：无法找到文档内容，文档标题: ${data.frontMatter.title}`);\n        return [];\n    }\n\n    // 5. 验证内容不为空\n    if (!content || content.trim().length === 0) {\n        console.error(`错误：文档内容为空，跳过处理: ${data.frontMatter.title}`);\n        return [];\n    }\n\n    // 6. 合并完整文档\n    const completeDocument = `---\n${frontMatterYaml}\n---\n${content}`;\n    console.log(`完整文档长度: ${completeDocument.length}`);\n\n    // 7. 准备文件路径和文件名\n    const filePath = `/Users/matthewyin/Coding/nssa/content/${data.category}/`;\n    const fileName = data.fileName;\n    \n    // 8. 为SSH节点创建正确的binary格式\n    const fileContent = completeDocument;\n    \n    // 9. SSH节点专用格式 - 直接将文件内容作为字符串传递\n    const finalOutput = {\n        json: {\n            filePath,\n            fileName,\n            category: data.category,\n            title: data.frontMatter.title,\n            originalDoc: data.originalDoc,\n            success: true,\n            fileContent: fileContent  // 添加文件内容到json中\n        },\n        binary: {\n            data: Buffer.from(fileContent, 'utf8')\n        }\n    };\n    \n    console.log(`--- [合并内容] 节点成功处理: ${fileName} ---`);\n    console.log(`输出文件内容长度: ${fileContent.length}`);\n    console.log(`输出binary.data长度: ${finalOutput.binary.data.length}`);\n    return finalOutput;\n    \n} catch (error) {\n    console.error(\"--- [合并内容] 节点发生错误 ---\", error.message);\n    console.error(\"错误堆栈:\", error.stack);\n    return [];\n}"
+        "jsCode": "// 合并内容 + 图片处理 + Mermaid 处理\nconsole.log(\"--- [合并内容] 节点开始执行 ---\");\ntry {\n    // 1. 获取由Merge节点合并后的单个输入项\n    const input = $input.first();\n    const data = input.json;\n    console.log(\"收到的输入数据类型:\", typeof data);\n    console.log(\"收到的binary数据:\", input.binary ? \"存在\" : \"不存在\");\n\n    // 2. 严格检查合并后的数据是否有效\n    if (!data || !data.frontMatter || !data.fileName) {\n        console.error(\"错误：合并后的数据无效或不完整，将跳过此项。\");\n        return []; \n    }\n    console.log(`数据检查通过: ${data.fileName}`);\n\n    // 3. 准备Front Matter\n    const fm = data.frontMatter;\n    const frontMatterYaml = `title: \"${fm.title || ''}\"\ndescription: \"${fm.description || ''}\"\ntags: [${fm.tags ? fm.tags.map(tag => `\"${tag}\"`).join(', ') : ''}]\ndate: \"${fm.date || ''}\"\nlastmod: \"${fm.lastmod || ''}\"\ncategories: [${fm.categories ? fm.categories.map(cat => `\"${cat}\"`).join(', ') : ''}]`;\n\n    // 4. 获取Markdown内容\n    let content = '';\n    \n    if (input.binary && input.binary.data) {\n        if (Buffer.isBuffer(input.binary.data)) {\n            content = input.binary.data.toString('utf8');\n        } else {\n            content = Buffer.from(input.binary.data).toString('utf8');\n        }\n        console.log(\"从binary数据获取内容，长度:\", content.length);\n    } else if (typeof data.data === 'string') {\n        content = data.data;\n        console.log(\"从data.data获取内容，长度:\", content.length);\n    } else if (typeof data.body === 'string') {\n        content = data.body;\n        console.log(\"从data.body获取内容，长度:\", content.length);\n    } else {\n        console.error(`错误：无法找到文档内容，文档标题: ${data.frontMatter.title}`);\n        return [];\n    }\n\n    // 5. 验证内容不为空\n    if (!content || content.trim().length === 0) {\n        console.error(`错误：文档内容为空，跳过处理: ${data.frontMatter.title}`);\n        return [];\n    }\n\n    // 6. ===== Mermaid 处理：优先于图片处理，防止文本标记内URL被误识别 =====\n    const mermaidList = [];\n    let mermaidCounter = 0;\n    const mermaidMatches = [];\n    const mermaidRegex = /\\[MERMAID\\]\\n([\\s\\S]*?)\\[\\/MERMAID\\]/gi;\n    let mermaidMatch;\n    while ((mermaidMatch = mermaidRegex.exec(content)) !== null) {\n        mermaidCounter++;\n        const fullBlock = mermaidMatch[0];\n        const diagramCode = mermaidMatch[1].trim();\n        // 对 mermaid 代码做 base64 编码，供 mermaid.ink API 使用\n        const base64Code = Buffer.from(JSON.stringify({ code: diagramCode, mermaid: { theme: 'default' } })).toString('base64url');\n        const localFileName = `mermaid-${mermaidCounter}.svg`;\n        mermaidMatches.push({ fullBlock, base64Code, localFileName });\n        mermaidList.push({ base64Code, localFileName });\n    }\n    // 把 mermaid 标记块替换为本地 SVG 图片引用\n    let processedContent = content;\n    mermaidMatches.forEach(m => {\n        processedContent = processedContent.replace(m.fullBlock, `![Mermaid 图表](./${m.localFileName})`);\n    });\n    console.log(`Mermaid 处理：找到 ${mermaidList.length} 个标记块，已替换为本地 SVG 路径`);\n    // ===== Mermaid 处理结束 =====\n\n    // 7. ===== 图片处理：提取并替换外部图片URL =====\n    const imageList = [];\n    let imageCounter = 0;\n    const imageRegex = /!\\[([^\\]]*)\\]\\((https?:\\/\\/[^)]+)\\)/g;\n    let match;\n    while ((match = imageRegex.exec(processedContent)) !== null) {\n        const originalUrl = match[2];\n        const isGoogleImage = /googleusercontent\\.com|ggpht\\.com|googleapis\\.com\\/drive/.test(originalUrl);\n        if (isGoogleImage) {\n            imageCounter++;\n            const localFileName = `image-${imageCounter}.jpg`;\n            imageList.push({ url: originalUrl, localFileName });\n        }\n    }\n    imageList.forEach(img => {\n        const escapedUrl = img.url.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n        processedContent = processedContent.replace(new RegExp(escapedUrl, 'g'), `./${img.localFileName}`);\n    });\n    console.log(`图片处理：找到 ${imageList.length} 张外部图片，已替换为本地相对路径`);\n    // ===== 图片处理结束 =====\n\n    // 8. 合并完整文档\n    const completeDocument = `---\\n${frontMatterYaml}\\n---\\n${processedContent}`;\n    const fileName = data.fileName;\n    const slug = fileName.replace(/\\.md$/, '');\n    const category = data.category;\n\n    const finalOutput = {\n        json: {\n            fileName,\n            slug,\n            category,\n            title: data.frontMatter.title,\n            originalDoc: data.originalDoc,\n            success: true,\n            fileContent: completeDocument,\n            imageList,\n            mermaidList\n        },\n        binary: { data: Buffer.from(completeDocument, 'utf8') }\n    };\n    console.log(`--- [合并内容] 节点成功处理: ${fileName}, 图片:${imageList.length}, Mermaid:${mermaidList.length} ---`);\n    return finalOutput;\n    \n} catch (error) {\n    console.error(\"--- [合并内容] 节点发生错误 ---\", error.message);\n    console.error(\"错误堆栈:\", error.stack);\n    return [];\n}"
       },
-      "id": "21f04294-008f-4274-8780-f034ef2b9714",
+      "id": "6e1d1fc3-7d18-4400-8abb-c06a79ade8ee",
       "name": "合并内容",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        272,
-        256
+        496,
+        160
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "jsCode": "// 准备资源下载命令：处理普通图片（Google Drive）+ Mermaid 图表（mermaid.ink）\nconsole.log(\"--- [准备资源下载命令] 节点开始执行 ---\");\ntry {\n    const input = $input.first();\n    const data = input.json;\n\n    const imageList = data.imageList || [];\n    const mermaidList = data.mermaidList || [];\n    const slug = data.slug || '';\n    const category = data.category || '';\n\n    if (!slug || !category) {\n        console.error('slug 或 category 为空，跳过资源下载');\n        return { json: { ...data, imageDownloadScript: `echo \"SKIP: slug or category empty\"` } };\n    }\n\n    const basePath = `/Users/matthewyin/Coding/nssa/src/content/posts/${category}/${slug}`;\n    const allCommands = [`mkdir -p '${basePath}'`];\n\n    // 1. Google Drive 图片下载命令\n    imageList.forEach(img => {\n        const safeUrl = img.url.replace(/'/g, \"'\\\\''\" );\n        allCommands.push(`curl -L -s --max-time 30 -o '${basePath}/${img.localFileName}' '${safeUrl}' && echo \"IMG_OK: ${img.localFileName}\" || echo \"IMG_FAIL: ${img.localFileName}\"`);\n    });\n\n    // 2. Mermaid 图表渲染命令（调用 mermaid.ink 免费 API）\n    // API 格式：https://mermaid.ink/svg/{base64url_encoded_config}\n    mermaidList.forEach(m => {\n        const mermaidUrl = `https://mermaid.ink/svg/${m.base64Code}`;\n        allCommands.push(`curl -L -s --max-time 60 -o '${basePath}/${m.localFileName}' '${mermaidUrl}' && echo \"MERMAID_OK: ${m.localFileName}\" || echo \"MERMAID_FAIL: ${m.localFileName}\"`);\n    });\n\n    allCommands.push(`echo \"RESOURCE_DONE: img=${imageList.length} mermaid=${mermaidList.length} slug=${slug}\"`);\n\n    const script = allCommands.join('\\n');\n    console.log(`生成了 ${imageList.length} 条图片命令 + ${mermaidList.length} 条 Mermaid 命令`);\n    return { json: { ...data, imageDownloadScript: script } };\n\n} catch (error) {\n    console.error('准备资源下载命令失败:', error.message);\n    return { json: { ...$input.first().json, imageDownloadScript: `echo \"ERROR: ${error.message}\"` } };\n}"
+      },
+      "id": "d1a2b3c4-e5f6-7890-abcd-ef1234567890",
+      "name": "准备资源下载命令",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        160
       ],
       "alwaysOutputData": true,
       "retryOnFail": false
@@ -146,25 +150,36 @@
     {
       "parameters": {
         "authentication": "privateKey",
-        "command": "=CATEGORY=\"{{ $json.category }}\"\nFILENAME=\"{{ $json.fileName }}\"\nSLUG=\"${FILENAME%.md}\"\nBASE_PATH=\"/Users/matthewyin/Coding/nssa/src/content/posts\"\nFULL_PATH=\"${BASE_PATH}/${CATEGORY}/${SLUG}\"\n\nmkdir -p \"${FULL_PATH}/\" && cat > \"${FULL_PATH}/index.md\" << 'EOFMARKER'\n{{ $json.fileContent }}\nEOFMARKER",
+        "command": "={{ $json.imageDownloadScript }}",
         "cwd": "=/"
       },
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
       "position": [
-        480,
-        752
+        960,
+        160
       ],
-      "id": "dbf8669b-06b1-4329-b96c-84e54b1cb018",
+      "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef",
+      "name": "SSH下载资源",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "command": "=# 验证必要变量\nCATEGORY=\"{{ $json.category }}\"\nFILENAME=\"{{ $json.fileName }}\"\n\n# 调试输出\necho \"DEBUG: CATEGORY='${CATEGORY}'\"\necho \"DEBUG: FILENAME='${FILENAME}'\"\n\n# 验证变量不为空\nif [ -z \"${CATEGORY}\" ] || [ -z \"${FILENAME}\" ]; then\n    echo \"ERROR: 必要变量为空，跳过文件创建\"\n    echo \"CATEGORY: '${CATEGORY}'\"\n    echo \"FILENAME: '${FILENAME}'\"\n    exit 1\nfi\n\n# 构建路径\nSLUG=\"${FILENAME%.md}\"\nBASE_PATH=\"/Users/matthewyin/Coding/nssa/src/content/posts\"\nFULL_PATH=\"${BASE_PATH}/${CATEGORY}/${SLUG}\"\n\necho \"DEBUG: SLUG='${SLUG}'\"\necho \"DEBUG: FULL_PATH='${FULL_PATH}'\"\n\n# 验证最终路径\nif [[ \"${FULL_PATH}\" == *\"//\" ]] || [[ \"${SLUG}\" == \"\" ]]; then\n    echo \"ERROR: 路径构建错误，跳过文件创建\"\n    echo \"FULL_PATH: '${FULL_PATH}'\"\n    echo \"SLUG: '${SLUG}'\"\n    exit 1\nfi\n\n# 创建目录和文件\nmkdir -p \"${FULL_PATH}/\" && cat > \"${FULL_PATH}/index.md\" << 'EOFMARKER'\n{{ $json.fileContent }}\nEOFMARKER\n\necho \"SUCCESS: 文件已创建 ${FULL_PATH}/index.md\"",
+        "cwd": "=/"
+      },
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        160
+      ],
+      "id": "c9ec0000-9bb7-4ecd-8558-8b3e6b8cd166",
       "name": "保存合并后的文件到本地",
       "alwaysOutputData": false,
       "retryOnFail": false,
-      "credentials": {
-        "sshPrivateKey": {
-          "id": "N6eECZU7wEyeaTWT",
-          "name": "SSH Password account 2"
-        }
-      },
       "onError": "continueRegularOutput"
     },
     {
@@ -198,7 +213,7 @@
         -784,
         192
       ],
-      "id": "78ba29f7-d0aa-4eaf-aa6f-d1e4b50634a7",
+      "id": "1071d156-de25-4a82-89dc-73d685f2a490",
       "name": "If"
     },
     {
@@ -213,14 +228,8 @@
         -1232,
         192
       ],
-      "id": "0cd5378f-da7a-446a-aa8b-d34fd9db85c9",
-      "name": "检查文件是否存在",
-      "credentials": {
-        "sshPrivateKey": {
-          "id": "N6eECZU7wEyeaTWT",
-          "name": "SSH Password account 2"
-        }
-      }
+      "id": "72c26b1e-9fd1-4424-82f3-9e053c18538b",
+      "name": "检查文件是否存在"
     },
     {
       "parameters": {
@@ -232,7 +241,7 @@
         -1008,
         192
       ],
-      "id": "8099dcec-37a8-4d35-8202-f470b66011f8",
+      "id": "4c2e1339-c3c1-46c5-903e-893c2796a352",
       "name": "判断文件状态"
     },
     {
@@ -247,15 +256,9 @@
         -1232,
         16
       ],
-      "id": "c5806e00-fca4-4c98-ac4f-4369e7cc3e46",
+      "id": "2d95b9c3-57f7-4a10-a7e5-9123bf0cd958",
       "name": "更新至GitHub",
-      "executeOnce": true,
-      "credentials": {
-        "sshPrivateKey": {
-          "id": "N6eECZU7wEyeaTWT",
-          "name": "SSH Password account 2"
-        }
-      }
+      "executeOnce": true
     },
     {
       "parameters": {
@@ -277,26 +280,20 @@
         },
         "options": {}
       },
-      "id": "b436d79b-adea-4b06-81e3-a11aef1edf96",
+      "id": "f3b39756-05f3-41d7-8654-7322ca565150",
       "name": "获取Google Dri nssa的子目录",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
         -2336,
         192
-      ],
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JUnWEOwe7cbBmf5L",
-          "name": "Google Drive account"
-        }
-      }
+      ]
     },
     {
       "parameters": {
         "jsCode": "// 处理子文件夹数据，为每个文件夹创建查询\nconst response = $input.first().json;\n\nif (!response.files || response.files.length === 0) {\n  console.log('没有找到子文件夹');\n  return [];\n}\n\nconsole.log(`找到 ${response.files.length} 个子文件夹`);\n\n// 为每个文件夹创建独立的查询任务\nreturn response.files.map(folder => ({\n  json: {\n    folderId: folder.id,\n    folderName: folder.name,\n    queryUrl: `https://www.googleapis.com/drive/v3/files?q='${folder.id}' in parents and mimeType='application/vnd.google-apps.document'&fields=files(id,name,mimeType,modifiedTime,parents,webViewLink)`\n  }\n}));"
       },
-      "id": "329e1c59-e66c-49b2-8ba5-5495f8903744",
+      "id": "6af4586b-0179-44e9-b339-667b2d268a49",
       "name": "处理nssa目录",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -312,20 +309,14 @@
         "nodeCredentialType": "googleDriveOAuth2Api",
         "options": {}
       },
-      "id": "44e72fe5-76b0-4d24-b0e5-6f4d89de11c8",
+      "id": "89fc4a98-5b02-472c-9d7b-38af45f7e88a",
       "name": "扫描nssa目录文档",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
         -1888,
         192
-      ],
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "JUnWEOwe7cbBmf5L",
-          "name": "Google Drive account"
-        }
-      }
+      ]
     },
     {
       "parameters": {
@@ -343,28 +334,72 @@
         -2560,
         192
       ],
-      "id": "c6202946-9b20-4b45-a0c6-ac265be4ca99",
+      "id": "2211488c-9986-4ee7-b8c4-4ee9eb74c568",
       "name": "Schedule Trigger"
     },
     {
       "parameters": {
-        "model": "deepseek-reasoner",
+        "jsCode": "// 文件质量检测节点\nconst input = $input.first();\nconst data = input.json;\n\n// 获取frontMatter数据\nconst frontMatter = data.frontMatter || {};\nconst title = frontMatter.title || '';\nconst description = frontMatter.description || '';\nconst tags = frontMatter.tags || [];\n\n// 检测条件\nconst conditions = {\n  emptyTitle: !title || title.trim() === '',\n  inaccessibleDoc: title.includes('无法访问文档') || title.toLowerCase().includes('inaccessible'),\n  emptyDescription: !description || description.trim() === '',\n  emptyTags: !Array.isArray(tags) || tags.length === 0\n};\n\n// 判断是否需要删除\nconst shouldDelete = conditions.emptyTitle || conditions.inaccessibleDoc || conditions.emptyDescription || conditions.emptyTags;\n\n// 构建检测结果\nconst result = {\n  json: {\n    ...data,\n    qualityCheck: {\n      passed: !shouldDelete,\n      shouldDelete: shouldDelete,\n      conditions: conditions,\n      issues: []\n    }\n  }\n};\n\n// 记录具体问题\nif (conditions.emptyTitle) result.json.qualityCheck.issues.push('标题为空');\nif (conditions.inaccessibleDoc) result.json.qualityCheck.issues.push('文档无法访问');\nif (conditions.emptyDescription) result.json.qualityCheck.issues.push('描述为空');\nif (conditions.emptyTags) result.json.qualityCheck.issues.push('标签为空');\n\nconsole.log(`质量检测 - 文件: ${data.fileName}`);\nconsole.log(`标题: \"${title}\"`);\nconsole.log(`描述长度: ${description.length}`);\nconsole.log(`标签数量: ${tags.length}`);\nconsole.log(`检测结果: ${shouldDelete ? '需要删除' : '质量合格'}`);\nif (shouldDelete) {\n  console.log(`问题列表: ${result.json.qualityCheck.issues.join(', ')}`);\n}\n\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        208
+      ],
+      "id": "a0ba0784-d11e-4ef4-81ad-b28ad9c6802f",
+      "name": "文档质量检测"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "dd6b909a-dd85-41fb-9c26-af9d76ff63a1",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
         "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1280,
+        416
+      ],
+      "id": "c76bfd26-08fd-463b-9c96-a4c68b9166ad",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-reasoner",
+        "options": {
+          "maxTokens": 32768,
+          "responseFormat": "json_object"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -656,
-        720
+        -528,
+        48
       ],
-      "id": "ae2b3acb-4fb6-4df5-88e1-df69b9a2f59f",
-      "name": "DeepSeek Chat Model",
-      "credentials": {
-        "deepSeekApi": {
-          "id": "pHU2v7B9FrlTiNWG",
-          "name": "DeepSeek account"
-        }
-      }
+      "id": "b07a79b7-f0dd-4c81-b0d7-d6654cc087c7",
+      "name": "DeepSeek Chat Model"
     }
   ],
   "connections": {
@@ -385,7 +420,7 @@
           {
             "node": "合并AI和内容",
             "type": "main",
-            "index": 1
+            "index": 0
           }
         ]
       ]
@@ -430,13 +465,24 @@
         ]
       ]
     },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "下载Markdown内容": {
       "main": [
         [
           {
             "node": "合并AI和内容",
             "type": "main",
-            "index": 0
+            "index": 1
           }
         ]
       ]
@@ -456,6 +502,28 @@
       "main": [
         [
           {
+            "node": "准备资源下载命令",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "准备资源下载命令": {
+      "main": [
+        [
+          {
+            "node": "SSH下载资源",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SSH下载资源": {
+      "main": [
+        [
+          {
             "node": "保存合并后的文件到本地",
             "type": "main",
             "index": 0
@@ -466,6 +534,11 @@
     "保存合并后的文件到本地": {
       "main": [
         [
+          {
+            "node": "文档质量检测",
+            "type": "main",
+            "index": 0
+          },
           {
             "node": "Loop Over Items",
             "type": "main",
@@ -485,12 +558,12 @@
         ],
         [
           {
-            "node": "AI Agent",
+            "node": "下载Markdown内容",
             "type": "main",
             "index": 0
           },
           {
-            "node": "下载Markdown内容",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -563,15 +636,20 @@
         ]
       ]
     },
-    "DeepSeek Chat Model": {
-      "ai_languageModel": [
+    "文档质量检测": {
+      "main": [
         [
           {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
+            "node": "If1",
+            "type": "main",
             "index": 0
           }
         ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        []
       ]
     }
   },
@@ -593,6 +671,7 @@
     ]
   },
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "ea27eea5943ea997fc6bfde06792d1e57f992a703d9ffee127ac850cbaaf6839"
   }
 }
