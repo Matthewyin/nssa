@@ -1,9 +1,9 @@
 ---
-title: "DeerFlow系列之番外篇：深入解析DeerFlow Agent体系"
-description: "本文详细解析了DeerFlow Agent体系的架构设计与核心逻辑。文章从Agent的定义出发，深入探讨了其在复杂任务编排、自主决策及工具调用方面的实现机制，旨在帮助开发者理解如何构建高效、可扩展的智能体系统，以提升自动化工作流的智能化水平。"
-tags: ["DeerFlow", "Agent", "AI智能体", "自动化工作流", "架构设计"]
-date: "2026-04-06T00:41:17.308Z"
-lastmod: "2026-04-06T00:41:17.308Z"
+title: "DeerFlow系列之番外篇-deerflow_agent体系解析"
+description: "本文详细解析了DeerFlow系列之番外篇，深入探讨了deerflow_agent体系的核心架构与运作机制。文章重点介绍了代理（Agent）在系统中的角色定位、任务调度流程以及如何通过自动化手段提升工作流效率，为理解DeerFlow的高级扩展能力提供了技术参考。"
+tags: ["DeerFlow", "Agent体系", "自动化流程", "技术架构", "智能代理"]
+date: "2026-04-06T00:57:44.563Z"
+lastmod: "2026-04-06T00:57:44.563Z"
 categories: ["技术专题"]
 ---
 # DeerFlow 中的 Agent 体系：Lead Agent、自建 Agent 与 Subagent
