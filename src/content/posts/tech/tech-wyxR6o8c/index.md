@@ -1,9 +1,9 @@
 ---
 title: "DeerFlow系列之一：从代码结构理解 SuperAgent Harness 的设计逻辑"
-description: "本文深入解析了DeerFlow系列中的SuperAgent Harness代码架构，详细探讨了其设计逻辑与实现机制。通过对核心模块的解构，读者可以清晰理解系统如何调度与管理代理（Agent），为开发者构建高效、可扩展的AI应用框架提供技术指导，特别适合关注智能体开发与系统架构的工程师阅读。"
-tags: ["DeerFlow", "SuperAgent", "AI Agent", "架构设计", "技术专题"]
-date: "2026-04-06T01:47:59.815Z"
-lastmod: "2026-04-06T01:47:59.815Z"
+description: "本文深度解析了 DeerFlow 系列中的 SuperAgent Harness 核心设计。通过拆解其代码架构与模块逻辑，详细阐述了该框架如何实现 Agent 任务编排、插件调度与执行流程的解耦，为开发者理解复杂 Agent 系统的构建提供了系统性的方法论视角，助力提升在智能代理开发中的架构设计能力与代码维护效率。"
+tags: ["DeerFlow", "SuperAgent", "Harness", "架构设计", "Agent开发"]
+date: "2026-04-07T09:24:08.678Z"
+lastmod: "2026-04-07T09:24:08.678Z"
 categories: ["技术专题"]
 ---
 # **DeerFlow 仓库目录功能说明**
