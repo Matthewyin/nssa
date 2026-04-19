@@ -1,9 +1,9 @@
 ---
-title: "Anthropic 卖托管运行时，OpenAI 卖可组装底座：Agent 基础设施之争"
-description: "本文深入剖析了 Anthropic 与 OpenAI 在 AI Agent 基础设施布局上的核心差异：Anthropic 通过托管运行时提供高度集成的应用环境，而 OpenAI 则侧重于构建可自由组装的底层模型架构。通过对比双方技术路径与生态哲学，探讨了 Agent 开发模式的演进趋势，为理解当前 AI 基础设施竞争格局提供了深刻的技术视角与战略洞察，适合关注大模型生态及 Agent 开发的技术开发者与行业决策者阅读。"
-tags: ["Anthropic", "OpenAI", "AI Agent", "大模型基础设施", "技术趋势"]
-date: "2026-04-19T12:47:39.024Z"
-lastmod: "2026-04-19T12:47:39.024Z"
+title: "Anthropic 卖托管运行时，OpenAI 卖可组装底座：Agent 基础设施之争——战略篇"
+description: "本文深度分析了Anthropic与OpenAI在Agent基础设施领域的战略差异。Anthropic侧重于提供托管运行时环境，旨在简化部署与运行；而OpenAI则致力于构建可组装的底座，通过模块化组件增强系统灵活性。文章探讨了两大AI巨头如何通过不同的技术路径与商业策略争夺Agent时代的生态主导权，并解析了这对开发者及企业应用带来的战略影响，是理解当前AI Agent基础设施架构竞争格局的必备指南。"
+tags: ["AI Agent", "Anthropic", "OpenAI", "基础设施", "技术战略"]
+date: "2026-04-19T14:41:18.556Z"
+lastmod: "2026-04-19T14:41:18.556Z"
 categories: ["技术专题"]
 ---
 # Anthropic 卖托管运行时，OpenAI 卖可组装底座：Agent 基础设施之争
@@ -184,5 +184,4 @@ OpenAI 的 `Agents SDK` 更接近：
 - OpenAI: [The next evolution of the Agents SDK](https://openai.com/index/the-next-evolution-of-the-agents-sdk)  
 - Anthropic: [Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview)
 
-![](./drawing-1.png)
 
