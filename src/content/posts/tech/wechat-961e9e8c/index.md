@@ -9,7 +9,6 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
-image: "./cover.png"
 ---
 
 # OpenAI 的哥布林事故：模型性格不是提示词，而是训练出来的
