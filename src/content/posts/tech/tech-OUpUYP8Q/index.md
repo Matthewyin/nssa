@@ -1,9 +1,9 @@
 ---
 title: "Anthropic 卖托管运行时，OpenAI 卖可组装底座：Agent 基础设施之争——技术篇"
-description: "本文深入分析了AI Agent基础设施的竞争格局，重点对比了Anthropic提供的托管运行时方案与OpenAI推崇的可组装底座模型。文章从技术架构视角拆解了两家巨头在Agent开发范式上的不同选择，探讨了开发者在构建复杂AI系统时，如何在灵活性与工程效率之间做出权衡，为理解当前Agent技术演进提供了深刻的技术洞察。"
-tags: ["Agent", "Anthropic", "OpenAI", "LLM", "技术架构", "人工智能"]
-date: "2026-04-19T14:41:14.570Z"
-lastmod: "2026-04-19T14:41:14.570Z"
+description: "本文深度剖析了 Anthropic 与 OpenAI 在 AI Agent 基础设施布局上的路线差异。通过对比 Anthropic 的“托管运行时”策略与 OpenAI 的“可组装底座”模式，探讨了开发者如何选择技术栈，并解读了 Agent 开发领域从模型驱动向工程化、产品化演进的关键趋势，为构建高效的 AI 应用提供技术视角参考。"
+tags: ["AI Agent", "Anthropic", "OpenAI", "大模型技术", "基础设施"]
+date: "2026-05-05T10:24:42.750Z"
+lastmod: "2026-05-05T10:24:42.750Z"
 categories: ["技术专题"]
 ---
 # Claude Managed Agents 和 OpenAI Agents SDK，到底是不是同一种东西？

@@ -1,11 +1,9 @@
 ---
-title: "SD-WAN、SRv6与MPLS VPN技术对比分析"
-subtitle: ""
-description: "本文深入比较SD-WAN、SRv6和MPLS VPN三种主流网络技术的异同点，涵盖技术原理、性能特点、应用场景和部署成本等方面，为网络架构师和技术决策者提供全面的技术选型参考。"
-tags: ["SD-WAN", "SRv6", "MPLS-VPN", "网络技术", "技术对比"]
-readingTime: ""
-date: "2025-09-04T00:11:35.614Z"
-lastmod: "2025-09-04T00:11:35.614Z"
+title: "SD-WAN, SRv6, MPLS VPN 异同分析"
+description: "本文深入对比了SD-WAN、SRv6和MPLS VPN三种主流网络技术。文章详细分析了它们在架构实现、业务逻辑及应用场景上的显著差异，帮助网络工程师理解如何在企业广域网构建中进行技术选型与融合，是理解现代网络演进路径的重要参考资料。"
+tags: ["SD-WAN", "SRv6", "MPLS VPN", "网络技术", "广域网"]
+date: "2026-05-05T10:25:32.927Z"
+lastmod: "2026-05-05T10:25:32.927Z"
 categories: ["技术专题"]
 ---
 

@@ -1,9 +1,9 @@
 ---
 title: "Anthropic 卖托管运行时，OpenAI 卖可组装底座：Agent 基础设施之争——战略篇"
-description: "本文深度分析了Anthropic与OpenAI在Agent基础设施领域的战略差异。Anthropic侧重于提供托管运行时环境，旨在简化部署与运行；而OpenAI则致力于构建可组装的底座，通过模块化组件增强系统灵活性。文章探讨了两大AI巨头如何通过不同的技术路径与商业策略争夺Agent时代的生态主导权，并解析了这对开发者及企业应用带来的战略影响，是理解当前AI Agent基础设施架构竞争格局的必备指南。"
-tags: ["AI Agent", "Anthropic", "OpenAI", "基础设施", "技术战略"]
-date: "2026-04-19T14:41:18.556Z"
-lastmod: "2026-04-19T14:41:18.556Z"
+description: "本文深入剖析了Anthropic与OpenAI在Agent基础设施层面的战略差异：Anthropic侧重于提供托管运行时，旨在降低开发门槛，追求即插即用的便捷性；而OpenAI则致力于构建可组装的底座，强调模块化与灵活性，赋予开发者更高的定制能力。文章通过对比两者的产品哲学与技术路径，探讨了当前AI Agent领域激烈的生态争夺战，为理解大模型应用落地的战略格局提供了深度洞察。"
+tags: ["人工智能", "Agent", "Anthropic", "OpenAI", "AI基础设施", "战略分析"]
+date: "2026-05-05T10:24:47.278Z"
+lastmod: "2026-05-05T10:24:47.278Z"
 categories: ["技术专题"]
 ---
 # Anthropic 卖托管运行时，OpenAI 卖可组装底座：Agent 基础设施之争

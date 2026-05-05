@@ -1,11 +1,9 @@
 ---
-title: "AI-Agent-NetTools：赋能AI代理的网络工具集"
-subtitle: ""
-description: "AI-Agent-NetTools是一个为AI代理设计的强大网络工具集，它使代理能够自主执行网络扫描、API调用等任务。该项目旨在通过大型语言模型驱动的智能代理，自动化复杂的网络操作和安全分析，从而显著提高效率和能力。"
-tags: ["AI Agent", "网络工具", "自主代理"]
-readingTime: ""
-date: "2025-12-04T10:57:23.022Z"
-lastmod: "2025-12-04T10:57:23.022Z"
+title: "AI-Agent-NetTools技术专题"
+description: "本文深入探讨了AI Agent在网络工具交互中的核心技术与应用。详细解析了Agent如何利用各种网络工具（NetTools）进行信息检索、API调用及数据处理，旨在提升自动化工作流的效率与智能化水平，是开发者构建高性能AI Agent系统的技术参考指南。"
+tags: ["AI Agent", "网络工具", "自动化工作流", "API集成", "人工智能"]
+date: "2026-05-05T10:24:51.126Z"
+lastmod: "2026-05-05T10:24:51.126Z"
 categories: ["技术专题"]
 ---
 # **AIAgent-NetTools**
