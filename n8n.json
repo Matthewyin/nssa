@@ -4,26 +4,26 @@
       "parameters": {
         "jsCode": "// 处理所有文档数据，合并文件夹信息\nconst allResults = $input.all();\nlet allDocuments = [];\n\n// 文件夹映射\nconst folderMap = {\n  '1xDNGIOGnsCsXs0KZCHwKOav96dQGith4': { name: '心理专题', category: 'psychology' },\n  '1uKz9AOYftgvExoLPbiMvlEtdjY63YSB6': { name: '职场专题', category: 'workplace' },\n  '125UBg7dLONmNg0ou9T4d8uVW_fsrJFH8': { name: '历史专题', category: 'history' },\n  '1frvBLCJkyDaBffF_JXR4Px8DoIcL-75_': { name: '技术专题', category: 'tech' },\n  '1hVM2Q2doBl2Sb9HeUvTawjxIhP_MGd6P': { name: '业务专题', category: 'business'}\n};\n\n// 遍历每个文件夹的结果\nallResults.forEach(result => {\n  if (result.json.files && result.json.files.length > 0) {\n    result.json.files.forEach(file => {\n      const folderId = file.parents[0];\n      const folderInfo = folderMap[folderId];\n      \n      if (folderInfo) {\n        allDocuments.push({\n          json: {\n            ...file,\n            folderName: folderInfo.name,\n            folderId: folderId,\n            category: folderInfo.category\n          }\n        });\n      }\n    });\n  }\n});\n\nconsole.log(`总共找到 ${allDocuments.length} 个文档`);\nreturn allDocuments;"
       },
-      "id": "8674ce6d-4cf6-4b04-9ab0-e7a0ee2761cd",
+      "id": "e04929bb-9f3a-4bb1-8add-b3409f457f9d",
       "name": "处理文档数据",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1680,
-        192
+        -1968,
+        96
       ]
     },
     {
       "parameters": {
         "jsCode": "// 解析AI Agent的响应\nconst response = $input.first();\nconst aiResponse = response.json.output;\nconst originalDoc = $('Loop Over Items').first().json;\n\nlet frontMatter = aiResponse;\n\n// 直接使用文档ID的后8位作为文件名\nconst docId = originalDoc.id;\nconst shortId = docId.slice(-8);\nconst fileName = $('判断文件状态').first().json.category + `-${shortId}.md`;\n\n// 构建完整的Front Matter\nconst now = new Date();\nconst completeFrontMatter = {\n  ...frontMatter,\n  date: now.toISOString(),\n  lastmod: now.toISOString(),\n  categories: [originalDoc.folderName]\n};\n\nreturn {\n  json: {\n    originalDoc,\n    frontMatter: completeFrontMatter,\n    fileName,\n    category: originalDoc.category\n  }\n};"
       },
-      "id": "958a6e78-594e-4fd8-bdc1-3ad73b26046b",
+      "id": "2f706fb6-ed92-4ef6-a19a-a17393d5aba5",
       "name": "处理AI响应",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -32,
-        -224
+        -320,
+        -320
       ]
     },
     {
@@ -33,10 +33,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -1456,
-        192
+        -1744,
+        96
       ],
-      "id": "48491a92-3ad1-4898-a0f8-31779323b490",
+      "id": "ef787e9b-4da4-4372-9a97-26eb5ba3b21f",
       "name": "Loop Over Items"
     },
     {
@@ -49,10 +49,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.8,
       "position": [
-        -448,
-        -224
+        -736,
+        -320
       ],
-      "id": "1179425e-0c73-48f2-b7bf-d6f02c24b12d",
+      "id": "749dc79c-9a48-4043-bc72-797f4ed0084a",
       "name": "AI Agent",
       "onError": "continueRegularOutput"
     },
@@ -63,10 +63,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        -144,
-        48
+        -432,
+        -48
       ],
-      "id": "86d2d57b-cdfd-4150-a648-0c42e374685c",
+      "id": "8319ac75-99ec-4075-aa1c-e4a6f245155c",
       "name": "Structured Output Parser"
     },
     {
@@ -77,11 +77,17 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -384,
-        48
+        -672,
+        -48
       ],
-      "id": "a55391c3-7b73-447e-8fa6-5d2021b14517",
-      "name": "Google Gemini Chat Model"
+      "id": "902a870f-abbf-4127-bd72-05fc16e7bd0e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "itRdUUPXbeECwMa9",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     },
     {
       "parameters": {
@@ -90,14 +96,20 @@
         "nodeCredentialType": "googleDriveOAuth2Api",
         "options": {}
       },
-      "id": "a709290b-f023-457a-bfa8-c63117d5e6e6",
+      "id": "f0957aa8-0fc2-4d0b-bfb8-584e0dca3fbd",
       "name": "下载Markdown内容",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        -336,
-        288
+        -624,
+        304
       ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
+        }
+      },
       "onError": "continueRegularOutput"
     },
     {
@@ -106,13 +118,13 @@
         "combinationMode": "mergeByPosition",
         "options": {}
       },
-      "id": "4f83843a-8ea4-4cb4-b59f-85ff6d197ed0",
+      "id": "aed494cf-4bde-4eb9-beef-9c2f71c814a4",
       "name": "合并AI和内容",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 2.1,
       "position": [
-        160,
-        160
+        -128,
+        64
       ],
       "alwaysOutputData": false,
       "onError": "continueRegularOutput"
@@ -121,13 +133,13 @@
       "parameters": {
         "jsCode": "// 合并内容 + 图片处理 + Mermaid 处理\nconsole.log(\"--- [合并内容] 节点开始执行 ---\");\ntry {\n    // 1. 获取由Merge节点合并后的单个输入项\n    const input = $input.first();\n    const data = input.json;\n    console.log(\"收到的输入数据类型:\", typeof data);\n    console.log(\"收到的binary数据:\", input.binary ? \"存在\" : \"不存在\");\n\n    // 2. 严格检查合并后的数据是否有效\n    if (!data || !data.frontMatter || !data.fileName) {\n        console.error(\"错误：合并后的数据无效或不完整，将跳过此项。\");\n        return []; \n    }\n    console.log(`数据检查通过: ${data.fileName}`);\n\n    // 3. 准备Front Matter\n    const fm = data.frontMatter;\n    const frontMatterYaml = `title: \"${fm.title || ''}\"\ndescription: \"${fm.description || ''}\"\ntags: [${fm.tags ? fm.tags.map(tag => `\"${tag}\"`).join(', ') : ''}]\ndate: \"${fm.date || ''}\"\nlastmod: \"${fm.lastmod || ''}\"\ncategories: [${fm.categories ? fm.categories.map(cat => `\"${cat}\"`).join(', ') : ''}]`;\n\n    // 4. 获取Markdown内容\n    let content = '';\n    \n    if (input.binary && input.binary.data) {\n        if (Buffer.isBuffer(input.binary.data)) {\n            content = input.binary.data.toString('utf8');\n        } else {\n            content = Buffer.from(input.binary.data).toString('utf8');\n        }\n        console.log(\"从binary数据获取内容，长度:\", content.length);\n    } else if (typeof data.data === 'string') {\n        content = data.data;\n        console.log(\"从data.data获取内容，长度:\", content.length);\n    } else if (typeof data.body === 'string') {\n        content = data.body;\n        console.log(\"从data.body获取内容，长度:\", content.length);\n    } else {\n        console.error(`错误：无法找到文档内容，文档标题: ${data.frontMatter.title}`);\n        return [];\n    }\n\n    // 5. 验证内容不为空\n    if (!content || content.trim().length === 0) {\n        console.error(`错误：文档内容为空，跳过处理: ${data.frontMatter.title}`);\n        return [];\n    }\n\n    // 6. ===== Mermaid 处理：优先于图片处理，防止文本标记内URL被误识别 =====\n    const mermaidList = [];\n    let mermaidCounter = 0;\n    const mermaidMatches = [];\n    const mermaidRegex = /MERMAIDSTART[ \\t]*\\n([\\s\\S]*?)MERMAIDEND/gi;\n    let mermaidMatch;\n    while ((mermaidMatch = mermaidRegex.exec(content)) !== null) {\n        mermaidCounter++;\n        const fullBlock = mermaidMatch[0];\n        const diagramCode = mermaidMatch[1].trim().split('\\n').map(line => line.trimEnd()).join('\\n').replace(/\\\\(.)/g, '$1');\n        // 对 mermaid 代码做 base64 编码，供 mermaid.ink API 使用\n        const base64Code = Buffer.from(JSON.stringify({ code: diagramCode, mermaid: { theme: 'default' } })).toString('base64url');\n        const localFileName = `mermaid-${mermaidCounter}.svg`;\n        mermaidMatches.push({ fullBlock, base64Code, localFileName });\n        mermaidList.push({ base64Code, localFileName });\n    }\n    // 把 mermaid 标记块替换为本地 SVG 图片引用\n    let processedContent = content;\n    mermaidMatches.forEach(m => {\n        processedContent = processedContent.replace(m.fullBlock, `![Mermaid 图表](./${m.localFileName})`);\n    });\n    console.log(`Mermaid 处理：找到 ${mermaidList.length} 个标记块，已替换为本地 SVG 路径`);\n    // ===== Mermaid 处理结束 =====\n\n    // 7. ===== 图片处理：提取并替换外部图片URL =====\n    const imageList = [];\n    let imageCounter = 0;\n    const imageRegex = /!\\[([^\\]]*)\\]\\((https?:\\/\\/[^)]+)\\)/g;\n    let match;\n    while ((match = imageRegex.exec(processedContent)) !== null) {\n        const originalUrl = match[2];\n        const isGoogleImage = /googleusercontent\\.com|ggpht\\.com|googleapis\\.com\\/drive/.test(originalUrl);\n        if (isGoogleImage) {\n            imageCounter++;\n            const localFileName = `image-${imageCounter}.jpg`;\n            imageList.push({ url: originalUrl, localFileName });\n        }\n    }\n    imageList.forEach(img => {\n        const escapedUrl = img.url.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n        processedContent = processedContent.replace(new RegExp(escapedUrl, 'g'), `./${img.localFileName}`);\n    });\n    console.log(`图片处理：找到 ${imageList.length} 张外部图片，已替换为本地相对路径`);\n    // ===== 图片处理结束 =====\n    // 8.5 ===== Base64 内联图片处理（Google Drawing / 嵌入式图片）=====\n    const inlineImageList = [];\n    let inlineCounter = 0;\n    const inlineRefMap = {};\n\n    // 匹配 [imageN]: <data:image/TYPE;base64,DATA> 定义行\n    const base64DefRegex = /\\[image(\\d+)\\]:\\s*<data:image\\/(\\w+);base64,([^>]+)>/g;\n    let defMatch;\n    while ((defMatch = base64DefRegex.exec(processedContent)) !== null) {\n        const refId = defMatch[1];\n        const mimeType = defMatch[2];\n        const base64Data = defMatch[3].replace(/\\n/g, '');\n        const ext = mimeType === 'jpeg' ? 'jpg' : mimeType;\n        inlineCounter++;\n        const localFileName = 'drawing-' + inlineCounter + '.' + ext;\n        inlineRefMap[refId] = { localFileName };\n        inlineImageList.push({ base64Data, localFileName });\n    }\n\n    // 替换 ![][imageN] 或 ![alt][imageN] 为本地路径\n    processedContent = processedContent.replace(/!\\[[^\\]]*\\]\\[image(\\d+)\\]/g, (match, refId) => {\n        const img = inlineRefMap[refId];\n        return img ? '![](./' + img.localFileName + ')' : match;\n    });\n\n    // 删除 base64 定义行\n    processedContent = processedContent.replace(/\\n?\\[image\\d+\\]:\\s*<data:image\\/\\w+;base64,[^>]+>/g, '');\n\n    console.log('Base64图片处理：找到 ' + inlineImageList.length + ' 张内联图片（Google Drawing）');\n    // ===== Base64 内联图片处理结束 =====\n\n\n    // 8. 合并完整文档\n    const completeDocument = `---\\n${frontMatterYaml}\\n---\\n${processedContent}`;\n    const fileName = data.fileName;\n    const slug = fileName.replace(/\\.md$/, '');\n    const category = data.category;\n\n    const finalOutput = {\n        json: {\n            fileName,\n            slug,\n            category,\n            title: data.frontMatter.title,\n            originalDoc: data.originalDoc,\n            success: true,\n            fileContent: completeDocument,\n            imageList,\n            mermaidList,\n            inlineImageList\n        },\n        binary: { data: Buffer.from(completeDocument, 'utf8') }\n    };\n    console.log(`--- [合并内容] 节点成功处理: ${fileName}, 图片:${imageList.length}, Mermaid:${mermaidList.length}, Drawing:${inlineImageList.length} ---`);\n    return finalOutput;\n    \n} catch (error) {\n    console.error(\"--- [合并内容] 节点发生错误 ---\", error.message);\n    console.error(\"错误堆栈:\", error.stack);\n    return [];\n}"
       },
-      "id": "6e1d1fc3-7d18-4400-8abb-c06a79ade8ee",
+      "id": "f37a697f-55dc-461a-88a6-03414c4dc1b3",
       "name": "合并内容",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        496,
-        160
+        208,
+        64
       ],
       "alwaysOutputData": true,
       "retryOnFail": false
@@ -136,13 +148,13 @@
       "parameters": {
         "jsCode": "// 准备资源下载命令：处理普通图片（Google Drive）+ Mermaid 图表（mermaid.ink）\nconsole.log(\"--- [准备资源下载命令] 节点开始执行 ---\");\ntry {\n    const input = $input.first();\n    const data = input.json;\n\n    const imageList = data.imageList || [];\n    const mermaidList = data.mermaidList || [];\n    const inlineImageList = data.inlineImageList || [];\n    const slug = data.slug || '';\n    const category = data.category || '';\n\n    if (!slug || !category) {\n        console.error('slug 或 category 为空，跳过资源下载');\n        return { json: { ...data, imageDownloadScript: `echo \"SKIP: slug or category empty\"` } };\n    }\n\n    const basePath = `/Users/matthewyin/Coding/nssa/src/content/posts/${category}/${slug}`;\n    const allCommands = [`mkdir -p '${basePath}'`];\n\n    // 1. Google Drive 图片下载命令\n    imageList.forEach(img => {\n        const safeUrl = img.url.replace(/'/g, \"'\\\\''\" );\n        allCommands.push(`curl -L -s --max-time 30 -o '${basePath}/${img.localFileName}' '${safeUrl}' && echo \"IMG_OK: ${img.localFileName}\" || echo \"IMG_FAIL: ${img.localFileName}\"`);\n    });\n\n    // 2. Mermaid 图表渲染命令（调用 mermaid.ink 免费 API）\n    // API 格式：https://mermaid.ink/svg/{base64url_encoded_config}\n    mermaidList.forEach(m => {\n        const mermaidUrl = `https://mermaid.ink/svg/${m.base64Code}`;\n        allCommands.push(`curl -L -s --max-time 60 -o '${basePath}/${m.localFileName}' '${mermaidUrl}' && echo \"MERMAID_OK: ${m.localFileName}\" || echo \"MERMAID_FAIL: ${m.localFileName}\"`);\n    });\n\n    // 3. Base64 内联图片（Google Drawing）写入命令\n    inlineImageList.forEach(img => {\n        allCommands.push(`python3 -c \"import base64; open('${basePath}/${img.localFileName}','wb').write(base64.b64decode('${img.base64Data}'))\" && echo \"DRAWING_OK: ${img.localFileName}\" || echo \"DRAWING_FAIL: ${img.localFileName}\"`);\n    });\n\n        allCommands.push(`echo \"RESOURCE_DONE: img=${imageList.length} mermaid=${mermaidList.length} drawing=${inlineImageList.length} slug=${slug}\"`);\n\n    const script = allCommands.join('\\n');\n    console.log(`生成了 ${imageList.length} 条图片命令 + ${mermaidList.length} 条 Mermaid 命令 + ${inlineImageList.length} 条 Drawing 命令`);\n    return { json: { ...data, imageDownloadScript: script } };\n\n} catch (error) {\n    console.error('准备资源下载命令失败:', error.message);\n    return { json: { ...$input.first().json, imageDownloadScript: `echo \"ERROR: ${error.message}\"` } };\n}"
       },
-      "id": "d1a2b3c4-e5f6-7890-abcd-ef1234567890",
+      "id": "f3b8f5d0-80c0-4d84-9aa0-d912bc6bc936",
       "name": "准备资源下载命令",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        720,
-        160
+        432,
+        64
       ],
       "alwaysOutputData": true,
       "retryOnFail": false
@@ -156,12 +168,18 @@
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
       "position": [
-        960,
-        160
+        672,
+        64
       ],
-      "id": "f0e1d2c3-b4a5-6789-0123-456789abcdef",
+      "id": "25ffcfed-357b-4be2-8506-0ddd6b302b1c",
       "name": "SSH下载资源",
       "alwaysOutputData": true,
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "N6eECZU7wEyeaTWT",
+          "name": "SSH Password account 2"
+        }
+      },
       "onError": "continueRegularOutput"
     },
     {
@@ -173,13 +191,19 @@
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
       "position": [
-        1200,
-        160
+        912,
+        64
       ],
-      "id": "c9ec0000-9bb7-4ecd-8558-8b3e6b8cd166",
+      "id": "e12ea8fc-ee05-4a9c-b99c-3eac8ebaab11",
       "name": "保存合并后的文件到本地",
       "alwaysOutputData": false,
       "retryOnFail": false,
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "N6eECZU7wEyeaTWT",
+          "name": "SSH Password account 2"
+        }
+      },
       "onError": "continueRegularOutput"
     },
     {
@@ -210,10 +234,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -784,
-        192
+        -1072,
+        96
       ],
-      "id": "1071d156-de25-4a82-89dc-73d685f2a490",
+      "id": "081da7f9-c137-454b-a029-32b7021695f4",
       "name": "If"
     },
     {
@@ -225,11 +249,17 @@
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
       "position": [
-        -1232,
-        192
+        -1520,
+        96
       ],
-      "id": "72c26b1e-9fd1-4424-82f3-9e053c18538b",
-      "name": "检查文件是否存在"
+      "id": "c6b025d7-1477-45a3-927c-3198f0390a3e",
+      "name": "检查文件是否存在",
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "N6eECZU7wEyeaTWT",
+          "name": "SSH Password account 2"
+        }
+      }
     },
     {
       "parameters": {
@@ -238,10 +268,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1008,
-        192
+        -1296,
+        96
       ],
-      "id": "4c2e1339-c3c1-46c5-903e-893c2796a352",
+      "id": "bf138185-e99d-4495-aaf7-8e7a60a04175",
       "name": "判断文件状态"
     },
     {
@@ -253,12 +283,18 @@
       "type": "n8n-nodes-base.ssh",
       "typeVersion": 1,
       "position": [
-        -1232,
-        16
+        -1520,
+        -80
       ],
-      "id": "2d95b9c3-57f7-4a10-a7e5-9123bf0cd958",
+      "id": "328adce7-3b38-4332-845d-cfecbfecdc41",
       "name": "更新至GitHub",
-      "executeOnce": true
+      "executeOnce": true,
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "N6eECZU7wEyeaTWT",
+          "name": "SSH Password account 2"
+        }
+      }
     },
     {
       "parameters": {
@@ -280,26 +316,32 @@
         },
         "options": {}
       },
-      "id": "f3b39756-05f3-41d7-8654-7322ca565150",
+      "id": "9767392d-12aa-4d99-a3b5-ffdaf27fb8a8",
       "name": "获取Google Dri nssa的子目录",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        -2336,
-        192
-      ]
+        -2624,
+        96
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
+        }
+      }
     },
     {
       "parameters": {
         "jsCode": "// 处理子文件夹数据，为每个文件夹创建查询\nconst response = $input.first().json;\n\nif (!response.files || response.files.length === 0) {\n  console.log('没有找到子文件夹');\n  return [];\n}\n\nconsole.log(`找到 ${response.files.length} 个子文件夹`);\n\n// 为每个文件夹创建独立的查询任务\nreturn response.files.map(folder => ({\n  json: {\n    folderId: folder.id,\n    folderName: folder.name,\n    queryUrl: `https://www.googleapis.com/drive/v3/files?q='${folder.id}' in parents and mimeType='application/vnd.google-apps.document'&fields=files(id,name,mimeType,modifiedTime,parents,webViewLink)`\n  }\n}));"
       },
-      "id": "6af4586b-0179-44e9-b339-667b2d268a49",
+      "id": "ce9d45ff-0056-4b28-a8ff-83a371c5fd4b",
       "name": "处理nssa目录",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2112,
-        192
+        -2400,
+        96
       ]
     },
     {
@@ -309,14 +351,20 @@
         "nodeCredentialType": "googleDriveOAuth2Api",
         "options": {}
       },
-      "id": "89fc4a98-5b02-472c-9d7b-38af45f7e88a",
+      "id": "92582218-0f14-4abd-bb6c-090a6d217be6",
       "name": "扫描nssa目录文档",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        -1888,
-        192
-      ]
+        -2176,
+        96
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "JUnWEOwe7cbBmf5L",
+          "name": "Google Drive account"
+        }
+      }
     },
     {
       "parameters": {
@@ -331,10 +379,10 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -2560,
-        192
+        -2848,
+        96
       ],
-      "id": "2211488c-9986-4ee7-b8c4-4ee9eb74c568",
+      "id": "01b3e3c6-c328-49cd-8625-8bb544453218",
       "name": "Schedule Trigger"
     },
     {
@@ -344,10 +392,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1072,
-        208
+        784,
+        112
       ],
-      "id": "a0ba0784-d11e-4ef4-81ad-b28ad9c6802f",
+      "id": "77a9923b-53b5-41ae-a9db-91a0f1295c69",
       "name": "文档质量检测"
     },
     {
@@ -378,10 +426,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1280,
-        416
+        992,
+        320
       ],
-      "id": "c76bfd26-08fd-463b-9c96-a4c68b9166ad",
+      "id": "be309784-e5d4-4bda-9cea-f6d93611d346",
       "name": "If1"
     },
     {
@@ -395,10 +443,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -528,
-        48
+        -816,
+        -48
       ],
-      "id": "b07a79b7-f0dd-4c81-b0d7-d6654cc087c7",
+      "id": "019127f0-6c40-4c2f-b29e-c94a86fa3fc9",
       "name": "DeepSeek Chat Model"
     }
   ],
@@ -645,11 +693,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "DeepSeek Chat Model": {
-      "ai_languageModel": [
-        []
       ]
     }
   },
