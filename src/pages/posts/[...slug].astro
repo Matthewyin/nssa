@@ -116,17 +116,6 @@ const formatDate = (date: Date) => {
         </div>
       )}
     </header>
-
-    {post.data.image && (
-      <div class="mb-10 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
-        <img
-          src={post.data.image}
-          alt={post.data.title}
-          class="w-full aspect-[16/9] object-cover"
-          loading="eager"
-        />
-      </div>
-    )}
     
     <!-- Article Content -->
     <article class="prose prose-lg dark:prose-invert max-w-none mb-12">

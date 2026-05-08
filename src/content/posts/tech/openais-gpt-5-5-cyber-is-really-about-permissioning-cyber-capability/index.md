@@ -6,7 +6,6 @@ date: "2026-05-08T06:13:59.671Z"
 lastmod: "2026-05-08T06:32:17Z"
 categories: ["tech"]
 category: "tech"
-image: "/images/posts/tech/openais-gpt-5-5-cyber-is-really-about-permissioning-cyber-capability/x-cover.png"
 lang: "en"
 showInZh: true
 source: "wechat"
