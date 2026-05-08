@@ -19,7 +19,7 @@ if (!validCategories.includes(category)) {
 
 // 获取该分类的所有文章
 const allPosts = await getCollection('posts', ({ data }) => {
-  return data.lang === 'zh' && !data.draft;
+  return (data.lang === 'zh' || data.showInZh) && !data.draft;
 });
 
 // 过滤该分类的文章，支持新的目录结构
@@ -152,7 +152,7 @@ const formatDate = (date: Date) => {
           data-date={post.data.date.toISOString()}
           data-title={post.data.title}
         >
-          <a href={`/posts/${post.slug}/`} class="block p-6 hover:no-underline">
+          <a href={post.data.lang === 'en' ? `/en/posts/${post.slug}/` : `/posts/${post.slug}/`} class="block p-6 hover:no-underline">
             {post.data.image && (
               <div class="mb-4 rounded-lg overflow-hidden">
                 <img 

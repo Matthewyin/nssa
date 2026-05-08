@@ -15,6 +15,7 @@ const postsCollection = defineCollection({
     weight: z.number().optional(),
     featured: z.boolean().optional().default(false),
     lang: z.enum(['zh', 'en']).optional().default('zh'),
+    showInZh: z.boolean().optional().default(false),
     // 国际化关联字段
     articleId: z.string().optional(), // 文章的唯一标识符
     translations: z.record(z.string()).optional(), // 其他语言版本的slug映射 {en: "slug-en", zh: "slug-zh"}
