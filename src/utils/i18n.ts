@@ -31,10 +31,9 @@ export const translations = {
     'nav.search.placeholder': '搜索...',
     
     // 首页
-    'home.title': 'NSSA - Network-System-Security-Application',
-    'home.subtitle': 'Network System Security Application',
-    'home.description': '深度解析商业洞察、网络技术、职场心理与历史。本站旨在探索商业、科技、组织与人性的复杂系统',
-    'home.intro': '通过现代化的网页技术，将复杂的商业、技术、历史、心理和职场转化为生动有趣的数字化体验',
+    'home.title': 'NSSA - Network / Systems / Security / AI',
+    'home.subtitle': 'Network / Systems / Security / AI',
+    'home.description': '用第一性原理拆解复杂系统——从技术架构到商业逻辑，从组织行为到认知模型',
     
     // 分类描述
     'category.business.title': '业务专题',
@@ -130,10 +129,9 @@ export const translations = {
     'nav.search.placeholder': 'Search...',
     
     // Homepage
-    'home.title': 'NSSA - Network-System-Security-Application',
-    'home.subtitle': 'Network System Security Application',
-    'home.description': 'In-depth analysis of business insights, network technology, workplace psychology, and history. This site aims to explore the complex systems of business, technology, organizations, and human nature.',
-    'home.intro': 'Through modern web technologies, we transform complex business, technical, historical, psychological, and workplace concepts into engaging digital experiences.',
+    'home.title': 'NSSA - Network / Systems / Security / AI',
+    'home.subtitle': 'Network / Systems / Security / AI',
+    'home.description': 'Deconstructing complex systems with first principles — from technical architecture to business logic, from organizational behavior to cognitive models',
     
     // Category descriptions
     'category.business.title': 'Business Topics',

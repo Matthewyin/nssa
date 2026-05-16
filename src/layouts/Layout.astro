@@ -107,7 +107,8 @@ const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, current
           <!-- Logo -->
           <div class="flex items-center space-x-8">
             <a href="/" class="flex items-center">
-              <img src="/logo.svg" alt="NSSA" class="h-8 w-auto" />
+              <img src="/logo-light.jpg" alt="NSSA" class="h-8 w-auto dark:hidden" />
+              <img src="/logo-dark.jpg" alt="NSSA" class="h-8 w-auto hidden dark:block" />
             </a>
             
             <!-- Desktop Navigation -->
@@ -265,77 +266,8 @@ const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, current
     <!-- Footer -->
     <footer class="border-t border-gray-200 mt-20 dark:border-gray-700">
       <div class="max-w-6xl mx-auto px-6 py-12">
-        <!-- 友情链接区域 -->
-        <div class="mb-12">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white text-center mb-8">
-            🚀 {t('footer.ecosystem_title', currentLang)}
-          </h3>
-          <p class="text-apple-gray text-center mb-8 max-w-2xl mx-auto">
-            {t('footer.ecosystem_description', currentLang)}
-          </p>
-
-          <!-- 友情链接网格 -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            <!-- 灵感墙 -->
-            <a href="https://inspirista.nssa.io"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="content-card p-6 text-center group block hover:no-underline">
-              <div class="text-3xl mb-3">💡</div>
-              <h4 class="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue transition-colors">
-                {t('footer.inspirista', currentLang)}
-              </h4>
-              <p class="text-apple-gray text-sm mb-4">
-                {t('footer.inspirista_desc', currentLang)}
-              </p>
-            </a>
-
-            <!-- 练功房 -->
-            <a href="https://sf.nssa.io"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="content-card p-6 text-center group block hover:no-underline">
-              <div class="text-3xl mb-3">🥋</div>
-              <h4 class="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue transition-colors">
-                {t('footer.sf', currentLang)}
-              </h4>
-              <p class="text-apple-gray text-sm mb-4">
-                {t('footer.sf_desc', currentLang)}
-              </p>
-            </a>
-
-            <!-- 工具箱 -->
-            <a href="https://topfac.nssa.io"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="content-card p-6 text-center group block hover:no-underline">
-              <div class="text-3xl mb-3">🛠️</div>
-              <h4 class="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue transition-colors">
-                {t('footer.tools', currentLang)}
-              </h4>
-              <p class="text-apple-gray text-sm mb-4">
-                {t('footer.tools_desc', currentLang)}
-              </p>
-            </a>
-
-            <!-- 游戏室 -->
-            <a href="https://games.nssa.io"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="content-card p-6 text-center group block hover:no-underline">
-              <div class="text-3xl mb-3">🎮</div>
-              <h4 class="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue transition-colors">
-                {t('footer.games', currentLang)}
-              </h4>
-              <p class="text-apple-gray text-sm mb-4">
-                {t('footer.games_desc', currentLang)}
-              </p>
-            </a>
-          </div>
-        </div>
-
         <!-- Bottom Footer -->
-        <div class="border-t border-gray-200 dark:border-gray-700 pt-8">
+        <div class="pt-8">
           <div class="flex flex-col md:flex-row justify-between items-center">
             <div class="text-center md:text-left mb-4 md:mb-0">
               <p class="text-apple-gray text-sm mb-1">{t('footer.copyright', currentLang)}</p>
