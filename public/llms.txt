@@ -1,0 +1,78 @@
+# NSSA - Network System Security Application
+
+> 深度解析商业洞察、网络技术、职场心理与历史。探索商业、科技、组织与人性的复杂系统。
+
+## 站点信息
+
+- 名称：NSSA
+- 域名：https://nssa.io
+- 语言：中文 / English
+- 框架：Astro (静态生成)
+
+## 内容专题
+
+### 业务专题 / Business
+深度商业分析与市场洞察，探索商业模式创新与企业战略。
+
+- Enterprise AI Advantage Is Moving From Access to Depth
+- OpenAI and Anthropic Are Moving Enterprise AI From Models to Deployment
+- Anthropic 的新公司，暴露了企业 AI 最大的真问题
+- 国产内存与AI算力瓶颈
+- 存储价格上涨原因及预测
+- "小镇的100元"经济学寓言：流动性与债务链
+- 宝马收购罗孚事件
+- AI与彩票结合
+- 体育博彩赔率架构与博彩公司盈利机制深度分析
+- 代金券：黑产与防范
+
+### 技术专题 / Tech
+探索前沿技术、分析技术趋势、研究技术对社会的影响。
+
+- Codex Is Moving From Desktop Tool To Work Orchestrator
+- Anthropic Is Building A Tiered Delivery System For Claude
+- Voice Agents Are Moving From Conversation to Workflow
+- AI Agent Outputs Are Becoming Interfaces
+- OpenAI's GPT-5.5-Cyber Is Really About Permissioning Cyber Capability
+- OpenAI 发布 MRC：大模型竞争，拼到数据中心网络了
+- GPT-5.5 Instant 的真正变化：OpenAI 在争夺默认入口
+- Anthropic 把金融智能体做成模板，企业 AI 落地正在换挡
+- OpenAI 发布 GPT-5.5：Agent 时代，模型要开始接管复杂任务
+- AI 变革与个人应对策略
+- AI-Agent-NetTools: AI 智能体网络交互工具深度解析
+- Anthropic 卖托管运行时，OpenAI 卖可组装底座（战略篇）
+- Anthropic 卖托管运行时，OpenAI 卖可组装底座（技术篇）
+
+### 心理专题 / Psychology
+心理学研究与行为分析，探索人类心理现象和行为模式。
+
+- 梦境解析：财富、冲突与亲情
+- 梦境解析：脆弱与强撑的心理投射
+- 梦境解析：诱惑、冲突与自我控制
+- 办公室冲突的梦境解析
+- 梦境分析：权力、欲望与创伤
+- 梦境深度心理分析与解读
+- 梦境解析：威胁、逃避与亲密
+- 梦境解析：清纯野性女子
+- 梦境：足球、僵尸与保护
+- 梦境时间线与心理整合
+
+### 职场专题 / Workplace
+职场动力学与组织行为研究，掌握职场生存智慧。
+
+- 单位预算申请沟通分析
+- 职场冲突分析与应对策略
+- 架构团队绩效与协作难题
+- 职场争抢行为深度分析
+- 职场沟通绕圈子心理分析与应对
+- 职场抢功行为深度分析
+- 岗位绩效年底发放分析
+
+### 历史专题 / History
+深度历史研究与分析，探索历史发展的内在规律。
+
+## 关键页面
+
+- 首页：https://nssa.io/
+- 关于：https://nssa.io/about/
+- RSS：https://nssa.io/rss.xml
+- Sitemap：https://nssa.io/sitemap-index.xml

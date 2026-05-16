@@ -8,6 +8,7 @@ export interface Props {
   modifiedTime?: string;
   tags?: string[];
   lang?: 'zh' | 'en';
+  breadcrumbs?: { name: string; url: string }[];
 }
 
 const {
@@ -18,13 +19,14 @@ const {
   publishedTime,
   modifiedTime,
   tags = [],
-  lang = 'zh'
+  lang = 'zh',
+  breadcrumbs = []
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const imageURL = image ? new URL(image, Astro.site) : null;
+const defaultImageURL = new URL('/images/og-default.png', Astro.site);
+const imageURL = image ? new URL(image, Astro.site) : defaultImageURL;
 
-// Generate structured data
 const structuredData = {
   "@context": "https://schema.org",
   "@type": article ? "Article" : "WebPage",
@@ -45,12 +47,10 @@ const structuredData = {
       "url": "https://nssa.io/logo.svg"
     }
   },
-  ...(imageURL && {
-    "image": {
-      "@type": "ImageObject",
-      "url": imageURL.toString()
-    }
-  }),
+  "image": {
+    "@type": "ImageObject",
+    "url": imageURL.toString()
+  },
   ...(publishedTime && {
     "datePublished": publishedTime
   }),
@@ -63,9 +63,27 @@ const structuredData = {
 };
 
 if (article) {
-  structuredData["@type"] = "Article";
   structuredData["articleSection"] = tags[0] || "General";
 }
+
+const breadcrumbData = breadcrumbs.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": lang === 'zh' ? '首页' : 'Home',
+      "item": "https://nssa.io/"
+    },
+    ...breadcrumbs.map((crumb, i) => ({
+      "@type": "ListItem",
+      "position": i + 2,
+      "name": crumb.name,
+      "item": new URL(crumb.url, Astro.site).toString()
+    }))
+  ]
+} : null;
 ---
 
 <!-- Basic Meta Tags -->
@@ -102,6 +120,7 @@ if (article) {
 
 <!-- Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+{breadcrumbData && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbData)} />}
 
 <!-- Preconnect to external domains -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />

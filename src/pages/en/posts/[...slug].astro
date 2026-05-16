@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
+import SEO from '../../../components/SEO.astro';
 import LanguageSwitcher from '../../../components/LanguageSwitcher.astro';
 import TranslationStatus from '../../../components/TranslationStatus.astro';
 import OptimizedImage from '../../../components/OptimizedImage.astro';
@@ -10,8 +11,6 @@ import { t } from '../../../utils/i18n';
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.lang === 'en');
   return posts.map((post) => {
-    // 处理嵌套目录结构的slug
-    // 例如：business/digital-transformation-2025/index -> business/digital-transformation-2025
     let slug = post.slug;
     if (slug.endsWith('/index')) {
       slug = slug.replace('/index', '');
@@ -27,7 +26,6 @@ export async function getStaticPaths() {
 const post = Astro.props;
 const { Content } = await post.render();
 
-// 获取相关文章（基于标签和分类）
 const allPosts = await getCollection('posts', ({ data }) => {
   return data.lang === 'en' && !data.draft;
 });
@@ -48,14 +46,28 @@ const formatDate = (date: Date) => {
     day: 'numeric',
   }).format(date);
 };
+
+const categorySlug = post.data.categories?.[0] || post.slug.split('/')[0] || '';
+const breadcrumbs = categorySlug ? [{ name: categorySlug, url: `/en/${categorySlug}/` }] : [];
 ---
 
-<Layout 
+<Layout
   title={post.data.title}
   description={post.data.description}
   image={post.data.image}
   lang="en"
 >
+  <SEO
+    title={post.data.title}
+    description={post.data.description || ''}
+    image={post.data.image}
+    article={true}
+    publishedTime={post.data.date.toISOString()}
+    modifiedTime={post.data.lastmod?.toISOString()}
+    tags={post.data.tags}
+    lang="en"
+    breadcrumbs={breadcrumbs}
+  />
   <main class="max-w-4xl mx-auto px-6 py-8">
     <!-- Language Switcher -->
     <LanguageSwitcher currentPost={post} currentLang={post.data.lang || 'en'} />
