@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/posts/tech/claude-computer-and-browser-use-a-practical-reliability-checklist/assets/x-cover.png"
 ---
 
 # Claude Computer and Browser Use: A Practical Reliability Checklist
