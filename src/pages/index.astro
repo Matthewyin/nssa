@@ -126,6 +126,16 @@ const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
                   </div>
                 </a>
               );})}
+              <a
+                href={`/${cat.key}/`}
+                class="group flex min-h-[220px] flex-col items-center justify-center rounded-3xl border border-dashed border-gray-200 bg-gray-50/70 p-8 text-center transition-all hover:-translate-y-0.5 hover:border-apple-blue/40 hover:bg-blue-50/60 hover:shadow-xl hover:shadow-gray-200/60 dark:border-gray-700 dark:bg-gray-900/30 dark:hover:border-blue-400/40 dark:hover:bg-blue-950/20 dark:hover:shadow-black/30"
+              >
+                <span class="mb-3 text-sm font-medium text-gray-400 dark:text-gray-500">更多{cat.label}专题</span>
+                <span class="text-2xl font-semibold text-gray-900 transition-colors group-hover:text-apple-blue dark:text-white dark:group-hover:text-blue-400">
+                  查看更多
+                </span>
+                <span class="mt-4 text-sm text-gray-500 dark:text-gray-400">进入完整分类页面 →</span>
+              </a>
             </div>
           ) : (
             <div class="text-center py-12 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/30 rounded-2xl">
