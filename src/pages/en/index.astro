@@ -32,6 +32,12 @@ const formatDate = (date: Date) => {
     day: 'numeric',
   }).format(date);
 };
+
+function extractLastImage(body) {
+  if (!body) return null;
+  const matches = [...body.matchAll(/!\[.*?\]\((.*?)\)/g)];
+  return matches.length > 0 ? matches[matches.length - 1][1] : null;
+}
 ---
 
 <Layout
@@ -40,8 +46,8 @@ const formatDate = (date: Date) => {
   lang="en"
 >
   <main>
-    <div class="max-w-6xl mx-auto px-6 py-16">
-      <div class="text-center mb-16">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="text-center mb-12">
         <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 dark:text-white tracking-tight mb-6">
           NSSA
         </h1>
@@ -53,20 +59,13 @@ const formatDate = (date: Date) => {
         </p>
       </div>
 
-      <div class="mb-6">
-        <div class="flex items-center gap-1 border-b border-gray-200 dark:border-gray-700 overflow-x-auto" id="category-tabs-en">
+      <div class="mb-8">
+        <div class="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-800/50 rounded-full p-1.5 overflow-x-auto" id="category-tabs-en">
           {categoryConfig.map((cat, i) => (
             <button
               data-tab={cat.key}
-              class={`tab-btn flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${i === 0 ? 'text-apple-blue dark:text-blue-400 border-apple-blue dark:border-blue-400' : 'text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300'}`}
+              class={`tab-btn px-4 py-2 text-sm font-medium whitespace-nowrap rounded-full transition-all ${i === 0 ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/60 dark:hover:bg-gray-700/50'}`}
             >
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                {cat.icon === 'tech' && <><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></>}
-                {cat.icon === 'business' && <><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-9"/></>}
-                {cat.icon === 'psychology' && <><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></>}
-                {cat.icon === 'workplace' && <><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></>}
-                {cat.icon === 'history' && <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>}
-              </svg>
               {cat.label}
             </button>
           ))}
@@ -80,16 +79,18 @@ const formatDate = (date: Date) => {
         >
           {categories[cat.key] && categories[cat.key].length > 0 ? (
             <div class="space-y-4">
-              {categories[cat.key].map((post) => (
+              {categories[cat.key].map((post) => {
+                const thumbnail = post.data.image || extractLastImage(post.body);
+                return (
                 <a
                   href={`/en/posts/${post.slug}/`}
-                  class="flex flex-col sm:flex-row gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-md transition-all group"
+                  class="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 transition-all group"
                 >
                   <div class="sm:w-48 sm:min-w-[192px] flex-shrink-0">
-                    <div class="aspect-[16/10] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
-                      {post.data.image ? (
+                    <div class="aspect-[16/10] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+                      {thumbnail ? (
                         <img
-                          src={post.data.image}
+                          src={thumbnail}
                           alt={post.data.title}
                           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           loading="lazy"
@@ -120,7 +121,7 @@ const formatDate = (date: Date) => {
                           <span class="text-gray-300 dark:text-gray-600">|</span>
                           <div class="flex gap-1">
                             {post.data.tags.slice(0, 2).map((tag) => (
-                              <span class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                              <span class="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
                                 {tag}
                               </span>
                             ))}
@@ -130,10 +131,10 @@ const formatDate = (date: Date) => {
                     </div>
                   </div>
                 </a>
-              ))}
+              );})}
             </div>
           ) : (
-            <div class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <div class="text-center py-12 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/30 rounded-2xl">
               No articles yet
             </div>
           )}
@@ -152,12 +153,12 @@ const formatDate = (date: Date) => {
       const key = tab.getAttribute('data-tab');
 
       tabs.forEach(t => {
-        t.classList.remove('text-apple-blue', 'dark:text-blue-400', 'border-apple-blue', 'dark:border-blue-400');
-        t.classList.add('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+        t.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-900', 'dark:text-white', 'shadow-sm');
+        t.classList.add('text-gray-500', 'dark:text-gray-400');
       });
 
-      tab.classList.remove('text-gray-500', 'dark:text-gray-400', 'border-transparent');
-      tab.classList.add('text-apple-blue', 'dark:text-blue-400', 'border-apple-blue', 'dark:border-blue-400');
+      tab.classList.remove('text-gray-500', 'dark:text-gray-400');
+      tab.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-900', 'dark:text-white', 'shadow-sm');
 
       panels.forEach(p => p.classList.add('hidden'));
       document.querySelector(`[data-panel="${key}"]`)?.classList.remove('hidden');
