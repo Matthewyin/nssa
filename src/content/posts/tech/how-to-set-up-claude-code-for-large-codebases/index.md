@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/how-to-set-up-claude-code-for-large-codebases/x-cover-1e44c0d1.png"
 ---
 
 # How to Set Up Claude Code for Large Codebases

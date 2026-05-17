@@ -22,7 +22,7 @@ const categories: Record<string, typeof sortedPosts> = {};
 for (const cat of categoryConfig) {
   categories[cat.key] = sortedPosts.filter(post => {
     return post.data.categories?.includes(cat.key) || post.slug.startsWith(cat.key + '/');
-  }).slice(0, 3);
+  }).slice(0, 8);
 }
 
 const formatDate = (date: Date) => {
@@ -33,15 +33,7 @@ const formatDate = (date: Date) => {
   }).format(date);
 };
 
-function extractLastImage(body, slug) {
-  if (!body) return null;
-  const matches = [...body.matchAll(/!\[.*?\]\((.*?)\)/g)];
-  if (matches.length === 0) return null;
-  const src = matches[matches.length - 1][1];
-  if (src.startsWith('./')) return `/posts/${slug}/${src.slice(2)}`;
-  if (src.startsWith('/') || src.startsWith('http')) return src;
-  return `/posts/${slug}/${src}`;
-}
+const fallbackLogoClass = "w-full h-full object-contain p-8 sm:p-10";
 ---
 
 <Layout title="NSSA - Network / Systems / Security / AI">
@@ -83,7 +75,7 @@ function extractLastImage(body, slug) {
           {categories[cat.key] && categories[cat.key].length > 0 ? (
             <div class="space-y-4">
               {categories[cat.key].map((post, postIdx) => {
-                const thumbnail = post.data.image || extractLastImage(post.body, post.slug);
+                const thumbnail = post.data.image;
                 const isFeatured = postIdx === 0;
                 return (
                 <a
@@ -101,8 +93,8 @@ function extractLastImage(body, slug) {
                         />
                       ) : (
                         <div class="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-800/50">
-                          <img src="/nssa-logo-light.svg" alt="NSSA" class="h-10 dark:hidden" />
-                          <img src="/nssa-logo-dark.svg" alt="NSSA" class="h-10 hidden dark:block" />
+                          <img src="/nssa-logo-light.svg" alt="NSSA" class={`${fallbackLogoClass} dark:hidden`} />
+                          <img src="/nssa-logo-dark.svg" alt="NSSA" class={`${fallbackLogoClass} hidden dark:block`} />
                         </div>
                       )}
                     </div>
