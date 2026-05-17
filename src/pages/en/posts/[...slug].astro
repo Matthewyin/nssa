@@ -51,6 +51,10 @@ const categorySlug = post.data.categories?.[0] || post.slug.split('/')[0] || '';
 const breadcrumbs = categorySlug ? [{ name: categorySlug, url: `/en/${categorySlug}/` }] : [];
 ---
 
+<div id="reading-progress" class="fixed top-16 left-0 w-full h-0.5 z-40 bg-transparent">
+  <div id="reading-progress-bar" class="h-full bg-apple-blue dark:bg-blue-400 transition-[width] duration-100" style="width: 0%"></div>
+</div>
+
 <Layout
   title={post.data.title}
   description={post.data.description}
@@ -130,7 +134,7 @@ const breadcrumbs = categorySlug ? [{ name: categorySlug, url: `/en/${categorySl
     </header>
     
     <!-- Article Content -->
-    <article class="prose prose-lg dark:prose-invert max-w-none mb-12">
+    <article class="prose prose-lg dark:prose-invert max-w-none mb-12" id="article-content">
       <Content />
     </article>
     
@@ -235,5 +239,19 @@ const breadcrumbs = categorySlug ? [{ name: categorySlug, url: `/en/${categorySl
       document.execCommand('copy');
       document.body.removeChild(textArea);
     });
+  }
+
+  // Reading progress bar
+  const progressBar = document.getElementById('reading-progress-bar');
+  const articleContent = document.getElementById('article-content');
+  if (progressBar && articleContent) {
+    window.addEventListener('scroll', () => {
+      const rect = articleContent.getBoundingClientRect();
+      const total = articleContent.scrollHeight;
+      const visible = window.innerHeight;
+      const scrolled = -rect.top;
+      const progress = Math.min(Math.max(scrolled / (total - visible) * 100, 0), 100);
+      progressBar.style.width = progress + '%';
+    }, { passive: true });
   }
 </script>

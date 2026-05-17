@@ -14,6 +14,8 @@ const currentLang = Astro.props.lang || getLangFromUrl(Astro.url);
 const { title, description = t('home.description', currentLang), image } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, currentLang);
+const currentPath = Astro.url.pathname;
+const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history'];
 ---
 
 <!doctype html>
@@ -92,6 +94,10 @@ const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, current
       .text-apple-gray {
         color: var(--apple-gray);
       }
+
+      .dark .text-apple-gray {
+        color: #a1a1aa;
+      }
       
       .content-card {
         @apply bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:shadow-lg;
@@ -113,22 +119,22 @@ const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, current
             
             <!-- Desktop Navigation -->
             <div class="hidden lg:flex items-center space-x-6">
-              <a href={currentLang === 'zh' ? '/business/' : '/en/business/'} class="nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 transition-colors">
+              <a href={currentLang === 'zh' ? '/business/' : '/en/business/'} class={`nav-link transition-colors ${currentPath.includes('/business') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
                 {t('nav.business', currentLang)}
               </a>
-              <a href={currentLang === 'zh' ? '/tech/' : '/en/tech/'} class="nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 transition-colors">
+              <a href={currentLang === 'zh' ? '/tech/' : '/en/tech/'} class={`nav-link transition-colors ${currentPath.includes('/tech') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
                 {t('nav.tech', currentLang)}
               </a>
-              <a href={currentLang === 'zh' ? '/psychology/' : '/en/psychology/'} class="nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 transition-colors">
+              <a href={currentLang === 'zh' ? '/psychology/' : '/en/psychology/'} class={`nav-link transition-colors ${currentPath.includes('/psychology') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
                 {t('nav.psychology', currentLang)}
               </a>
-              <a href={currentLang === 'zh' ? '/workplace/' : '/en/workplace/'} class="nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 transition-colors">
+              <a href={currentLang === 'zh' ? '/workplace/' : '/en/workplace/'} class={`nav-link transition-colors ${currentPath.includes('/workplace') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
                 {t('nav.workplace', currentLang)}
               </a>
-              <a href={currentLang === 'zh' ? '/history/' : '/en/history/'} class="nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 transition-colors">
+              <a href={currentLang === 'zh' ? '/history/' : '/en/history/'} class={`nav-link transition-colors ${currentPath.includes('/history') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
                 {t('nav.history', currentLang)}
               </a>
-              <a href={currentLang === 'zh' ? '/about/' : '/en/about/'} class="nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 transition-colors">
+              <a href={currentLang === 'zh' ? '/about/' : '/en/about/'} class={`nav-link transition-colors ${currentPath.includes('/about') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
                 {t('nav.about', currentLang)}
               </a>
             </div>
@@ -266,17 +272,44 @@ const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, current
     <!-- Footer -->
     <footer class="border-t border-gray-200 mt-20 dark:border-gray-700">
       <div class="max-w-6xl mx-auto px-6 py-12">
-        <!-- Bottom Footer -->
-        <div class="pt-8">
-          <div class="flex flex-col md:flex-row justify-between items-center">
-            <div class="text-center md:text-left mb-4 md:mb-0">
-              <p class="text-apple-gray text-sm mb-1">{t('footer.copyright', currentLang)}</p>
-              <p class="text-apple-gray text-xs">Powered by Astro | Domain: nssa.io</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <!-- 品牌信息 -->
+          <div>
+            <a href="/" class="flex items-center mb-3">
+              <img src="/nssa-logo-light.svg" alt="NSSA" class="h-6 w-auto dark:hidden" />
+              <img src="/nssa-logo-dark.svg" alt="NSSA" class="h-6 w-auto hidden dark:block" />
+            </a>
+            <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+              {currentLang === 'zh' ? '用第一性原理拆解复杂系统——从技术架构到商业逻辑，从组织行为到认知模型' : 'Deconstructing complex systems with first principles'}
+            </p>
+          </div>
+          <!-- 导航 -->
+          <div>
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">{currentLang === 'zh' ? '导航' : 'Navigation'}</h4>
+            <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 dark:text-gray-400">
+              <a href={currentLang === 'zh' ? '/tech/' : '/en/tech/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.tech', currentLang)}</a>
+              <a href={currentLang === 'zh' ? '/business/' : '/en/business/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.business', currentLang)}</a>
+              <a href={currentLang === 'zh' ? '/psychology/' : '/en/psychology/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.psychology', currentLang)}</a>
+              <a href={currentLang === 'zh' ? '/workplace/' : '/en/workplace/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.workplace', currentLang)}</a>
+              <a href={currentLang === 'zh' ? '/history/' : '/en/history/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.history', currentLang)}</a>
+              <a href={currentLang === 'zh' ? '/about/' : '/en/about/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.about', currentLang)}</a>
             </div>
-
-            <div class="flex items-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
+          </div>
+          <!-- 链接 -->
+          <div>
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">{currentLang === 'zh' ? '链接' : 'Links'}</h4>
+            <div class="flex flex-col gap-2 text-sm text-gray-500 dark:text-gray-400">
               <a href="/sitemap-index.xml" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('footer.sitemap', currentLang)}</a>
               <a href={currentLang === 'zh' ? '/rss.xml' : '/en/rss.xml'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('footer.rss', currentLang)}</a>
+              <a href="https://github.com/Matthewyin/nssa" target="_blank" rel="noopener noreferrer" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">GitHub</a>
+            </div>
+          </div>
+        </div>
+        <!-- 底部版权 -->
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p class="text-gray-400 dark:text-gray-500 text-xs">{t('footer.copyright', currentLang)}</p>
+            <div class="flex items-center space-x-4 text-xs text-gray-400 dark:text-gray-500">
               <div class="flex items-center space-x-2">
                 <span>{t('footer.language', currentLang)}:</span>
                 {currentLang === 'zh' ? (
@@ -293,6 +326,7 @@ const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, current
                   </>
                 )}
               </div>
+              <span>Powered by Astro</span>
             </div>
           </div>
         </div>

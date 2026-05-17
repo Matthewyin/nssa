@@ -48,9 +48,10 @@ function extractLastImage(body, slug) {
   <main>
     <div class="max-w-6xl mx-auto px-6 py-12">
       <div class="text-center mb-12">
-        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 dark:text-white tracking-tight mb-6">
-          NSSA
-        </h1>
+        <div class="mb-6">
+          <img src="/nssa-logo-light.svg" alt="NSSA" class="h-20 sm:h-24 mx-auto dark:hidden" />
+          <img src="/nssa-logo-dark.svg" alt="NSSA" class="h-20 sm:h-24 mx-auto hidden dark:block" />
+        </div>
         <p class="text-xl sm:text-2xl text-apple-gray font-normal max-w-4xl mx-auto leading-relaxed mb-4">
           Network / Systems / Security / AI
         </p>
@@ -77,18 +78,19 @@ function extractLastImage(body, slug) {
       {categoryConfig.map((cat, i) => (
         <div
           data-panel={cat.key}
-          class={`tab-panel ${i === 0 ? '' : 'hidden'}`}
+          class={`tab-panel transition-opacity duration-200 ${i === 0 ? '' : 'hidden opacity-0'}`}
         >
           {categories[cat.key] && categories[cat.key].length > 0 ? (
             <div class="space-y-4">
-              {categories[cat.key].map((post) => {
+              {categories[cat.key].map((post, postIdx) => {
                 const thumbnail = post.data.image || extractLastImage(post.body, post.slug);
+                const isFeatured = postIdx === 0;
                 return (
                 <a
                   href={`/posts/${post.slug}/`}
-                  class="flex flex-col sm:flex-row gap-5 p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 transition-all group"
+                  class={`flex flex-col sm:flex-row gap-5 rounded-2xl border transition-all group ${isFeatured ? 'p-6 border-gray-100 dark:border-gray-700/50 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 bg-gray-50/50 dark:bg-gray-800/20' : 'p-5 border-gray-100 dark:border-gray-700/50 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20'}`}
                 >
-                  <div class="sm:w-48 sm:min-w-[192px] flex-shrink-0">
+                  <div class={`${isFeatured ? 'sm:w-64 sm:min-w-[256px]' : 'sm:w-48 sm:min-w-[192px]'} flex-shrink-0 hidden sm:block`}>
                     <div class="aspect-[16/10] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
                       {thumbnail ? (
                         <img
@@ -108,7 +110,7 @@ function extractLastImage(body, slug) {
                     </div>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2">
+                    <h3 class={`${isFeatured ? 'text-xl' : 'text-lg'} font-semibold text-gray-900 dark:text-white group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2`}>
                       {post.data.title}
                     </h3>
                     {post.data.description && (
@@ -116,11 +118,11 @@ function extractLastImage(body, slug) {
                         {post.data.description}
                       </p>
                     )}
-                    <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                    <div class="flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500">
                       <span>{formatDate(post.data.date)}</span>
                       {post.data.tags && post.data.tags.length > 0 && (
                         <>
-                          <span class="text-gray-300 dark:text-gray-600">|</span>
+                          <span class="text-gray-200 dark:text-gray-700">|</span>
                           <div class="flex gap-1">
                             {post.data.tags.slice(0, 2).map((tag) => (
                               <span class="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
@@ -162,8 +164,12 @@ function extractLastImage(body, slug) {
       tab.classList.remove('text-gray-500', 'dark:text-gray-400');
       tab.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-900', 'dark:text-white', 'shadow-sm');
 
-      panels.forEach(p => p.classList.add('hidden'));
-      document.querySelector(`[data-panel="${key}"]`)?.classList.remove('hidden');
+      panels.forEach(p => { p.classList.add('hidden', 'opacity-0'); });
+      const target = document.querySelector(`[data-panel="${key}"]`);
+      if (target) {
+        target.classList.remove('hidden');
+        requestAnimationFrame(() => target.classList.remove('opacity-0'));
+      }
     });
   });
 </script>
