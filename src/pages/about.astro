@@ -1,11 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SEO from '../components/SEO.astro';
 ---
 
 <Layout
-  title="关于 - NSSA"
-  description="NSSA - Network / Systems / Security / AI"
+  title="关于 NSSA - Network / Systems / Security / AI"
+  description="NSSA 是一个用第一性原理拆解复杂系统的技术博客，涵盖网络、系统、安全、AI 等领域。同时结合从业者视角分析行业业务，也分享关于心理与职场的思考。"
 >
+  <SEO
+    title="关于 NSSA - Network / Systems / Security / AI"
+    description="NSSA 是一个用第一性原理拆解复杂系统的技术博客，涵盖网络、系统、安全、AI 等领域。同时结合从业者视角分析行业业务，也分享关于心理与职场的思考。"
+    lang="zh"
+    breadcrumbs={[{ name: '关于', url: '/about/' }]}
+  />
   <main class="max-w-3xl mx-auto px-6 py-8">
     <!-- Page Header -->
     <header class="mb-12">
@@ -33,6 +40,29 @@ import Layout from '../layouts/Layout.astro';
         </p>
         <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
           内容涵盖五个核心领域——业务、技术、心理、职场、历史——它们相互交织，共同构成了我们生活和工作的复杂系统。
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">关于作者</h2>
+        <div class="not-prose flex items-start gap-6 mb-8">
+          <div class="w-20 h-20 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
+            <span class="text-3xl">🌐</span>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">大尹</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">Network Engineer / AI Learner / Programmer</p>
+            <div class="flex gap-4 text-sm">
+              <a href="https://x.com/bawan269" target="_blank" rel="noopener noreferrer" class="text-apple-blue hover:underline">X @bawan269</a>
+              <span class="text-gray-400">公众号：大尹隐于网</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          网络工程师出身，长期从事网络基础设施相关工作。当前正在深入学习人工智能技术，特别关注 AI Agent、大语言模型的应用与工程实践。
+        </p>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          闲时喜欢编程，热衷用代码解决问题。同时保持对心理学、历史和职场动态的浓厚兴趣——这些看似不相关的领域，在系统思维的框架下总能找到有趣的交叉点。
         </p>
       </section>
 

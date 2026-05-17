@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import SEO from '../../components/SEO.astro';
 import { t } from '../../utils/i18n';
 
 export async function getStaticPaths() {
@@ -67,11 +68,17 @@ const formatDate = (date: Date) => {
 const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
 ---
 
-<Layout 
+<Layout
   title={`${currentCategory.title} - NSSA`}
   description={currentCategory.description}
   lang="en"
 >
+  <SEO
+    title={`${currentCategory.title} - NSSA`}
+    description={currentCategory.description}
+    lang="en"
+    breadcrumbs={[{ name: currentCategory.title, url: `/en/${category}/` }]}
+  />
   <main class="max-w-6xl mx-auto px-6 py-8">
     <!-- Category Header -->
     <header class="mb-12">

@@ -21,12 +21,12 @@ export async function GET(context: APIContext) {
       description: post.data.description || '',
       link: `/en/posts/${post.slug}/`,
       categories: post.data.categories || [],
-      author: post.data.author || 'NSSA Team',
+      author: post.data.author || 'Dayin',
     })),
     customData: `
       <language>en-US</language>
-      <managingEditor>team@nssa.io (NSSA Team)</managingEditor>
-      <webMaster>team@nssa.io (NSSA Team)</webMaster>
+      <managingEditor>team@nssa.io (Dayin)</managingEditor>
+      <webMaster>team@nssa.io (Dayin)</webMaster>
       <copyright>© 2025 NSSA For educational and research purposes only</copyright>
       <category>Technology</category>
       <category>Business</category>
@@ -35,7 +35,7 @@ export async function GET(context: APIContext) {
       <category>History</category>
       <ttl>60</ttl>
       <image>
-        <url>https://nssa.io/logo.svg</url>
+        <url>https://nssa.io/nssa-logo-light.svg</url>
         <title>NSSA</title>
         <link>https://nssa.io/en</link>
         <width>144</width>

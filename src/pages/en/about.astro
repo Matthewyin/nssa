@@ -1,12 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import SEO from '../../components/SEO.astro';
 ---
 
 <Layout
-  title="About - NSSA"
-  description="NSSA - Network / Systems / Security / AI"
+  title="About NSSA - Network / Systems / Security / AI"
+  description="NSSA deconstructs complex systems with first principles — covering networking, systems, security, AI and more. Also shares industry insights and thoughts on psychology and workplace dynamics."
   lang="en"
 >
+  <SEO
+    title="About NSSA - Network / Systems / Security / AI"
+    description="NSSA deconstructs complex systems with first principles — covering networking, systems, security, AI and more. Also shares industry insights and thoughts on psychology and workplace dynamics."
+    lang="en"
+    breadcrumbs={[{ name: 'About', url: '/en/about/' }]}
+  />
   <main class="max-w-3xl mx-auto px-6 py-8">
     <header class="mb-12">
       <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4">
@@ -32,6 +39,29 @@ import Layout from '../../layouts/Layout.astro';
         </p>
         <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
           Our content spans five core areas — Business, Technology, Psychology, Workplace, and History — interwoven threads that form the complex systems we live and work in.
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">About the Author</h2>
+        <div class="not-prose flex items-start gap-6 mb-8">
+          <div class="w-20 h-20 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
+            <span class="text-3xl">🌐</span>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Dayin</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">Network Engineer / AI Learner / Programmer</p>
+            <div class="flex gap-4 text-sm">
+              <a href="https://x.com/bawan269" target="_blank" rel="noopener noreferrer" class="text-apple-blue hover:underline">X @bawan269</a>
+              <span class="text-gray-400">WeChat: 大尹隐于网</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          A network engineer by profession with extensive experience in network infrastructure. Currently deep-diving into artificial intelligence, with a particular focus on AI agents, large language models, and their engineering applications.
+        </p>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          An avid programmer who enjoys solving problems with code. Also maintains a keen interest in psychology, history, and workplace dynamics — seemingly unrelated fields that always reveal fascinating intersections through the lens of systems thinking.
         </p>
       </section>
 

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SEO from '../components/SEO.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('posts', ({ data }) => {
@@ -37,6 +38,11 @@ const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
 ---
 
 <Layout title="NSSA - Network / Systems / Security / AI">
+  <SEO
+    title="NSSA - Network / Systems / Security / AI"
+    description="用第一性原理拆解复杂系统——从技术架构到商业逻辑，从组织行为到认知模型"
+    lang="zh"
+  />
   <main>
     <div class="max-w-6xl mx-auto px-6 py-12">
       <div class="text-center mb-12">

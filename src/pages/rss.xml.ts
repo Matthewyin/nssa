@@ -21,12 +21,12 @@ export async function GET(context: APIContext) {
       description: post.data.description || '',
       link: `/posts/${post.slug}/`,
       categories: post.data.categories || [],
-      author: post.data.author || 'NSSA Team',
+      author: post.data.author || '大尹',
     })),
     customData: `
       <language>zh-CN</language>
-      <managingEditor>team@nssa.io (NSSA Team)</managingEditor>
-      <webMaster>team@nssa.io (NSSA Team)</webMaster>
+      <managingEditor>team@nssa.io (大尹)</managingEditor>
+      <webMaster>team@nssa.io (大尹)</webMaster>
       <copyright>© 2025 NSSA 仅用于学习和研究目的</copyright>
       <category>Technology</category>
       <category>Business</category>
@@ -35,7 +35,7 @@ export async function GET(context: APIContext) {
       <category>History</category>
       <ttl>60</ttl>
       <image>
-        <url>https://nssa.io/logo.svg</url>
+        <url>https://nssa.io/nssa-logo-light.svg</url>
         <title>NSSA</title>
         <link>https://nssa.io</link>
         <width>144</width>

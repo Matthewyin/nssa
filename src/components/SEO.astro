@@ -9,6 +9,7 @@ export interface Props {
   tags?: string[];
   lang?: 'zh' | 'en';
   breadcrumbs?: { name: string; url: string }[];
+  faq?: { question: string; answer: string }[];
 }
 
 const {
@@ -20,12 +21,24 @@ const {
   modifiedTime,
   tags = [],
   lang = 'zh',
-  breadcrumbs = []
+  breadcrumbs = [],
+  faq = []
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const defaultImageURL = new URL('/images/og-default.png', Astro.site);
 const imageURL = image ? new URL(image, Astro.site) : defaultImageURL;
+
+// 作者信息
+const authorData = {
+  "@type": "Person",
+  "name": "大尹",
+  "url": lang === 'zh' ? "https://nssa.io/about/" : "https://nssa.io/en/about/",
+  "jobTitle": "Network Engineer",
+  "sameAs": [
+    "https://x.com/bawan269"
+  ]
+};
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -33,18 +46,14 @@ const structuredData = {
   "headline": title,
   "description": description,
   "url": canonicalURL.toString(),
-  "author": {
-    "@type": "Organization",
-    "name": "NSSA Team",
-    "url": "https://nssa.io"
-  },
+  "author": authorData,
   "publisher": {
     "@type": "Organization",
     "name": "NSSA",
     "url": "https://nssa.io",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://nssa.io/logo.svg"
+      "url": "https://nssa.io/nssa-logo-light.svg"
     }
   },
   "image": {
@@ -65,6 +74,37 @@ const structuredData = {
 if (article) {
   structuredData["articleSection"] = tags[0] || "General";
 }
+
+// 首页输出 Organization schema
+const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/en/';
+const organizationData = isHomePage ? {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NSSA",
+  "alternateName": "Network System Security Application",
+  "url": "https://nssa.io",
+  "logo": "https://nssa.io/nssa-logo-light.svg",
+  "sameAs": [
+    "https://x.com/bawan269"
+  ],
+  "description": lang === 'zh'
+    ? "用第一性原理拆解复杂系统——从技术架构到商业逻辑，从组织行为到认知模型"
+    : "Deconstructing complex systems with first principles — from technical architecture to business logic, from organizational behavior to cognitive models"
+} : null;
+
+// FAQ schema
+const faqData = faq.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faq.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+} : null;
 
 const breadcrumbData = breadcrumbs.length > 0 ? {
   "@context": "https://schema.org",
@@ -115,12 +155,14 @@ const breadcrumbData = breadcrumbs.length > 0 ? {
 
 <!-- Additional Meta Tags -->
 <meta name="robots" content="index, follow" />
-<meta name="author" content="NSSA Team" />
+<meta name="author" content="大尹" />
 <meta name="language" content={lang === 'zh' ? 'Chinese' : 'English'} />
 
 <!-- Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 {breadcrumbData && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbData)} />}
+{organizationData && <script type="application/ld+json" set:html={JSON.stringify(organizationData)} />}
+{faqData && <script type="application/ld+json" set:html={JSON.stringify(faqData)} />}
 
 <!-- Preconnect to external domains -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />

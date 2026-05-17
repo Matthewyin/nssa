@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import SEO from '../../components/SEO.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('posts', ({ data }) => {
@@ -41,6 +42,11 @@ const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
   description="Deconstructing complex systems with first principles"
   lang="en"
 >
+  <SEO
+    title="NSSA - Network / Systems / Security / AI"
+    description="Deconstructing complex systems with first principles — from technical architecture to business logic, from organizational behavior to cognitive models"
+    lang="en"
+  />
   <main>
     <div class="max-w-6xl mx-auto px-6 py-12">
       <div class="text-center mb-12">
