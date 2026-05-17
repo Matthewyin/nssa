@@ -33,10 +33,14 @@ const formatDate = (date: Date) => {
   }).format(date);
 };
 
-function extractLastImage(body) {
+function extractLastImage(body, slug) {
   if (!body) return null;
   const matches = [...body.matchAll(/!\[.*?\]\((.*?)\)/g)];
-  return matches.length > 0 ? matches[matches.length - 1][1] : null;
+  if (matches.length === 0) return null;
+  const src = matches[matches.length - 1][1];
+  if (src.startsWith('./')) return `/en/posts/${slug}/${src.slice(2)}`;
+  if (src.startsWith('/') || src.startsWith('http')) return src;
+  return `/en/posts/${slug}/${src}`;
 }
 ---
 
@@ -59,12 +63,12 @@ function extractLastImage(body) {
         </p>
       </div>
 
-      <div class="mb-8">
+      <div class="mb-8 flex justify-center">
         <div class="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-800/50 rounded-full p-1.5 overflow-x-auto" id="category-tabs-en">
           {categoryConfig.map((cat, i) => (
             <button
               data-tab={cat.key}
-              class={`tab-btn px-4 py-2 text-sm font-medium whitespace-nowrap rounded-full transition-all ${i === 0 ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/60 dark:hover:bg-gray-700/50'}`}
+              class={`tab-btn px-6 py-2.5 text-base font-medium whitespace-nowrap rounded-full transition-all ${i === 0 ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-white/60 dark:hover:bg-gray-700/50'}`}
             >
               {cat.label}
             </button>
@@ -80,7 +84,7 @@ function extractLastImage(body) {
           {categories[cat.key] && categories[cat.key].length > 0 ? (
             <div class="space-y-4">
               {categories[cat.key].map((post) => {
-                const thumbnail = post.data.image || extractLastImage(post.body);
+                const thumbnail = post.data.image || extractLastImage(post.body, post.slug);
                 return (
                 <a
                   href={`/en/posts/${post.slug}/`}
