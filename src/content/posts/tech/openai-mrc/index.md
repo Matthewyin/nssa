@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/openai-mrc/x-cover-3c016d0e.png"
 ---
 
 # OpenAI 发布 MRC：大模型竞争，拼到数据中心网络了

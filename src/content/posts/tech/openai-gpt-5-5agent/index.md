@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/openai-gpt-5-5agent/x-cover-24f3470b.png"
 ---
 
 # GPT-5.5 发布：OpenAI 要卖的不是更聪明的聊天框，而是能持续干活的系统

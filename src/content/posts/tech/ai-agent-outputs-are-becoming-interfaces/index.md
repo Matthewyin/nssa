@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/ai-agent-outputs-are-becoming-interfaces/x-cover-a105e607.png"
 ---
 # AI Agent Outputs Are Becoming Interfaces
 

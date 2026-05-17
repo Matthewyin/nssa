@@ -9,6 +9,7 @@ category: "business"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/business/openai-and-anthropic-are-moving-enterprise-ai-from-models-to-deployment/x-cover-badf2e5b.png"
 ---
 
 # OpenAI and Anthropic Are Moving Enterprise AI From Models to Deployment

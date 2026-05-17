@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/anthropic-is-building-a-tiered-delivery-system-for-claude/x-cover-8ae90fa4.png"
 ---
 
 # Anthropic Is Building A Tiered Delivery System For Claude

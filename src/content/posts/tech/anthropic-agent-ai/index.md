@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/anthropic-agent-ai/x-cover-3f22fbdb.png"
 ---
 
 # Anthropic 把金融智能体（Agent）做成模板，企业 AI 落地正在换挡

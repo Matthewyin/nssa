@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/codex-is-moving-from-desktop-tool-to-work-orchestrator/x-cover-ad9134b7.png"
 ---
 
 # Codex Is Moving From Desktop Tool To Work Orchestrator

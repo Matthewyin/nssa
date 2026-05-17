@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/voice-agents-are-moving-from-conversation-to-workflow/x-cover-633c6a96.png"
 ---
 
 # Voice Agents Are Moving From Conversation to Workflow

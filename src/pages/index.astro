@@ -33,7 +33,7 @@ const formatDate = (date: Date) => {
   }).format(date);
 };
 
-const fallbackLogoClass = "w-full h-full object-contain p-8 sm:p-10";
+const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
 ---
 
 <Layout title="NSSA - Network / Systems / Security / AI">
@@ -73,22 +73,22 @@ const fallbackLogoClass = "w-full h-full object-contain p-8 sm:p-10";
           class={`tab-panel transition-opacity duration-200 ${i === 0 ? '' : 'hidden opacity-0'}`}
         >
           {categories[cat.key] && categories[cat.key].length > 0 ? (
-            <div class="space-y-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {categories[cat.key].map((post, postIdx) => {
                 const thumbnail = post.data.image;
                 const isFeatured = postIdx === 0;
                 return (
                 <a
                   href={`/posts/${post.slug}/`}
-                  class={`flex flex-col sm:flex-row gap-5 rounded-2xl border transition-all group ${isFeatured ? 'p-6 border-gray-100 dark:border-gray-700/50 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20 bg-gray-50/50 dark:bg-gray-800/20' : 'p-5 border-gray-100 dark:border-gray-700/50 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20'}`}
+                  class={`group rounded-3xl border border-gray-100 dark:border-gray-700/50 bg-white/80 dark:bg-gray-900/40 overflow-hidden transition-all hover:shadow-xl hover:shadow-gray-200/60 dark:hover:shadow-black/30 hover:-translate-y-0.5 ${isFeatured ? 'lg:col-span-2 grid lg:grid-cols-[minmax(360px,520px)_1fr] gap-0 p-3 lg:p-4' : 'block p-4'}`}
                 >
-                  <div class={`${isFeatured ? 'sm:w-64 sm:min-w-[256px]' : 'sm:w-48 sm:min-w-[192px]'} flex-shrink-0 hidden sm:block`}>
-                    <div class="aspect-[16/10] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+                  <div class={`${isFeatured ? 'lg:mr-6 mb-4 lg:mb-0' : 'mb-4'} w-full`}>
+                    <div class={`${isFeatured ? 'rounded-2xl' : 'rounded-2xl'} aspect-[5/2] overflow-hidden bg-gray-100 dark:bg-gray-800`}>
                       {thumbnail ? (
                         <img
                           src={thumbnail}
                           alt={post.data.title}
-                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                          class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
                           loading="lazy"
                         />
                       ) : (
@@ -99,12 +99,12 @@ const fallbackLogoClass = "w-full h-full object-contain p-8 sm:p-10";
                       )}
                     </div>
                   </div>
-                  <div class="flex-1 min-w-0">
-                    <h3 class={`${isFeatured ? 'text-xl' : 'text-lg'} font-semibold text-gray-900 dark:text-white group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2`}>
+                  <div class={`${isFeatured ? 'flex min-w-0 flex-col justify-center p-1 lg:p-3' : 'min-w-0'}`}>
+                    <h3 class={`${isFeatured ? 'text-2xl' : 'text-lg'} font-semibold text-gray-900 dark:text-white group-hover:text-apple-blue dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-3`}>
                       {post.data.title}
                     </h3>
                     {post.data.description && (
-                      <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
+                      <p class={`${isFeatured ? 'text-base line-clamp-3' : 'text-sm line-clamp-2'} text-gray-600 dark:text-gray-300 mb-4`}>
                         {post.data.description}
                       </p>
                     )}

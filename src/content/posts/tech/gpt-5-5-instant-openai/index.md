@@ -9,6 +9,7 @@ category: "tech"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/gpt-5-5-instant-openai/x-cover-03b299ab.png"
 ---
 
 # GPT-5.5 Instant 的真正变化：OpenAI 在争夺默认入口

@@ -81,7 +81,7 @@ const formatDate = (date: Date) => {
   }).format(date);
 };
 
-const fallbackLogoClass = "w-full h-full object-contain p-8 sm:p-10";
+const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
 ---
 
 <Layout 
@@ -157,12 +157,12 @@ const fallbackLogoClass = "w-full h-full object-contain p-8 sm:p-10";
           data-title={post.data.title}
         >
           <a href={post.data.lang === 'en' ? `/en/posts/${post.slug}/` : `/posts/${post.slug}/`} class="block p-5 hover:no-underline">
-            <div class="mb-4 rounded-xl overflow-hidden aspect-[16/10] bg-gray-100 dark:bg-gray-800">
+            <div class="mb-4 rounded-xl overflow-hidden aspect-[5/2] bg-gray-100 dark:bg-gray-800">
               {thumbnail ? (
                 <img
                   src={thumbnail}
                   alt={post.data.title}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                  class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
                   loading="lazy"
                 />
               ) : (

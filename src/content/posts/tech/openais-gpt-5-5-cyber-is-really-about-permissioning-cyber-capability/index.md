@@ -10,6 +10,7 @@ lang: "en"
 showInZh: true
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/tech/openais-gpt-5-5-cyber-is-really-about-permissioning-cyber-capability/x-cover-3adb11df.png"
 ---
 
 # OpenAI’s GPT-5.5-Cyber Is Really About Permissioning Cyber Capability

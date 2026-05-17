@@ -9,6 +9,7 @@ category: "business"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/business/enterprise-ai-advantage-is-moving-from-access-to-depth/x-cover-e920c6c8.png"
 ---
 
 # Enterprise AI Advantage Is Moving From Access to Depth

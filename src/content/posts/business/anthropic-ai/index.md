@@ -9,6 +9,7 @@ category: "business"
 lang: "zh"
 source: "wechat"
 origin: "everyday-ai-news"
+image: "/images/posts/business/anthropic-ai/x-cover-4227c787.png"
 ---
 
 # Anthropic 的新公司，暴露了企业 AI 最大的真问题
