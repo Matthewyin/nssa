@@ -1,31 +1,44 @@
 ---
+import SEO from '../components/SEO.astro';
 import SearchSimple from '../components/SearchSimple.astro';
 import '../styles/global.css';
-import { getLangFromUrl, t, getAlternateLanguagePaths, type Language } from '../utils/i18n';
+import { CATEGORY_INFO, CATEGORY_KEYS, SITE_DESCRIPTION } from '../utils/site';
 
 export interface Props {
   title: string;
   description?: string;
   image?: string;
-  lang?: Language;
+  article?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  tags?: string[];
+  contentLang?: 'zh' | 'en';
+  breadcrumbs?: { name: string; url: string }[];
+  faq?: { question: string; answer: string }[];
 }
 
-const currentLang = Astro.props.lang || getLangFromUrl(Astro.url);
-const { title, description = t('home.description', currentLang), image } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const alternateLanguages = getAlternateLanguagePaths(Astro.url.pathname, currentLang);
+const {
+  title,
+  description = SITE_DESCRIPTION,
+  image,
+  article = false,
+  publishedTime,
+  modifiedTime,
+  tags = [],
+  contentLang = 'en',
+  breadcrumbs = [],
+  faq = []
+} = Astro.props;
 const currentPath = Astro.url.pathname;
-const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history'];
 ---
 
 <!doctype html>
-<html lang={currentLang === 'zh' ? 'zh-CN' : 'en-US'}>
+<html lang="en-US">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- SEO Meta Tags -->
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-42PG0XQ79M"></script>
     <script is:inline>
@@ -36,31 +49,18 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
       gtag('config', 'G-42PG0XQ79M');
     </script>
 
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta name="keywords" content={title} />
-    <meta name="author" content="NSSA Team" />
-    <link rel="canonical" href={canonicalURL} />
-
-    <!-- Alternate Language Links -->
-    {Object.entries(alternateLanguages).map(([lang, path]) => (
-      <link rel="alternate" hreflang={lang} href={new URL(path, Astro.site)} />
-    ))}
-    <link rel="alternate" hreflang="x-default" href={new URL(currentLang === 'zh' ? Astro.url.pathname : alternateLanguages.zh || '/', Astro.site)} />
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:site_name" content="NSSA - Network-System-Security-Application" />
-    {image && <meta property="og:image" content={image} />}
-    
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    {image && <meta name="twitter:image" content={image} />}
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      article={article}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      tags={tags}
+      contentLang={contentLang}
+      breadcrumbs={breadcrumbs}
+      faq={faq}
+    />
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -118,23 +118,13 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
             
             <!-- Desktop Navigation -->
             <div class="hidden lg:flex items-center space-x-6">
-              <a href={currentLang === 'zh' ? '/business/' : '/en/business/'} class={`nav-link transition-colors ${currentPath.includes('/business') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
-                {t('nav.business', currentLang)}
-              </a>
-              <a href={currentLang === 'zh' ? '/tech/' : '/en/tech/'} class={`nav-link transition-colors ${currentPath.includes('/tech') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
-                {t('nav.tech', currentLang)}
-              </a>
-              <a href={currentLang === 'zh' ? '/psychology/' : '/en/psychology/'} class={`nav-link transition-colors ${currentPath.includes('/psychology') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
-                {t('nav.psychology', currentLang)}
-              </a>
-              <a href={currentLang === 'zh' ? '/workplace/' : '/en/workplace/'} class={`nav-link transition-colors ${currentPath.includes('/workplace') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
-                {t('nav.workplace', currentLang)}
-              </a>
-              <a href={currentLang === 'zh' ? '/history/' : '/en/history/'} class={`nav-link transition-colors ${currentPath.includes('/history') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
-                {t('nav.history', currentLang)}
-              </a>
-              <a href={currentLang === 'zh' ? '/about/' : '/en/about/'} class={`nav-link transition-colors ${currentPath.includes('/about') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
-                {t('nav.about', currentLang)}
+              {CATEGORY_KEYS.map((category) => (
+                <a href={`/${category}/`} class={`nav-link transition-colors ${currentPath.startsWith(`/${category}/`) || currentPath === `/${category}/` ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
+                  {CATEGORY_INFO[category].title}
+                </a>
+              ))}
+              <a href="/about/" class={`nav-link transition-colors ${currentPath.includes('/about') ? 'text-apple-blue dark:text-blue-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400'}`}>
+                About
               </a>
             </div>
           </div>
@@ -147,7 +137,7 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
                 <input
                   type="text"
                   id="search-input"
-                  placeholder={t('nav.search.placeholder', currentLang)}
+                  placeholder="Search..."
                   class="w-64 px-4 py-2 pl-10 pr-4 text-sm bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-apple-blue dark:focus:ring-blue-400 focus:border-transparent dark:text-white dark:placeholder-gray-400"
                 />
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -165,35 +155,11 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
               </div>
             </div>
             
-            <!-- Language Toggle -->
-            <div class="relative">
-              <button 
-                id="language-toggle" 
-                class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" 
-                title="切换语言"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022.0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
-                </svg>
-              </button>
-              <div id="language-menu" class="hidden absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
-                {currentLang === 'zh' ? (
-                  <a href="/en" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg">
-                    English
-                  </a>
-                ) : (
-                  <a href="/" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg">
-                    中文
-                  </a>
-                )}
-              </div>
-            </div>
-            
             <!-- Theme Toggle -->
             <button 
               id="theme-toggle" 
               class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" 
-              title="切换主题"
+              title="Toggle theme"
             >
               <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1A1 1 0 119 4V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707A1 1 0 1113.536 5.05l.707-.707a1 1 0 011.414.0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707A1 1 0 004.343 5.757l.707.707zm1.414 8.486-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
@@ -207,7 +173,7 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
             </button>
             
             <!-- Mobile Menu Button -->
-            <button class="lg:hidden p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" onclick="toggleMobileMenu()">
+            <button id="mobile-menu-toggle" class="lg:hidden p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
               </svg>
@@ -222,7 +188,7 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
               <input 
                 type="text" 
                 id="mobile-search-input" 
-                placeholder="搜索..." 
+                placeholder="Search..." 
                 class="w-full px-4 py-2 pl-10 pr-4 text-sm bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-apple-blue dark:focus:ring-blue-400 focus:border-transparent dark:text-white dark:placeholder-gray-400"
               />
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -240,23 +206,13 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
             </div>
           </div>
           
-          <a href="/business/" class="block py-3 px-2 nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            业务专题
-          </a>
-          <a href="/tech/" class="block py-3 px-2 nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            技术专题
-          </a>
-          <a href="/psychology/" class="block py-3 px-2 nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            心理专题
-          </a>
-          <a href="/workplace/" class="block py-3 px-2 nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            职场专题
-          </a>
-          <a href="/history/" class="block py-3 px-2 nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            历史专题
-          </a>
+          {CATEGORY_KEYS.map((category) => (
+            <a href={`/${category}/`} class="block py-3 px-2 nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
+              {CATEGORY_INFO[category].title}
+            </a>
+          ))}
           <a href="/about/" class="block py-3 px-2 nav-link text-gray-700 dark:text-gray-300 hover:text-apple-blue dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            关于
+            About
           </a>
         </div>
       </div>
@@ -272,59 +228,37 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
     <footer class="border-t border-gray-200 mt-20 dark:border-gray-700">
       <div class="max-w-6xl mx-auto px-6 py-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <!-- 品牌信息 -->
           <div>
             <a href="/" class="flex items-center mb-3">
               <img src="/nssa-logo-light.svg" alt="NSSA" class="h-6 w-auto dark:hidden" />
               <img src="/nssa-logo-dark.svg" alt="NSSA" class="h-6 w-auto hidden dark:block" />
             </a>
             <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-              {currentLang === 'zh' ? '用第一性原理拆解复杂系统——从技术架构到商业逻辑，从组织行为到认知模型' : 'Deconstructing complex systems with first principles'}
+              Deconstructing complex systems with first principles.
             </p>
           </div>
-          <!-- 导航 -->
           <div>
-            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">{currentLang === 'zh' ? '导航' : 'Navigation'}</h4>
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Navigation</h4>
             <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 dark:text-gray-400">
-              <a href={currentLang === 'zh' ? '/tech/' : '/en/tech/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.tech', currentLang)}</a>
-              <a href={currentLang === 'zh' ? '/business/' : '/en/business/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.business', currentLang)}</a>
-              <a href={currentLang === 'zh' ? '/psychology/' : '/en/psychology/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.psychology', currentLang)}</a>
-              <a href={currentLang === 'zh' ? '/workplace/' : '/en/workplace/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.workplace', currentLang)}</a>
-              <a href={currentLang === 'zh' ? '/history/' : '/en/history/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.history', currentLang)}</a>
-              <a href={currentLang === 'zh' ? '/about/' : '/en/about/'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('nav.about', currentLang)}</a>
+              {CATEGORY_KEYS.map((category) => (
+                <a href={`/${category}/`} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{CATEGORY_INFO[category].title}</a>
+              ))}
+              <a href="/about/" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">About</a>
             </div>
           </div>
-          <!-- 链接 -->
           <div>
-            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">{currentLang === 'zh' ? '链接' : 'Links'}</h4>
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Links</h4>
             <div class="flex flex-col gap-2 text-sm text-gray-500 dark:text-gray-400">
-              <a href="/sitemap-index.xml" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('footer.sitemap', currentLang)}</a>
-              <a href={currentLang === 'zh' ? '/rss.xml' : '/en/rss.xml'} class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">{t('footer.rss', currentLang)}</a>
+              <a href="/sitemap-index.xml" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">Sitemap</a>
+              <a href="/rss.xml" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">RSS Feed</a>
               <a href="https://github.com/Matthewyin/nssa" target="_blank" rel="noopener noreferrer" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">GitHub</a>
             </div>
           </div>
         </div>
-        <!-- 底部版权 -->
         <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
           <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
-            <p class="text-gray-400 dark:text-gray-500 text-xs">{t('footer.copyright', currentLang)}</p>
+            <p class="text-gray-400 dark:text-gray-500 text-xs">© 2025 NSSA. For educational and research purposes only.</p>
             <div class="flex items-center space-x-4 text-xs text-gray-400 dark:text-gray-500">
-              <div class="flex items-center space-x-2">
-                <span>{t('footer.language', currentLang)}:</span>
-                {currentLang === 'zh' ? (
-                  <>
-                    <span class="text-apple-blue">中文</span>
-                    <span>|</span>
-                    <a href="/en/" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">English</a>
-                  </>
-                ) : (
-                  <>
-                    <a href="/" class="hover:text-apple-blue dark:hover:text-blue-400 transition-colors">中文</a>
-                    <span>|</span>
-                    <span class="text-apple-blue">English</span>
-                  </>
-                )}
-              </div>
               <span>Powered by Astro</span>
             </div>
           </div>
@@ -334,30 +268,34 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
     
     <!-- Scripts -->
     <script>
-      // Theme toggle functionality
       function initThemeToggle() {
         const themeToggle = document.getElementById('theme-toggle');
         const lightIcon = document.getElementById('theme-toggle-light-icon');
         const darkIcon = document.getElementById('theme-toggle-dark-icon');
         const systemIcon = document.getElementById('theme-toggle-system-icon');
+        if (!themeToggle || !lightIcon || !darkIcon || !systemIcon) return;
+
+        const lightIconEl = lightIcon;
+        const darkIconEl = darkIcon;
+        const systemIconEl = systemIcon;
         
         let currentTheme = localStorage.getItem('theme') || 'system';
         
-        function setTheme(theme) {
-          lightIcon.classList.add('hidden');
-          darkIcon.classList.add('hidden');
-          systemIcon.classList.add('hidden');
+        function setTheme(theme: string) {
+          lightIconEl.classList.add('hidden');
+          darkIconEl.classList.add('hidden');
+          systemIconEl.classList.add('hidden');
           
           if (theme === 'dark') {
             document.documentElement.classList.add('dark');
-            lightIcon.classList.remove('hidden');
+            lightIconEl.classList.remove('hidden');
             localStorage.setItem('theme', 'dark');
           } else if (theme === 'light') {
             document.documentElement.classList.remove('dark');
-            darkIcon.classList.remove('hidden');
+            darkIconEl.classList.remove('hidden');
             localStorage.setItem('theme', 'light');
           } else {
-            systemIcon.classList.remove('hidden');
+            systemIconEl.classList.remove('hidden');
             localStorage.setItem('theme', 'system');
             if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
               document.documentElement.classList.add('dark');
@@ -367,7 +305,6 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
           }
         }
         
-        // Listen for system theme changes
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
           if (localStorage.getItem('theme') === 'system') {
             if (e.matches) {
@@ -396,39 +333,19 @@ const navCategories = ['business', 'tech', 'psychology', 'workplace', 'history']
         });
       }
       
-      // Mobile menu toggle (global function)
-      window.toggleMobileMenu = function() {
+      function initMobileMenu() {
+        const toggle = document.getElementById('mobile-menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenu) {
+        if (!toggle || !mobileMenu) return;
+
+        toggle.addEventListener('click', function() {
           mobileMenu.classList.toggle('hidden');
-        }
+        });
       }
       
-      // Language toggle
-      function initLanguageToggle() {
-        const languageToggle = document.getElementById('language-toggle');
-        const languageMenu = document.getElementById('language-menu');
-        
-        if (languageToggle && languageMenu) {
-          languageToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            languageMenu.classList.toggle('hidden');
-          });
-          
-          document.addEventListener('click', function() {
-            languageMenu.classList.add('hidden');
-          });
-          
-          languageMenu.addEventListener('click', function(e) {
-            e.stopPropagation();
-          });
-        }
-      }
-      
-      // Initialize on DOM load
       document.addEventListener('DOMContentLoaded', function() {
         initThemeToggle();
-        initLanguageToggle();
+        initMobileMenu();
       });
     </script>
   </body>

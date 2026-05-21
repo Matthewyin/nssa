@@ -12,23 +12,8 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
-    sitemap({
-      i18n: {
-        defaultLocale: 'zh',
-        locales: {
-          zh: 'zh-CN',
-          en: 'en-US',
-        },
-      },
-    }),
+    sitemap(),
   ],
-  i18n: {
-    defaultLocale: 'zh',
-    locales: ['zh', 'en'],
-    routing: {
-      prefixDefaultLocale: false,
-    },
-  },
   output: 'static',
   build: {
     format: 'directory',

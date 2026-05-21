@@ -7,7 +7,7 @@ export interface Props {
   publishedTime?: string;
   modifiedTime?: string;
   tags?: string[];
-  lang?: 'zh' | 'en';
+  contentLang?: 'zh' | 'en';
   breadcrumbs?: { name: string; url: string }[];
   faq?: { question: string; answer: string }[];
 }
@@ -20,7 +20,7 @@ const {
   publishedTime,
   modifiedTime,
   tags = [],
-  lang = 'zh',
+  contentLang = 'en',
   breadcrumbs = [],
   faq = []
 } = Astro.props;
@@ -29,23 +29,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const defaultImageURL = new URL('/images/og-default.png', Astro.site);
 const imageURL = image ? new URL(image, Astro.site) : defaultImageURL;
 
-// 作者信息
 const authorData = {
   "@type": "Person",
-  "name": "大尹",
-  "url": lang === 'zh' ? "https://nssa.io/about/" : "https://nssa.io/en/about/",
+  "name": "Dayin",
+  "alternateName": "大尹",
+  "url": "https://nssa.io/about/",
   "jobTitle": "Network Engineer",
   "sameAs": [
     "https://x.com/bawan269"
   ]
 };
 
-const structuredData = {
+const structuredData: Record<string, unknown> = {
   "@context": "https://schema.org",
   "@type": article ? "Article" : "WebPage",
   "headline": title,
   "description": description,
   "url": canonicalURL.toString(),
+  "inLanguage": contentLang === 'zh' ? 'zh-CN' : 'en-US',
   "author": authorData,
   "publisher": {
     "@type": "Organization",
@@ -75,8 +76,7 @@ if (article) {
   structuredData["articleSection"] = tags[0] || "General";
 }
 
-// 首页输出 Organization schema
-const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/en/';
+const isHomePage = Astro.url.pathname === '/';
 const organizationData = isHomePage ? {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -87,9 +87,20 @@ const organizationData = isHomePage ? {
   "sameAs": [
     "https://x.com/bawan269"
   ],
-  "description": lang === 'zh'
-    ? "用第一性原理拆解复杂系统——从技术架构到商业逻辑，从组织行为到认知模型"
-    : "Deconstructing complex systems with first principles — from technical architecture to business logic, from organizational behavior to cognitive models"
+  "description": "Deconstructing complex systems with first principles, from technical architecture to business logic, from organizational behavior to cognitive models"
+} : null;
+
+const websiteData = isHomePage ? {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "NSSA",
+  "url": "https://nssa.io",
+  "inLanguage": "en-US",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://nssa.io/search/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
 } : null;
 
 // FAQ schema
@@ -113,7 +124,7 @@ const breadcrumbData = breadcrumbs.length > 0 ? {
     {
       "@type": "ListItem",
       "position": 1,
-      "name": lang === 'zh' ? '首页' : 'Home',
+      "name": "Home",
       "item": "https://nssa.io/"
     },
     ...breadcrumbs.map((crumb, i) => ({
@@ -138,7 +149,7 @@ const breadcrumbData = breadcrumbs.length > 0 ? {
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:site_name" content="NSSA - Network-System-Security-Application" />
-<meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+<meta property="og:locale" content="en_US" />
 {imageURL && <meta property="og:image" content={imageURL} />}
 {imageURL && <meta property="og:image:width" content="1200" />}
 {imageURL && <meta property="og:image:height" content="630" />}
@@ -155,13 +166,14 @@ const breadcrumbData = breadcrumbs.length > 0 ? {
 
 <!-- Additional Meta Tags -->
 <meta name="robots" content="index, follow" />
-<meta name="author" content="大尹" />
-<meta name="language" content={lang === 'zh' ? 'Chinese' : 'English'} />
+<meta name="author" content="Dayin" />
+<meta name="language" content="English" />
 
 <!-- Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 {breadcrumbData && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbData)} />}
 {organizationData && <script type="application/ld+json" set:html={JSON.stringify(organizationData)} />}
+{websiteData && <script type="application/ld+json" set:html={JSON.stringify(websiteData)} />}
 {faqData && <script type="application/ld+json" set:html={JSON.stringify(faqData)} />}
 
 <!-- Preconnect to external domains -->
@@ -171,8 +183,3 @@ const breadcrumbData = breadcrumbs.length > 0 ? {
 <!-- DNS Prefetch -->
 <link rel="dns-prefetch" href="//fonts.googleapis.com" />
 <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
-
-<!-- Alternate language versions -->
-{lang === 'zh' && <link rel="alternate" hreflang="en" href={`https://nssa.io/en${Astro.url.pathname}`} />}
-{lang === 'en' && <link rel="alternate" hreflang="zh" href={`https://nssa.io${Astro.url.pathname.replace('/en', '')}`} />}
-<link rel="alternate" hreflang="x-default" href={`https://nssa.io${Astro.url.pathname}`} />

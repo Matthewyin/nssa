@@ -1,109 +1,52 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import SEO from '../components/SEO.astro';
+import {
+  CATEGORY_INFO,
+  CATEGORY_KEYS,
+  type CategoryKey,
+  formatDisplayDate,
+  getPostCategory,
+  getPostUrl,
+} from '../utils/site';
 
 export async function getStaticPaths() {
-  const categories = ['business', 'tech', 'psychology', 'workplace', 'history'];
-  return categories.map((category) => ({
+  return CATEGORY_KEYS.map((category) => ({
     params: { category },
   }));
 }
 
 const { category } = Astro.params;
 
-// 验证分类参数
-const validCategories = ['business', 'tech', 'psychology', 'workplace', 'history'];
-if (!validCategories.includes(category)) {
+if (!CATEGORY_KEYS.includes(category as CategoryKey)) {
   return Astro.redirect('/404');
 }
 
-// 获取该分类的所有文章
-const allPosts = await getCollection('posts', ({ data }) => {
-  return (data.lang === 'zh' || data.showInZh) && !data.draft;
-});
+const currentCategoryKey = category as CategoryKey;
+const currentCategory = CATEGORY_INFO[currentCategoryKey];
 
-// 过滤该分类的文章，支持新的目录结构
-const categoryPosts = allPosts.filter(post => {
-  // 支持新的目录结构：检查slug是否以分类开头
-  const isInCategoryFolder = post.slug.startsWith(category + '/');
-  // 兼容旧的分类方式
-  const isInCategories = post.data.categories?.includes(category);
-  // 检查新的category字段
-  const hasCategory = post.data.category === category;
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = allPosts
+  .filter(post => getPostCategory(post) === currentCategoryKey)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-  return isInCategoryFolder || isInCategories || hasCategory;
-});
-
-// 按日期排序
-const sortedPosts = categoryPosts.sort((a, b) =>
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
-
-// 获取所有标签
 const allTags = [...new Set(sortedPosts.flatMap(post => post.data.tags || []))];
-
-// 分类信息
-const categoryInfo = {
-  business: {
-    title: '业务专题',
-    description: '深度商业分析与市场洞察，探索商业模式创新与企业战略',
-    icon: '📊'
-  },
-  tech: {
-    title: '技术专题',
-    description: '探索前沿技术、分析技术趋势、研究技术对社会的影响',
-    icon: '🔬'
-  },
-  psychology: {
-    title: '心理专题',
-    description: '心理学研究与行为分析，探索人类心理现象和行为模式',
-    icon: '🧠'
-  },
-  workplace: {
-    title: '职场专题',
-    description: '职场动力学与组织行为研究，掌握职场生存智慧',
-    icon: '💼'
-  },
-  history: {
-    title: '历史专题',
-    description: '深度历史研究与分析，探索历史发展的内在规律',
-    icon: '📚'
-  }
-};
-
-const currentCategory = categoryInfo[category] || { title: category, description: '', icon: '📄' };
-
-const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(date);
-};
-
 const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
 ---
 
 <Layout
   title={`${currentCategory.title} - NSSA`}
   description={currentCategory.description}
+  breadcrumbs={[{ name: currentCategory.title, url: `/${currentCategoryKey}/` }]}
 >
-  <SEO
-    title={`${currentCategory.title} - NSSA`}
-    description={currentCategory.description}
-    lang="zh"
-    breadcrumbs={[{ name: currentCategory.title, url: `/${category}/` }]}
-  />
   <main class="max-w-6xl mx-auto px-6 py-8">
-    <!-- Category Header -->
     <header class="mb-12">
       <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        <a href="/" class="hover:text-apple-blue transition-colors">首页</a>
+        <a href="/" class="hover:text-apple-blue transition-colors">Home</a>
         <span class="mx-2">→</span>
         <span class="text-gray-900 dark:text-white">{currentCategory.title}</span>
       </nav>
-      
+
       <div class="flex items-center gap-4 mb-6">
         <span class="text-4xl">{currentCategory.icon}</span>
         <div>
@@ -115,170 +58,159 @@ const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
           </p>
         </div>
       </div>
-      
-      <div class="flex items-center justify-between">
+
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p class="text-gray-500 dark:text-gray-400">
-          共 {sortedPosts.length} 篇文章
+          {sortedPosts.length} articles total
         </p>
-        
-        <!-- Filter Controls -->
-        <div class="flex items-center gap-4">
-          <!-- Tag Filter -->
-          <div class="relative">
-            <select 
-              id="tag-filter"
-              class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue"
-            >
-              <option value="">所有标签</option>
-              {allTags.map((tag) => (
-                <option value={tag}>{tag}</option>
-              ))}
-            </select>
-          </div>
-          
-          <!-- Sort Options -->
-          <div class="relative">
-            <select 
-              id="sort-filter"
-              class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue"
-            >
-              <option value="date-desc">最新发布</option>
-              <option value="date-asc">最早发布</option>
-              <option value="title-asc">标题 A-Z</option>
-              <option value="title-desc">标题 Z-A</option>
-            </select>
-          </div>
+
+        <div class="flex flex-wrap items-center gap-4">
+          <select
+            id="tag-filter"
+            class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue"
+          >
+            <option value="">All Tags</option>
+            {allTags.map((tag) => (
+              <option value={tag}>{tag}</option>
+            ))}
+          </select>
+
+          <select
+            id="sort-filter"
+            class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue"
+          >
+            <option value="date-desc">Latest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="title-asc">Title A-Z</option>
+            <option value="title-desc">Title Z-A</option>
+          </select>
         </div>
       </div>
     </header>
-    
-    <!-- Articles Grid -->
+
     <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {sortedPosts.map((post) => {
         const thumbnail = post.data.image;
         return (
-        <article
-          class="content-card group article-item"
-          data-tags={JSON.stringify(post.data.tags || [])}
-          data-date={post.data.date.toISOString()}
-          data-title={post.data.title}
-        >
-          <a href={post.data.lang === 'en' ? `/en/posts/${post.slug}/` : `/posts/${post.slug}/`} class="block p-5 hover:no-underline">
-            <div class="mb-4 rounded-xl overflow-hidden aspect-[5/2] bg-gray-100 dark:bg-gray-800">
-              {thumbnail ? (
-                <img
-                  src={thumbnail}
-                  alt={post.data.title}
-                  class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
-                  loading="lazy"
-                />
-              ) : (
-                <div class="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-800/50">
-                  <img src="/nssa-logo-light.svg" alt="NSSA" class={`${fallbackLogoClass} dark:hidden`} />
-                  <img src="/nssa-logo-dark.svg" alt="NSSA" class={`${fallbackLogoClass} hidden dark:block`} />
-                </div>
+          <article
+            class="content-card group article-item"
+            data-tags={JSON.stringify(post.data.tags || [])}
+            data-date={post.data.date.toISOString()}
+            data-title={post.data.title}
+          >
+            <a href={getPostUrl(post)} class="block p-5 hover:no-underline">
+              <div class="mb-4 rounded-xl overflow-hidden aspect-[5/2] bg-gray-100 dark:bg-gray-800">
+                {thumbnail ? (
+                  <img
+                    src={thumbnail}
+                    alt={post.data.title}
+                    class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-800/50">
+                    <img src="/nssa-logo-light.svg" alt="NSSA" class={`${fallbackLogoClass} dark:hidden`} />
+                    <img src="/nssa-logo-dark.svg" alt="NSSA" class={`${fallbackLogoClass} hidden dark:block`} />
+                  </div>
+                )}
+              </div>
+
+              <div class="flex flex-wrap gap-2 mb-3">
+                {post.data.tags?.slice(0, 3).map((tag) => (
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue transition-colors line-clamp-2">
+                {post.data.title}
+              </h2>
+
+              {post.data.description && (
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
+                  {post.data.description}
+                </p>
               )}
-            </div>
 
-            <div class="flex flex-wrap gap-2 mb-3">
-              {post.data.tags?.slice(0, 3).map((tag) => (
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
-                  #{tag}
+              <div class="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
+                <time datetime={post.data.date.toISOString()}>
+                  {formatDisplayDate(post.data.date, post.data.lang)}
+                </time>
+                <span class="text-apple-blue group-hover:translate-x-1 transition-transform">
+                  Read More →
                 </span>
-              ))}
-            </div>
-
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-apple-blue transition-colors line-clamp-2">
-              {post.data.title}
-            </h2>
-
-            {post.data.description && (
-              <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
-                {post.data.description}
-              </p>
-            )}
-
-            <div class="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
-              <time datetime={post.data.date.toISOString()}>
-                {formatDate(post.data.date)}
-              </time>
-              <span class="text-apple-blue group-hover:translate-x-1 transition-transform">
-                阅读更多 →
-              </span>
-            </div>
-          </a>
-        </article>
-      );})}
+              </div>
+            </a>
+          </article>
+        );
+      })}
     </div>
-    
-    <!-- No Results Message -->
+
     <div id="no-results" class="hidden text-center py-12">
       <div class="text-gray-400 dark:text-gray-500 mb-4">
         <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.467-.881-6.08-2.33"/>
         </svg>
       </div>
-      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">没有找到匹配的文章</h3>
-      <p class="text-gray-500 dark:text-gray-400">请尝试调整筛选条件</p>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No matching articles found</h3>
+      <p class="text-gray-500 dark:text-gray-400">Try adjusting your filter criteria</p>
     </div>
   </main>
 </Layout>
 
 <script>
-  // 文章筛选和排序功能
   document.addEventListener('DOMContentLoaded', function() {
-    const tagFilter = document.getElementById('tag-filter');
-    const sortFilter = document.getElementById('sort-filter');
-    const articlesContainer = document.getElementById('articles-container');
+    const tagFilter = document.getElementById('tag-filter') as HTMLSelectElement | null;
+    const sortFilter = document.getElementById('sort-filter') as HTMLSelectElement | null;
     const noResults = document.getElementById('no-results');
-    
+    if (!tagFilter || !sortFilter || !noResults) return;
+
+    const tagSelect = tagFilter;
+    const sortSelect = sortFilter;
+    const noResultsEl = noResults;
+
     function filterAndSortArticles() {
-      const selectedTag = tagFilter.value;
-      const sortOption = sortFilter.value;
-      const articles = Array.from(document.querySelectorAll('.article-item'));
-      
-      // 筛选文章
+      const selectedTag = tagSelect.value;
+      const sortOption = sortSelect.value;
+      const articles = Array.from(document.querySelectorAll<HTMLElement>('.article-item'));
+
       const filteredArticles = articles.filter(article => {
         if (!selectedTag) return true;
-        
         const articleTags = JSON.parse(article.dataset.tags || '[]');
         return articleTags.includes(selectedTag);
       });
-      
-      // 排序文章
+
       filteredArticles.sort((a, b) => {
         switch (sortOption) {
           case 'date-desc':
-            return new Date(b.dataset.date).getTime() - new Date(a.dataset.date).getTime();
+            return new Date(b.dataset.date || '').getTime() - new Date(a.dataset.date || '').getTime();
           case 'date-asc':
-            return new Date(a.dataset.date).getTime() - new Date(b.dataset.date).getTime();
+            return new Date(a.dataset.date || '').getTime() - new Date(b.dataset.date || '').getTime();
           case 'title-asc':
-            return a.dataset.title.localeCompare(b.dataset.title);
+            return (a.dataset.title || '').localeCompare(b.dataset.title || '');
           case 'title-desc':
-            return b.dataset.title.localeCompare(a.dataset.title);
+            return (b.dataset.title || '').localeCompare(a.dataset.title || '');
           default:
             return 0;
         }
       });
-      
-      // 隐藏所有文章
+
       articles.forEach(article => {
         article.style.display = 'none';
       });
-      
-      // 显示筛选后的文章
+
       if (filteredArticles.length > 0) {
         filteredArticles.forEach(article => {
           article.style.display = 'block';
         });
-        noResults.classList.add('hidden');
+        noResultsEl.classList.add('hidden');
       } else {
-        noResults.classList.remove('hidden');
+        noResultsEl.classList.remove('hidden');
       }
     }
-    
-    // 绑定事件监听器
-    tagFilter.addEventListener('change', filterAndSortArticles);
-    sortFilter.addEventListener('change', filterAndSortArticles);
+
+    tagSelect.addEventListener('change', filterAndSortArticles);
+    sortSelect.addEventListener('change', filterAndSortArticles);
   });
 </script>
