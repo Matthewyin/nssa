@@ -5,6 +5,7 @@ import Layout from '../layouts/Layout.astro';
 <Layout
   title="About NSSA - Network / Systems / Security / AI"
   description="NSSA deconstructs complex systems with first principles, covering networking, systems, security, AI, business, psychology, workplace dynamics, and history."
+  schemaType="AboutPage"
   breadcrumbs={[{ name: 'About', url: '/about/' }]}
 >
   <main class="max-w-3xl mx-auto px-6 py-8">
@@ -53,6 +54,16 @@ import Layout from '../layouts/Layout.astro';
         </p>
         <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
           I also write about business, psychology, workplace dynamics, and history because technical systems rarely exist alone. They sit inside organizations, incentives, people, and time.
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Editorial Approach</h2>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          NSSA articles are written as working notes for people who need to understand systems, not just consume news. The focus is on causality, constraints, tradeoffs, and operational consequences.
+        </p>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          Technical posts draw on hands-on infrastructure experience and ongoing AI engineering practice. Business and workplace essays use the same systems lens to explain incentives, decision paths, and failure modes.
         </p>
       </section>
 

@@ -1,24 +1,16 @@
----
-import { getCollection } from 'astro:content';
-import { getPostCategory, getPostUrl } from '../utils/site';
+<script is:inline>
+  let searchData = null;
 
-const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+  async function loadSearchData() {
+    if (searchData) return searchData;
 
-const searchData = allPosts.map(post => ({
-  slug: post.slug,
-  url: getPostUrl(post),
-  title: post.data.title,
-  description: post.data.description || '',
-  tags: post.data.tags || [],
-  category: getPostCategory(post),
-  content: post.body.slice(0, 300),
-  date: post.data.date.toISOString(),
-  lang: post.data.lang || 'zh',
-  author: post.data.author || 'Dayin'
-}));
----
+    const response = await fetch('/search-index.json');
+    if (!response.ok) return [];
 
-<script define:vars={{ searchData }}>
+    searchData = await response.json();
+    return searchData;
+  }
+
   function simpleSearch(query, data) {
     if (!query || query.length < 1) return [];
 
@@ -97,13 +89,14 @@ const searchData = allPosts.map(post => ({
     if (mobileSearchResults) mobileSearchResults.classList.add('hidden');
   }
 
-  function performSearch(query, isMobile = false) {
+  async function performSearch(query, isMobile = false) {
     if (!query || query.length < 1) {
       hideSearchResults();
       return;
     }
 
-    displaySearchResults(simpleSearch(query, searchData), isMobile);
+    const data = await loadSearchData();
+    displaySearchResults(simpleSearch(query, data), isMobile);
   }
 
   document.addEventListener('DOMContentLoaded', function() {

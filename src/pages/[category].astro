@@ -37,6 +37,7 @@ const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
 <Layout
   title={`${currentCategory.title} - NSSA`}
   description={currentCategory.description}
+  schemaType="CollectionPage"
   breadcrumbs={[{ name: currentCategory.title, url: `/${currentCategoryKey}/` }]}
 >
   <main class="max-w-6xl mx-auto px-6 py-8">
@@ -157,9 +158,8 @@ const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
       <p class="text-gray-500 dark:text-gray-400">Try adjusting your filter criteria</p>
     </div>
   </main>
-</Layout>
 
-<script>
+  <script>
   document.addEventListener('DOMContentLoaded', function() {
     const tagFilter = document.getElementById('tag-filter') as HTMLSelectElement | null;
     const sortFilter = document.getElementById('sort-filter') as HTMLSelectElement | null;
@@ -213,4 +213,5 @@ const fallbackLogoClass = "w-full h-full object-contain p-4 sm:p-6";
     tagSelect.addEventListener('change', filterAndSortArticles);
     sortSelect.addEventListener('change', filterAndSortArticles);
   });
-</script>
+  </script>
+</Layout>

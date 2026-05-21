@@ -1,22 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import { getPostCategory, getPostUrl } from '../utils/site';
-
-const allPosts = await getCollection('posts', ({ data }) => !data.draft);
-
-const searchData = allPosts.map(post => ({
-  slug: post.slug,
-  url: getPostUrl(post),
-  title: post.data.title,
-  description: post.data.description || '',
-  tags: post.data.tags || [],
-  category: getPostCategory(post),
-  content: post.body.slice(0, 500),
-  date: post.data.date.toISOString(),
-  lang: post.data.lang || 'zh',
-  author: post.data.author && post.data.author !== 'NSSA Team' ? post.data.author : 'Dayin'
-}));
 
 const query = Astro.url.searchParams.get('q') || '';
 ---
@@ -24,6 +7,7 @@ const query = Astro.url.searchParams.get('q') || '';
 <Layout
   title={query ? `Search Results: ${query}` : 'Search - NSSA'}
   description={query ? `Search results for "${query}"` : 'Search NSSA articles'}
+  schemaType="SearchResultsPage"
 >
   <main class="max-w-6xl mx-auto px-6 py-8">
     <div class="mb-8">
@@ -60,9 +44,20 @@ const query = Astro.url.searchParams.get('q') || '';
       )}
     </div>
   </main>
-</Layout>
 
-<script define:vars={{ searchData, query }}>
+  <script is:inline>
+  let searchData = null;
+
+  async function loadSearchData() {
+    if (searchData) return searchData;
+
+    const response = await fetch('/search-index.json');
+    if (!response.ok) return [];
+
+    searchData = await response.json();
+    return searchData;
+  }
+
   function simpleSearch(query, data) {
     if (!query || query.length < 1) return [];
 
@@ -163,7 +158,7 @@ const query = Astro.url.searchParams.get('q') || '';
     }
   }
 
-  function performSearch(searchQuery) {
+  async function performSearch(searchQuery) {
     if (!searchQuery) {
       const container = document.getElementById('search-results-container');
       if (container) {
@@ -180,13 +175,15 @@ const query = Astro.url.searchParams.get('q') || '';
       return;
     }
 
-    displaySearchResults(simpleSearch(searchQuery, searchData), searchQuery);
+    const data = await loadSearchData();
+    displaySearchResults(simpleSearch(searchQuery, data), searchQuery);
   }
 
   document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-page-input');
+    const initialQuery = searchInput ? searchInput.value.trim() : '';
 
-    if (query) performSearch(query);
+    if (initialQuery) performSearch(initialQuery);
 
     if (searchInput) {
       searchInput.addEventListener('input', function(e) {
@@ -212,4 +209,5 @@ const query = Astro.url.searchParams.get('q') || '';
       });
     }
   });
-</script>
+  </script>
+</Layout>

@@ -15,6 +15,8 @@ export interface Props {
   contentLang?: 'zh' | 'en';
   breadcrumbs?: { name: string; url: string }[];
   faq?: { question: string; answer: string }[];
+  schemaType?: 'WebPage' | 'AboutPage' | 'CollectionPage' | 'SearchResultsPage';
+  wordCount?: number;
 }
 
 const {
@@ -27,7 +29,9 @@ const {
   tags = [],
   contentLang = 'en',
   breadcrumbs = [],
-  faq = []
+  faq = [],
+  schemaType = 'WebPage',
+  wordCount
 } = Astro.props;
 const currentPath = Astro.url.pathname;
 ---
@@ -60,6 +64,8 @@ const currentPath = Astro.url.pathname;
       contentLang={contentLang}
       breadcrumbs={breadcrumbs}
       faq={faq}
+      schemaType={schemaType}
+      wordCount={wordCount}
     />
     
     <!-- Favicon -->

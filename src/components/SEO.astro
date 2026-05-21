@@ -10,6 +10,8 @@ export interface Props {
   contentLang?: 'zh' | 'en';
   breadcrumbs?: { name: string; url: string }[];
   faq?: { question: string; answer: string }[];
+  schemaType?: 'WebPage' | 'AboutPage' | 'CollectionPage' | 'SearchResultsPage';
+  wordCount?: number;
 }
 
 const {
@@ -22,7 +24,9 @@ const {
   tags = [],
   contentLang = 'en',
   breadcrumbs = [],
-  faq = []
+  faq = [],
+  schemaType = 'WebPage',
+  wordCount
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -35,14 +39,23 @@ const authorData = {
   "alternateName": "大尹",
   "url": "https://nssa.io/about/",
   "jobTitle": "Network Engineer",
+  "knowsAbout": [
+    "Network infrastructure",
+    "Systems engineering",
+    "Cybersecurity",
+    "Artificial intelligence",
+    "AI agents",
+    "Organizational systems"
+  ],
   "sameAs": [
-    "https://x.com/bawan269"
+    "https://x.com/bawan269",
+    "https://github.com/Matthewyin"
   ]
 };
 
 const structuredData: Record<string, unknown> = {
   "@context": "https://schema.org",
-  "@type": article ? "Article" : "WebPage",
+  "@type": article ? "Article" : schemaType,
   "headline": title,
   "description": description,
   "url": canonicalURL.toString(),
@@ -74,9 +87,18 @@ const structuredData: Record<string, unknown> = {
 
 if (article) {
   structuredData["articleSection"] = tags[0] || "General";
+  structuredData["mainEntityOfPage"] = {
+    "@type": "WebPage",
+    "@id": canonicalURL.toString()
+  };
+
+  if (wordCount) {
+    structuredData["wordCount"] = wordCount;
+  }
 }
 
 const isHomePage = Astro.url.pathname === '/';
+const isAboutPage = Astro.url.pathname === '/about/';
 const organizationData = isHomePage ? {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -88,6 +110,13 @@ const organizationData = isHomePage ? {
     "https://x.com/bawan269"
   ],
   "description": "Deconstructing complex systems with first principles, from technical architecture to business logic, from organizational behavior to cognitive models"
+} : null;
+
+const personData = isAboutPage ? {
+  "@context": "https://schema.org",
+  ...authorData,
+  "description": "Dayin is a network engineer focused on network infrastructure, systems, security, AI agents, large language models, and practical engineering workflows.",
+  "mainEntityOfPage": "https://nssa.io/about/"
 } : null;
 
 const websiteData = isHomePage ? {
@@ -168,12 +197,14 @@ const breadcrumbData = breadcrumbs.length > 0 ? {
 <meta name="robots" content="index, follow" />
 <meta name="author" content="Dayin" />
 <meta name="language" content="English" />
+<link rel="author" href="https://nssa.io/about/" />
 
 <!-- Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 {breadcrumbData && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbData)} />}
 {organizationData && <script type="application/ld+json" set:html={JSON.stringify(organizationData)} />}
 {websiteData && <script type="application/ld+json" set:html={JSON.stringify(websiteData)} />}
+{personData && <script type="application/ld+json" set:html={JSON.stringify(personData)} />}
 {faqData && <script type="application/ld+json" set:html={JSON.stringify(faqData)} />}
 
 <!-- Preconnect to external domains -->
