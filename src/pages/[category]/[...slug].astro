@@ -159,9 +159,8 @@ const relatedPosts = allPosts
       </section>
     )}
   </main>
-</Layout>
 
-<script>
+  <script>
   function shareToX() {
     const url = encodeURIComponent(window.location.href);
     const title = encodeURIComponent(document.title);
@@ -224,4 +223,5 @@ const relatedPosts = allPosts
       progressBar.style.width = progress + '%';
     }, { passive: true });
   }
-</script>
+  </script>
+</Layout>
