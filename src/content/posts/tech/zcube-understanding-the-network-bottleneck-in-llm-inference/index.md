@@ -175,6 +175,10 @@ After migration, the same cluster running GLM-5.1 coding inference showed:
 
 Source: Z.ai X Article.
 
+![ZCube inference networking learning infographic](./assets/infographic.png)
+
+Learning infographic for the ZCube inference networking bottleneck.
+
 ## Why This Matters
 
 LLM inference is moving from isolated component optimization toward system-level co-design.
