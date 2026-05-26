@@ -1,6 +1,6 @@
 ---
 title: "AI Agent Engineering Series 02: How to Write Tools for Agents"
-description: "This article studies Anthropic Engineering’s practical method for designing tools for AI agents. The main idea is that agent tools are not ordinary APIs. They are contracts between"
+description: "This article studies Anthropic Engineering’s practical method for designing AI agent tools as contracts between deterministic systems and non-deterministic agents."
 tags: ["AI", "公众号"]
 date: "2026-05-26T17:05:07.244Z"
 lastmod: "2026-05-26T17:05:07.244Z"
@@ -14,7 +14,7 @@ image: "/images/posts/tech/ai-agent-engineering-series-02-how-to-write-tools-for
 
 # AI Agent Engineering Series 02: How to Write Tools for Agents
 
-This article studies Anthropic Engineering’s practical method for designing tools for AI agents. The main idea is that agent tools are not ordinary APIs. They are contracts between deterministic software systems and non-deterministic agents, so they need evaluation, iteration, careful context design, and token-efficient responses.
+This article studies Anthropic Engineering’s practical method for designing AI agent tools as contracts between deterministic systems and non-deterministic agents.
 
 Source: Anthropic Engineering  
 Original: Writing effective tools for agents — with agents  
