@@ -3,7 +3,7 @@ title: "Using LLMs to Secure Source Code: The Bottleneck Has Moved After Discove
 description: "LLMs can now help security teams read code, identify suspicious paths, draft proof-of-concept exploits, and suggest patches. The harder question is no longer only how to find more "
 tags: ["AI", "公众号"]
 date: "2026-05-31T11:32:58.999Z"
-lastmod: "2026-05-31T11:32:58.999Z"
+lastmod: "2026-05-31T11:42:00.000Z"
 categories: ["tech"]
 category: "tech"
 lang: "zh"
@@ -25,9 +25,11 @@ Anthropic's article "Using LLMs to secure source code" describes a practical six
 5. Triage by root cause, preconditions, and impact.
 6. Patch, retest, and search for variants.
 
-![LLM Source Code Security Loop](./assets/infographic.png)
+![The Defender's Loop](./assets/article-image-01.png)
 
 The key point is that discovery scales more easily than the downstream work. Anthropic notes that, as of May 22, 2026, its open-source scanning work had disclosed 1,596 vulnerabilities, with 97 known to be patched. That gap shows why a security workflow must budget for verification, triage, and patch validation before simply adding more scanning agents.
+
+![LLM Source Code Security Loop](./assets/infographic.png)
 
 The first foundation is a threat model. The model needs to know what assets matter, which entry points are exposed, which inputs are trusted, and which vulnerability classes are relevant to the system. Without that context, an LLM may flag trusted configuration as attacker-controlled, or miss real risk because it assumes an internet-facing service is internal only.
 
@@ -38,6 +40,8 @@ Discovery should then focus on recall. The article recommends giving the agent r
 Verification should be separate from discovery. The verifier should run independently and look for reasons a finding may be wrong: upstream validation, authentication gates, type constraints, unreachable code, or compensating controls. When possible, the verifier should build and run a reproducible PoC.
 
 Triage turns verified findings into an actionable queue. Duplicates should be grouped by root cause, not by the number of reports. Severity should be grounded in reachability, attacker control, preconditions, authentication requirements, read/write impact, and blast radius.
+
+![Verification and Triage Evidence Map](./assets/article-image-02.png)
 
 Patching closes the loop. A good workflow starts with a failing test, applies the smallest root-cause fix, confirms the original PoC no longer works, checks for regressions, and then runs an adversarial review against the patch. Human ownership remains necessary because generated patches can be too narrow, too broad, or disruptive to legitimate system behavior.
 
