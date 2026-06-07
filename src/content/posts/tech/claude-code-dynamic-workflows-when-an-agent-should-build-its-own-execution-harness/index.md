@@ -48,8 +48,6 @@ Source: Anthropic Claude Blog, "A harness for every task: dynamic workflows in C
 
 The following images are reused from the Anthropic source article, including mechanism diagrams, workflow diagrams, and page images.
 
-![原文配图 01](./assets/article-image-01.svg)
-
 ![原文配图 02](./assets/article-image-02.png)
 
 ![原文配图 03](./assets/article-image-03.png)
@@ -67,13 +65,3 @@ The following images are reused from the Anthropic source article, including mec
 ![原文配图 09](./assets/article-image-09.png)
 
 ![原文配图 10](./assets/article-image-10.png)
-
-![原文配图 11](./assets/article-image-11.svg)
-
-![原文配图 12](./assets/article-image-12.svg)
-
-![原文配图 13](./assets/article-image-13.svg)
-
-![原文配图 14](./assets/article-image-14.svg)
-
-![原文配图 15](./assets/article-image-15.svg)
