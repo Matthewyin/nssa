@@ -1,6 +1,6 @@
 ---
 title: "Cloud cache optimization needs a cost model, not only a hit-rate target"
-description: "Many cache optimization discussions begin with hit rate.That is reasonable in a fixed-capacity world. If a machine already has a fixed cache budget, the engineering problem is to u"
+description: "Google Research shows how cost-aware TTL decisions reduced Spanner memory usage by 15.5% and total cost of ownership by about 5%."
 tags: ["AI", "公众号"]
 date: "2026-06-27T01:11:40.565Z"
 lastmod: "2026-06-27T01:11:40.565Z"
