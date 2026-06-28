@@ -1,6 +1,6 @@
 ---
 title: "GPT-5.6 turns model selection into a routing problem"
-description: "OpenAI's GPT-5.6 preview contains several announcements at once: three model tiers named Sol, Terra, and Luna; a new `max` reasoning effort; an `ultra` mode that uses subagents; st"
+description: "GPT-5.6 introduces Sol, Terra, and Luna alongside max reasoning, ultra subagents, explicit cache economics, and phased risk-based access."
 tags: ["AI", "公众号"]
 date: "2026-06-28T04:53:22.270Z"
 lastmod: "2026-06-28T04:53:22.270Z"
