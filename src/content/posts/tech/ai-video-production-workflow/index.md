@@ -22,6 +22,8 @@ image: "/images/posts/tech/ai-video-production-workflow/x-cover-ef558e5f.png"
 
 **AI 视频生产不能只靠生成模型，必须把“生成”和“工程控制”分开。**
 
+![AI 视频生产工作流总览](./assets/infographic.png)
+
 ## 一、真正难的不是生成视频
 
 一开始，我以为目标很简单：把公众号文章做成 1 分钟左右的视频。
@@ -61,6 +63,8 @@ Dreamina 生成关键图，Seedance 2.0 mini 把关键图变成短视频段，Mi
 一句话概括就是：
 
 **模型负责生成素材，工程流程负责控制成片。**
+
+![生成模型和工程流程的分工](./assets/article-image-01.png)
 
 ## 三、第一步：先把文章切成口播稿
 
@@ -133,6 +137,8 @@ BGM 也不交给生成模型。
 `hyperframes lint`、`hyperframes validate`、`hyperframes inspect`、`hyperframes snapshot`，最后再用 `ffprobe` 看视频和音频信息。
 
 这些检查能发现很多肉眼容易漏的问题，比如素材路径错了、字幕溢出、音频流缺失、视频时长不对。
+
+![从文章到可发布视频的链路](./assets/article-image-02.png)
 
 ## 七、这套流程真正解决了什么
 
